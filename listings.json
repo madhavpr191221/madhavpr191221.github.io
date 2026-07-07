@@ -1,0 +1,27 @@
+[
+  {
+    "listing": "/world-models/index.html",
+    "items": []
+  },
+  {
+    "listing": "/3d-vision/index.html",
+    "items": []
+  },
+  {
+    "listing": "/survival-analysis/index.html",
+    "items": [
+      "/survival-analysis/part-1-why-survival-analysis-exists/index.html",
+      "/survival-analysis/part-2-distributions-in-survival-analysis/index.html",
+      "/survival-analysis/part-3-fitting-survival-distributions/index.html",
+      "/survival-analysis/part-4-kaplan-meier-estimator/index.html",
+      "/survival-analysis/part-5-cox-ph/index.html"
+    ]
+  },
+  {
+    "listing": "/transformers/index.html",
+    "items": [
+      "/transformers/self-attention-from-first-principles/index.html",
+      "/transformers/self-attention-part-2/index.html"
+    ]
+  }
+]
