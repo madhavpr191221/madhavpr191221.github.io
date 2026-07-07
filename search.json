@@ -144,7 +144,7 @@
     "href": "index.html#writing",
     "title": "Madhav Prashanth",
     "section": "Writing",
-    "text": "Writing\n\nTransformers — Self-attention from covariance geometry to ViT.\nWorld Models — Representation learning, VICReg, JEPA.\nSurvival Analysis — Hazard functions, Kaplan-Meier, Cox-PH."
+    "text": "Writing\n\nTransformers & Perception — Self-attention from covariance geometry to ViT, DINO, DETR, and beyond.\n3D Vision — Classical and neural 3D computer vision.\nWorld Models — Representation learning, VICReg, JEPA.\nSurvival Analysis — Hazard functions, Kaplan-Meier, Cox-PH."
   },
   {
     "objectID": "index.html#code",
