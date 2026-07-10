@@ -5,7 +5,9 @@
   },
   {
     "listing": "/3d-vision/index.html",
-    "items": []
+    "items": [
+      "/3d-vision/homogeneous-coordinates/index.html"
+    ]
   },
   {
     "listing": "/survival-analysis/index.html",
