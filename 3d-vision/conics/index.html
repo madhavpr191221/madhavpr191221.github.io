@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Madhav Prashanth Ramachandran">
+<meta name="dcterms.date" content="2026-07-13">
+<meta name="description" content="Projective duality derived from the symmetry of the incidence condition, and an introduction to conics in the projective plane.">
+
+<title>3D Computer Vision from First Principles — Part 2 – Madhav Prashanth</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Madhav Prashanth</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../world-models/index.html"> 
+<span class="menu-text">World Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../transformers/index.html"> 
+<span class="menu-text">Transformers &amp; Perception</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../survival-analysis/index.html"> 
+<span class="menu-text">Survival Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../3d-vision/index.html"> 
+<span class="menu-text">3D Vision</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/madhavpr191221"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/madhavpr/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#summary-of-part-1" id="toc-summary-of-part-1" class="nav-link active" data-scroll-target="#summary-of-part-1">Summary of Part 1</a></li>
+  <li><a href="#projective-duality" id="toc-projective-duality" class="nav-link" data-scroll-target="#projective-duality">Projective Duality</a></li>
+  <li><a href="#conics" id="toc-conics" class="nav-link" data-scroll-target="#conics">Conics</a></li>
+  <li><a href="#lifting-the-conic-to-mathbbp2" id="toc-lifting-the-conic-to-mathbbp2" class="nav-link" data-scroll-target="#lifting-the-conic-to-mathbbp2">Lifting the Conic to <span class="math inline">\(\mathbb{P}^2\)</span></a></li>
+  <li><a href="#tangent-lines-to-a-conic" id="toc-tangent-lines-to-a-conic" class="nav-link" data-scroll-target="#tangent-lines-to-a-conic">Tangent Lines to a Conic</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">3D Computer Vision from First Principles — Part 2</h1>
+<p class="subtitle lead">Projective Duality and Conics in <span class="math inline">\(\mathbb{P}^2\)</span></p>
+  <div class="quarto-categories">
+    <div class="quarto-category">3d-vision</div>
+    <div class="quarto-category">projective-geometry</div>
+    <div class="quarto-category">linear-algebra</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Projective duality derived from the symmetry of the incidence condition, and an introduction to conics in the projective plane.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Madhav Prashanth Ramachandran </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 13, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="summary-of-part-1" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-part-1">Summary of Part 1</h2>
+<p>In Part 1, we built <span class="math inline">\(\mathbb{P}^2\)</span> from scratch — starting from nothing but the desire to intersect two lines. Given two lines <span class="math inline">\(\boldsymbol{\ell}_1\)</span> and <span class="math inline">\(\boldsymbol{\ell}_2\)</span> in <span class="math inline">\(\mathbb{R}^2\)</span>, represented as vectors of their coefficients, their intersection point is <span class="math inline">\([\mathbf{u}] = [\boldsymbol{\ell}_1
+\times \boldsymbol{\ell}_2]\)</span> — an equivalence class in <span class="math inline">\(\mathbb{P}^2\)</span>. We defined the equivalence relation <span class="math inline">\(\sim\)</span> on <span class="math inline">\(\mathbb{R}^3 \setminus \{\mathbf{0}\}\)</span>, showed that <span class="math inline">\(\mathbb{P}^2\)</span> splits into two pieces (<span class="math inline">\(u_3 \neq 0\)</span> and <span class="math inline">\(u_3 = 0\)</span>), proved the bijection <span class="math inline">\(\phi\)</span> with <span class="math inline">\(\mathbb{R}^2\)</span>, and ended with the camera mapping <span class="math inline">\(\tilde{\mathbf{x}} = P\tilde{\mathbf{X}}\)</span> as the motivation for all of it.</p>
+<p>In this post we ask the dual question: given two points, what is the line through them? The answer falls out of the same cross product machinery — with points and lines swapped. This symmetry is called projective duality, and it is one of the cleanest facts in all of projective geometry. We then move on to conics — curves defined by degree-2 equations — and show how they live naturally in <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+</section>
+<section id="projective-duality" class="level2">
+<h2 class="anchored" data-anchor-id="projective-duality">Projective Duality</h2>
+<section id="the-line-through-two-points" class="level3">
+<h3 class="anchored" data-anchor-id="the-line-through-two-points">The Line Through Two Points</h3>
+<p>Given two points <span class="math inline">\(\mathbf{x}_1 = (x_1, y_1)^\top\)</span> and <span class="math inline">\(\mathbf{x}_2 =
+(x_2, y_2)^\top\)</span> in <span class="math inline">\(\mathbb{R}^2\)</span>, what is the line passing through both?</p>
+<p>Let the line be <span class="math inline">\(\boldsymbol{\ell} = (a, b, c)^\top\)</span>, so the line equation is <span class="math inline">\(ax + by + c = 0\)</span>. The two conditions are:</p>
+<p><span class="math display">\[ax_1 + by_1 + c = 0 \qquad \text{and} \qquad ax_2 + by_2 + c = 0\]</span></p>
+<p>Lift the points to <span class="math inline">\(\mathbb{R}^3\)</span>:</p>
+<p><span class="math display">\[\tilde{\mathbf{u}}_1 = \begin{pmatrix} x_1 \\ y_1 \\ 1 \end{pmatrix}, \qquad
+\tilde{\mathbf{u}}_2 = \begin{pmatrix} x_2 \\ y_2 \\ 1 \end{pmatrix}\]</span></p>
+<p>The two conditions become:</p>
+<p><span class="math display">\[\tilde{\mathbf{u}}_1^\top \boldsymbol{\ell} = 0 \qquad \text{and} \qquad
+\tilde{\mathbf{u}}_2^\top \boldsymbol{\ell} = 0\]</span></p>
+<p>So <span class="math inline">\(\boldsymbol{\ell}\)</span> is in the null space of:</p>
+<p><span class="math display">\[A = \begin{bmatrix} \tilde{\mathbf{u}}_1^\top \\ \tilde{\mathbf{u}}_2^\top
+\end{bmatrix} \in \mathbb{R}^{2 \times 3}\]</span></p>
+<p>If <span class="math inline">\(\mathbf{x}_1 \neq \mathbf{x}_2\)</span>, then <span class="math inline">\(\tilde{\mathbf{u}}_1\)</span> and <span class="math inline">\(\tilde{\mathbf{u}}_2\)</span> are linearly independent — the third coordinate <span class="math inline">\(1\)</span> ensures this, even if <span class="math inline">\((x_1, y_1)^\top\)</span> and <span class="math inline">\((x_2, y_2)^\top\)</span> are scalar multiples of each other as vectors in <span class="math inline">\(\mathbb{R}^2\)</span>. So <span class="math inline">\(A\)</span> has rank <span class="math inline">\(2\)</span>, and by rank-nullity:</p>
+<p><span class="math display">\[\dim(\text{null}(A)) = 3 - 2 = 1\]</span></p>
+<p>The null space is one-dimensional, spanned by <span class="math inline">\(\tilde{\mathbf{u}}_1 \times
+\tilde{\mathbf{u}}_2\)</span>. So:</p>
+<p><span class="math display">\[\boldsymbol{\ell} = \tilde{\mathbf{u}}_1 \times \tilde{\mathbf{u}}_2\]</span></p>
+<p>unique up to nonzero scale. If another line <span class="math inline">\(\boldsymbol{\ell}'\)</span> also passes through both points, then <span class="math inline">\(\boldsymbol{\ell}'\)</span> is also in the null space of <span class="math inline">\(A\)</span> — which is one-dimensional. So <span class="math inline">\(\boldsymbol{\ell}' = \lambda\boldsymbol{\ell}\)</span> for some <span class="math inline">\(\lambda \neq 0\)</span>. The line is unique in <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+<p>Note: we lifted <span class="math inline">\((x_i, y_i)^\top\)</span> to <span class="math inline">\((x_i, y_i, 1)^\top\)</span> purely as an algebraic device to write the line equation as a dot product. No <span class="math inline">\(\mathbb{P}^2\)</span> yet — we are still working in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+</section>
+<section id="well-definedness" class="level3">
+<h3 class="anchored" data-anchor-id="well-definedness">Well-Definedness</h3>
+<p>Does the line <span class="math inline">\([\boldsymbol{\ell}] = [\tilde{\mathbf{u}}_1 \times
+\tilde{\mathbf{u}}_2]\)</span> depend on which representatives we choose for the two points? Suppose we replace <span class="math inline">\(\tilde{\mathbf{u}}_1\)</span> with <span class="math inline">\(\lambda_1
+\tilde{\mathbf{u}}_1\)</span> and <span class="math inline">\(\tilde{\mathbf{u}}_2\)</span> with <span class="math inline">\(\lambda_2
+\tilde{\mathbf{u}}_2\)</span>. The cross product becomes:</p>
+<p><span class="math display">\[(\lambda_1 \tilde{\mathbf{u}}_1) \times (\lambda_2 \tilde{\mathbf{u}}_2) =
+\lambda_1 \lambda_2 (\tilde{\mathbf{u}}_1 \times \tilde{\mathbf{u}}_2) =
+\lambda_1 \lambda_2 \boldsymbol{\ell}\]</span></p>
+<p>Still in the same equivalence class <span class="math inline">\([\boldsymbol{\ell}]\)</span>. The line is well-defined.</p>
+</section>
+<section id="the-symmetry" class="level3">
+<h3 class="anchored" data-anchor-id="the-symmetry">The Symmetry</h3>
+<p>So we have:</p>
+<ul>
+<li>Intersection of two lines <span class="math inline">\(\boldsymbol{\ell}_1\)</span> and <span class="math inline">\(\boldsymbol{\ell}_2\)</span>: the point <span class="math inline">\([\mathbf{u}] = [\boldsymbol{\ell}_1 \times \boldsymbol{\ell}_2]\)</span></li>
+<li>Line through two points <span class="math inline">\(\tilde{\mathbf{u}}_1\)</span> and <span class="math inline">\(\tilde{\mathbf{u}}_2\)</span>: the line <span class="math inline">\([\boldsymbol{\ell}] = [\tilde{\mathbf{u}}_1 \times \tilde{\mathbf{u}}_2]\)</span></li>
+</ul>
+<p>Same formula. Same derivation. Points and lines play perfectly symmetric roles.</p>
+</section>
+<section id="collinear-points-and-concurrent-lines" class="level3">
+<h3 class="anchored" data-anchor-id="collinear-points-and-concurrent-lines">Collinear Points and Concurrent Lines</h3>
+<p><strong>Three collinear points.</strong> Suppose <span class="math inline">\([\mathbf{u}_1]\)</span>, <span class="math inline">\([\mathbf{u}_2]\)</span>, and <span class="math inline">\([\mathbf{u}_3]\)</span> all lie on the same line <span class="math inline">\(\boldsymbol{\ell}\)</span>. Then:</p>
+<p><span class="math display">\[A\boldsymbol{\ell} = \mathbf{0}, \qquad A = \begin{bmatrix} \mathbf{u}_1^\top \\
+\mathbf{u}_2^\top \\ \mathbf{u}_3^\top \end{bmatrix} \in \mathbb{R}^{3 \times 3}\]</span></p>
+<p>Since <span class="math inline">\(\boldsymbol{\ell} \neq \mathbf{0}\)</span>, <span class="math inline">\(A\)</span> must be singular:</p>
+<p><span class="math display">\[\det A = 0 \qquad \Longleftrightarrow \qquad
+\det\begin{bmatrix} \mathbf{u}_1 &amp; \mathbf{u}_2 &amp; \mathbf{u}_3 \end{bmatrix} = 0\]</span></p>
+<p>since <span class="math inline">\(\det A = \det A^\top\)</span>. This is just saying that <span class="math inline">\(\{\mathbf{u}_1,
+\mathbf{u}_2, \mathbf{u}_3\}\)</span> is linearly dependent.</p>
+<p><strong>Three concurrent lines.</strong> Now suppose <span class="math inline">\(\boldsymbol{\ell}_1\)</span>, <span class="math inline">\(\boldsymbol{\ell}_2\)</span>, <span class="math inline">\(\boldsymbol{\ell}_3\)</span> all pass through the same point <span class="math inline">\(\mathbf{u}\)</span>. Their pairwise intersections must all be the same point:</p>
+<p><span class="math display">\[\mathbf{u}_{12} = \boldsymbol{\ell}_1 \times \boldsymbol{\ell}_2, \quad
+\mathbf{u}_{23} = \boldsymbol{\ell}_2 \times \boldsymbol{\ell}_3, \quad
+\mathbf{u}_{13} = \boldsymbol{\ell}_1 \times \boldsymbol{\ell}_3\]</span></p>
+<p>From <span class="math inline">\(\mathbf{u}_{12} = \mathbf{u}_{23}\)</span>, taking the dot product with <span class="math inline">\(\boldsymbol{\ell}_1\)</span>:</p>
+<p><span class="math display">\[\langle \boldsymbol{\ell}_1, \boldsymbol{\ell}_2 \times \boldsymbol{\ell}_3
+\rangle = 0\]</span></p>
+<p>This is the scalar triple product — which equals <span class="math inline">\(\det[\boldsymbol{\ell}_1\
+\boldsymbol{\ell}_2\ \boldsymbol{\ell}_3]\)</span>. So:</p>
+<p><span class="math display">\[\det\begin{bmatrix} \boldsymbol{\ell}_1 &amp; \boldsymbol{\ell}_2 &amp; \boldsymbol{\ell}_3
+\end{bmatrix} = 0\]</span></p>
+<p>The same determinant condition. Points and lines swapped.</p>
+</section>
+<section id="the-duality-principle" class="level3">
+<h3 class="anchored" data-anchor-id="the-duality-principle">The Duality Principle</h3>
+<p><strong>Definition (Duality Principle).</strong> In <span class="math inline">\(\mathbb{P}^2\)</span>, every valid statement about points and lines remains valid when the words “point” and “line” are swapped everywhere. This is a direct consequence of the symmetry of the incidence condition <span class="math inline">\(\boldsymbol{\ell}^\top \mathbf{u} = 0\)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statement</th>
+<th>Dual statement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Two points determine a unique line</td>
+<td>Two lines determine a unique point</td>
+</tr>
+<tr class="even">
+<td>Line through two points: <span class="math inline">\(\boldsymbol{\ell} = \tilde{\mathbf{u}}_1 \times \tilde{\mathbf{u}}_2\)</span></td>
+<td>Point on two lines: <span class="math inline">\(\mathbf{u} = \boldsymbol{\ell}_1 \times \boldsymbol{\ell}_2\)</span></td>
+</tr>
+<tr class="odd">
+<td>Three points collinear: <span class="math inline">\(\det[\mathbf{u}_1\ \mathbf{u}_2\ \mathbf{u}_3] = 0\)</span></td>
+<td>Three lines concurrent: <span class="math inline">\(\det[\boldsymbol{\ell}_1\ \boldsymbol{\ell}_2\ \boldsymbol{\ell}_3] = 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Same formula. Same proof. Swap points and lines and every statement remains true.</p>
+<p>When we pass to <span class="math inline">\(\mathbb{P}^2\)</span>, we take equivalence classes. A point in <span class="math inline">\(\mathbb{P}^2\)</span> is <span class="math inline">\([\mathbf{u}]\)</span>. A line in <span class="math inline">\(\mathbb{P}^2\)</span> is <span class="math inline">\([\boldsymbol{\ell}]\)</span>. Both are equivalence classes of nonzero vectors in <span class="math inline">\(\mathbb{R}^3\)</span>. There is no algebraic distinction between the two — only the role they play in <span class="math inline">\(\boldsymbol{\ell}^\top \mathbf{u} = 0\)</span>.</p>
+</section>
+</section>
+<section id="conics" class="level2">
+<h2 class="anchored" data-anchor-id="conics">Conics</h2>
+<section id="what-is-a-conic" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-conic">What is a Conic?</h3>
+<p>A conic section — or simply a conic — is the curve formed by the intersection of a plane with a double cone. Depending on the angle at which the plane cuts the cone, you get one of three shapes: an ellipse, a parabola, or a hyperbola. A circle is a special case of an ellipse.</p>
+<p>[image of conic sections here]</p>
+<p>You have likely seen their standard equations:</p>
+<p><span class="math display">\[\text{Ellipse:} \quad \frac{x^2}{a^2} + \frac{y^2}{b^2} = 1\]</span></p>
+<p><span class="math display">\[\text{Circle:} \quad x^2 + y^2 = r^2\]</span></p>
+<p><span class="math display">\[\text{Parabola:} \quad y = ax^2\]</span></p>
+<p><span class="math display">\[\text{Hyperbola:} \quad \frac{x^2}{a^2} - \frac{y^2}{b^2} = 1\]</span></p>
+<p>[images of each conic here]</p>
+</section>
+<section id="a-forgotten-view-of-conics" class="level3">
+<h3 class="anchored" data-anchor-id="a-forgotten-view-of-conics">A (Forgotten?) View of Conics</h3>
+<p>Here is a view of conics that is perhaps less familiar. Every second-degree polynomial in <span class="math inline">\((x, y)\)</span> can be written as:</p>
+<p><span class="math display">\[F(x, y) = ax^2 + bxy + cy^2 + dx + ey + f = 0\]</span></p>
+<p>for some coefficients <span class="math inline">\(a, b, c, d, e, f \in \mathbb{R}\)</span>, not all zero. The zero set <span class="math inline">\(\{(x, y) \in \mathbb{R}^2 : F(x, y) = 0\}\)</span> is a conic.</p>
+<p>It turns out that every ellipse, parabola, and hyperbola can be written in this form — and conversely, solving <span class="math inline">\(F(x, y) = 0\)</span> gives either one of the three standard conics or a degenerate case: a pair of straight lines, a single line, or a single point.</p>
+<p>The shape of the conic is entirely determined by the coefficients <span class="math inline">\(a, b, c, d,
+e, f\)</span>. We will now look at this equation very carefully from the point of view of linear algebra — and see what the coefficient matrix tells us about the geometry.</p>
+</section>
+<section id="the-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="the-matrix-form">The Matrix Form</h3>
+<p>Every second-degree polynomial <span class="math inline">\(F(x, y)\)</span> can be written in matrix form as:</p>
+<p><span class="math display">\[F(\mathbf{x}) = \mathbf{x}^\top A \mathbf{x} + \mathbf{g}^\top \mathbf{x} + f\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x} = (x, y)^\top\)</span>, <span class="math inline">\(\mathbf{g} = (d, e)^\top\)</span>, and <span class="math inline">\(A\)</span> is the <span class="math inline">\(2 \times 2\)</span> symmetric matrix:</p>
+<p><span class="math display">\[A = \begin{pmatrix} a &amp; b/2 \\ b/2 &amp; c \end{pmatrix}\]</span></p>
+</section>
+<section id="diagonalizing-via-the-spectral-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="diagonalizing-via-the-spectral-theorem">Diagonalizing via the Spectral Theorem</h3>
+<p><span class="math inline">\(A\)</span> is symmetric. By the <a href="https://en.wikipedia.org/wiki/Spectral_theorem">spectral theorem</a>, there exists an orthogonal matrix <span class="math inline">\(Q\)</span> such that:</p>
+<p><span class="math display">\[A = Q \Lambda Q^\top, \qquad \Lambda = \begin{pmatrix} \lambda_1 &amp; 0 \\ 0 &amp;
+\lambda_2 \end{pmatrix}\]</span></p>
+<p>where <span class="math inline">\(\lambda_1, \lambda_2\)</span> are the eigenvalues of <span class="math inline">\(A\)</span>. The shape of the conic turns out to depend entirely on the signs of these eigenvalues. But first, a change of variables that makes this visible.</p>
+</section>
+<section id="a-change-of-variables" class="level3">
+<h3 class="anchored" data-anchor-id="a-change-of-variables">A Change of Variables</h3>
+<p>Substitute <span class="math inline">\(A = Q\Lambda Q^\top\)</span> into <span class="math inline">\(F(\mathbf{x})\)</span>:</p>
+<p><span class="math display">\[F(\mathbf{x}) = \mathbf{x}^\top Q \Lambda Q^\top \mathbf{x} + \mathbf{g}^\top
+\mathbf{x} + f\]</span></p>
+<p>Set <span class="math inline">\(\mathbf{z} = Q^\top \mathbf{x}\)</span>. Since <span class="math inline">\(Q\)</span> is orthogonal, this is just a rotation of coordinates. Also write <span class="math inline">\(\mathbf{h} = Q^\top \mathbf{g}\)</span>, so that <span class="math inline">\(\mathbf{g}^\top \mathbf{x} = \mathbf{h}^\top \mathbf{z}\)</span>. Then:</p>
+<p><span class="math display">\[F(\mathbf{z}) = \mathbf{z}^\top \Lambda \mathbf{z} + \mathbf{h}^\top \mathbf{z}
++ f = \lambda_1 z_1^2 + \lambda_2 z_2^2 + h_1 z_1 + h_2 z_2 + f\]</span></p>
+<p>I am using <span class="math inline">\(F(\mathbf{z})\)</span> as an abuse of notation — it is the same function, just expressed in rotated coordinates.</p>
+</section>
+<section id="completing-the-square" class="level3">
+<h3 class="anchored" data-anchor-id="completing-the-square">Completing the Square</h3>
+<p>Assume for now that <span class="math inline">\(\lambda_1 \neq 0\)</span> and <span class="math inline">\(\lambda_2 \neq 0\)</span> — that is, <span class="math inline">\(\det A = \lambda_1 \lambda_2 \neq 0\)</span>, so <span class="math inline">\(A\)</span> is invertible. Then complete the square in each variable. Set:</p>
+<p><span class="math display">\[w_i = z_i + \frac{h_i}{2\lambda_i}, \qquad i = 1, 2\]</span></p>
+<p>The algebra of completing the square is straightforward but messy — it would fill half a page and obscure the point. I will spare you the details and just state the result: the linear terms absorb into the squares, and <span class="math inline">\(F(\mathbf{z})
+= 0\)</span> becomes:</p>
+<p><span class="math display">\[\lambda_1 w_1^2 + \lambda_2 w_2^2 = \rho\]</span></p>
+<p>for some constant <span class="math inline">\(\rho\)</span> that collects the leftover terms from completing the square. The conic, in coordinates <span class="math inline">\(\mathbf{w}\)</span>, is now in its simplest form. The shape is visible directly from the signs of <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>.</p>
+</section>
+<section id="the-three-cases" class="level3">
+<h3 class="anchored" data-anchor-id="the-three-cases">The Three Cases</h3>
+<p><strong>Case 1: Same sign eigenvalues.</strong></p>
+<p>Suppose <span class="math inline">\(\lambda_1 &gt; 0\)</span> and <span class="math inline">\(\lambda_2 &gt; 0\)</span> (multiply through by <span class="math inline">\(-1\)</span> if both are negative). Then <span class="math inline">\(\lambda_1 w_1^2 + \lambda_2 w_2^2 = \rho\)</span> gives:</p>
+<p><span class="math display">\[\frac{w_1^2}{\rho/\lambda_1} + \frac{w_2^2}{\rho/\lambda_2} = 1\]</span></p>
+<p>which is an ellipse — provided <span class="math inline">\(\rho &gt; 0\)</span>. If <span class="math inline">\(\rho = 0\)</span>, both terms are non-negative and sum to zero, forcing <span class="math inline">\((w_1, w_2) = (0, 0)\)</span> — a single point, not very interesting. If <span class="math inline">\(\rho &lt; 0\)</span>, the left side is non-negative and the right side is negative — no real solutions at all.</p>
+<p>So same sign eigenvalues give the <strong>ellipse family</strong>: an ellipse, a single point, or the empty set.</p>
+<p><strong>Case 2: Opposite sign eigenvalues.</strong></p>
+<p>Suppose <span class="math inline">\(\lambda_1 &gt; 0\)</span> and <span class="math inline">\(\lambda_2 &lt; 0\)</span>, so <span class="math inline">\(|\lambda_2| = -\lambda_2\)</span>. The equation becomes:</p>
+<p><span class="math display">\[\lambda_1 w_1^2 - |\lambda_2| w_2^2 = \rho\]</span></p>
+<p>If <span class="math inline">\(\rho &gt; 0\)</span>:</p>
+<p><span class="math display">\[\frac{w_1^2}{\rho/\lambda_1} - \frac{w_2^2}{\rho/|\lambda_2|} = 1\]</span></p>
+<p>a hyperbola opening horizontally. If <span class="math inline">\(\rho &lt; 0\)</span>, dividing through by <span class="math inline">\(\rho\)</span> flips the signs — a hyperbola opening vertically.</p>
+<p>If <span class="math inline">\(\rho = 0\)</span>:</p>
+<p><span class="math display">\[\lambda_1 w_1^2 - |\lambda_2| w_2^2 = 0 \qquad \Longleftrightarrow \qquad
+(\sqrt{\lambda_1}\, w_1 - \sqrt{|\lambda_2|}\, w_2)(\sqrt{\lambda_1}\, w_1 +
+\sqrt{|\lambda_2|}\, w_2) = 0\]</span></p>
+<p>This is a pair of intersecting lines. Why? A product of two linear expressions equals zero if and only if at least one factor is zero — so the zero set is the union of the two lines <span class="math inline">\(\sqrt{\lambda_1}\, w_1 = \sqrt{|\lambda_2|}\, w_2\)</span> and <span class="math inline">\(\sqrt{\lambda_1}\, w_1 = -\sqrt{|\lambda_2|}\, w_2\)</span>. Since they have opposite slopes, they intersect at the origin. More generally, any equation of the form <span class="math inline">\((a_1 x + b_1 y + c_1)(a_2 x + b_2 y + c_2) = 0\)</span> is a pair of lines — each factor defines one line, and a point satisfies the product if and only if it lies on at least one of them.</p>
+<p>So opposite sign eigenvalues give the <strong>hyperbola family</strong>: a hyperbola or a pair of intersecting lines.</p>
+<p><strong>Case 3: One zero eigenvalue.</strong></p>
+<p>Suppose <span class="math inline">\(\lambda_1 \neq 0\)</span> and <span class="math inline">\(\lambda_2 = 0\)</span>, so:</p>
+<p><span class="math display">\[\Lambda = \begin{pmatrix} \lambda_1 &amp; 0 \\ 0 &amp; 0 \end{pmatrix}\]</span></p>
+<p>The equation <span class="math inline">\(F(\mathbf{z}) = 0\)</span> becomes:</p>
+<p><span class="math display">\[\lambda_1 z_1^2 + h_1 z_1 + h_2 z_2 + f = 0\]</span></p>
+<p>If <span class="math inline">\(h_2 \neq 0\)</span>, we can solve for <span class="math inline">\(z_2\)</span>:</p>
+<p><span class="math display">\[z_2 = -\frac{\lambda_1}{h_2} z_1^2 - \frac{h_1}{h_2} z_1 - \frac{f}{h_2}
+= \alpha(z_1 - \beta)^2 + \gamma\]</span></p>
+<p>for appropriate constants <span class="math inline">\(\alpha, \beta, \gamma\)</span> — a parabola.</p>
+<p>If <span class="math inline">\(h_2 = 0\)</span>, the <span class="math inline">\(z_2\)</span> variable disappears entirely and we are left with a quadratic in <span class="math inline">\(z_1\)</span> alone:</p>
+<p><span class="math display">\[\lambda_1 z_1^2 + h_1 z_1 + f = 0\]</span></p>
+<p>which factors (over <span class="math inline">\(\mathbb{R}\)</span>, when the discriminant is non-negative) as <span class="math inline">\(\lambda_1(z_1 - s)(z_1 - t) = 0\)</span> for constants <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span>. This gives two parallel lines <span class="math inline">\(z_1 = s\)</span> and <span class="math inline">\(z_1 = t\)</span> (or a repeated line if <span class="math inline">\(s = t\)</span>).</p>
+<p>So one zero eigenvalue gives the <strong>parabola family</strong>: a parabola or a pair of parallel lines.</p>
+</section>
+<section id="upshot" class="level3">
+<h3 class="anchored" data-anchor-id="upshot">Upshot</h3>
+<p>The shape of the conic is completely determined by the eigenvalues of the <span class="math inline">\(2 \times 2\)</span> matrix <span class="math inline">\(A\)</span>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Eigenvalues of <span class="math inline">\(A\)</span></th>
+<th>Generic case</th>
+<th>Degenerate case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Same sign</td>
+<td>Ellipse</td>
+<td>Single point or empty set</td>
+</tr>
+<tr class="even">
+<td>Opposite sign</td>
+<td>Hyperbola</td>
+<td>Pair of intersecting lines</td>
+</tr>
+<tr class="odd">
+<td>One zero</td>
+<td>Parabola</td>
+<td>Pair of parallel lines (or a repeated line)</td>
+</tr>
+</tbody>
+</table>
+<p>The linear terms <span class="math inline">\(\mathbf{g}\)</span> and constant <span class="math inline">\(f\)</span> only shift and translate — they do not change the type. The type is entirely in the quadratic part <span class="math inline">\(A\)</span>.</p>
+</section>
+<section id="what-happens-at-infinity" class="level3">
+<h3 class="anchored" data-anchor-id="what-happens-at-infinity">What Happens at Infinity?</h3>
+<p>A point <span class="math inline">\((x, y)^\top\)</span> lies on the conic if and only if <span class="math inline">\(F(x, y) = 0\)</span>. The conic is a level set — the zero set of <span class="math inline">\(F\)</span> in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+<p><strong>The ellipse is bounded.</strong> In the <span class="math inline">\(\mathbf{w}\)</span> coordinates from earlier, the ellipse is:</p>
+<p><span class="math display">\[\frac{w_1^2}{\rho/\lambda_1} + \frac{w_2^2}{\rho/\lambda_2} = 1\]</span></p>
+<p>with <span class="math inline">\(\lambda_1, \lambda_2, \rho &gt; 0\)</span>. Every point on the ellipse satisfies:</p>
+<p><span class="math display">\[w_1^2 \leq \frac{\rho}{\lambda_1} \qquad \text{and} \qquad w_2^2 \leq
+\frac{\rho}{\lambda_2}\]</span></p>
+<p>So both coordinates are bounded. The ellipse is contained in a rectangle — it cannot escape to infinity. There are no points on the ellipse arbitrarily far from the origin.</p>
+<p><strong>The hyperbola and parabola are unbounded.</strong> You can verify this directly from their standard forms — take <span class="math inline">\(x \to \infty\)</span> along either branch of a hyperbola, or along the arms of a parabola. Points escape to infinity.</p>
+<p>For these unbounded conics, a natural question arises: as we travel further and further along the conic, in what directions are we heading? Do these directions converge to something?</p>
+<p>The picture may be unfamiliar and even non-intuitive. But the answer involves some beautiful machinery from real analysis. Sit back and enjoy the ride. If the argument feels too involved, scroll down to the main result — but I promise the journey is worth it.</p>
+<p>What we will find here leads directly to the notion of a <strong>point at infinity</strong> for a conic — exactly analogous to what we found for parallel lines in Part 1.</p>
+<section id="the-escaping-sequence-argument" class="level4">
+<h4 class="anchored" data-anchor-id="the-escaping-sequence-argument">The Escaping Sequence Argument</h4>
+<p>Suppose the conic is unbounded. Then there exists a sequence of points <span class="math inline">\(\mathbf{x}_n = (x_n, y_n)^\top\)</span> on the conic with <span class="math inline">\(\|\mathbf{x}_n\| \to
+\infty\)</span>. Normalize each point to land on the unit circle:</p>
+<p><span class="math display">\[\hat{\mathbf{u}}_n = \frac{\mathbf{x}_n}{\|\mathbf{x}_n\|}, \qquad
+\|\hat{\mathbf{u}}_n\| = 1\]</span></p>
+<p>The unit circle in <span class="math inline">\(\mathbb{R}^2\)</span> is compact — it is closed and bounded. By the Bolzano-Weierstrass theorem, every sequence in a compact set has a convergent subsequence. So there exists a subsequence <span class="math inline">\(\hat{\mathbf{u}}_{n_k}
+\to \hat{\mathbf{u}}\)</span> with <span class="math inline">\(\|\hat{\mathbf{u}}\| = 1\)</span>.</p>
+<p>What can we say about <span class="math inline">\(\hat{\mathbf{u}}\)</span>? Since <span class="math inline">\(\mathbf{x}_{n_k} =
+\|\mathbf{x}_{n_k}\| \cdot \hat{\mathbf{u}}_{n_k}\)</span> lies on the conic:</p>
+<p><span class="math display">\[0 = F(\mathbf{x}_{n_k}) = \mathbf{x}_{n_k}^\top A \mathbf{x}_{n_k} +
+\mathbf{g}^\top \mathbf{x}_{n_k} + f\]</span></p>
+<p><span class="math display">\[= \|\mathbf{x}_{n_k}\|^2 \hat{\mathbf{u}}_{n_k}^\top A \hat{\mathbf{u}}_{n_k}
++ \|\mathbf{x}_{n_k}\| \mathbf{g}^\top \hat{\mathbf{u}}_{n_k} + f\]</span></p>
+<p>Divide through by <span class="math inline">\(\|\mathbf{x}_{n_k}\|^2\)</span>:</p>
+<p><span class="math display">\[0 = \hat{\mathbf{u}}_{n_k}^\top A \hat{\mathbf{u}}_{n_k} +
+\frac{\mathbf{g}^\top \hat{\mathbf{u}}_{n_k}}{\|\mathbf{x}_{n_k}\|} +
+\frac{f}{\|\mathbf{x}_{n_k}\|^2}\]</span> As <span class="math inline">\(k \to \infty\)</span>, the last two terms vanish — the numerators are bounded (by Cauchy-Schwarz, <span class="math inline">\(|\mathbf{g}^\top \hat{\mathbf{u}}_{n_k}| \leq \|\mathbf{g}\|\)</span>) while the denominators grow without bound. So:</p>
+<p><span class="math display">\[\lim_{k \to \infty} \hat{\mathbf{u}}_{n_k}^\top A \hat{\mathbf{u}}_{n_k} = 0\]</span></p>
+<p>Now we invoke continuity. Recall the sequential criterion: a function <span class="math inline">\(g\)</span> is continuous at a point <span class="math inline">\(\mathbf{a}\)</span> if and only if for every sequence <span class="math inline">\(\mathbf{x}_n \to \mathbf{a}\)</span>, we have <span class="math inline">\(g(\mathbf{x}_n) \to g(\mathbf{a})\)</span>.</p>
+<p>Define <span class="math inline">\(g(\mathbf{u}) = \mathbf{u}^\top A \mathbf{u}\)</span>. This is a polynomial in the entries of <span class="math inline">\(\mathbf{u}\)</span> — hence continuous everywhere. Since <span class="math inline">\(\hat{\mathbf{u}}_{n_k} \to \hat{\mathbf{u}}\)</span>, the sequential criterion gives:</p>
+<p><span class="math display">\[g(\hat{\mathbf{u}}_{n_k}) \to g(\hat{\mathbf{u}})\]</span></p>
+<p>But we already know <span class="math inline">\(g(\hat{\mathbf{u}}_{n_k}) \to 0\)</span>. By uniqueness of limits:</p>
+<p><span class="math display">\[\boxed{\hat{\mathbf{u}}^\top A \hat{\mathbf{u}} = 0}\]</span></p>
+<p>The limiting direction <span class="math inline">\(\hat{\mathbf{u}}\)</span> satisfies the <strong>quadratic part alone</strong>. The linear terms <span class="math inline">\(\mathbf{g}\)</span> and constant <span class="math inline">\(f\)</span> — the terms that distinguish between, say, different parabolas or differently positioned hyperbolas — become completely negligible at infinity. Only <span class="math inline">\(A\)</span> survives.</p>
+</section>
+<section id="the-main-result" class="level4">
+<h4 class="anchored" data-anchor-id="the-main-result">The Main Result</h4>
+<p>As points on an unbounded conic escape to infinity, their directions converge to a unit vector <span class="math inline">\(\hat{\mathbf{u}} = (\hat{u}_1, \hat{u}_2)^\top\)</span> satisfying <span class="math inline">\(\hat{\mathbf{u}}^\top A \hat{\mathbf{u}} = 0\)</span>. To count the number of such directions, assume <span class="math inline">\(\hat{u}_2 \neq 0\)</span> and set <span class="math inline">\(t = \hat{u}_1 / \hat{u}_2\)</span>. Dividing <span class="math inline">\(\hat{\mathbf{u}}^\top A \hat{\mathbf{u}} = 0\)</span> through by <span class="math inline">\(\hat{u}_2^2\)</span>:</p>
+<p><span class="math display">\[at^2 + bt + c = 0\]</span></p>
+<p>where <span class="math inline">\(a, b, c\)</span> are the same entries of <span class="math inline">\(A\)</span> from the original conic equation. This is a quadratic in <span class="math inline">\(t\)</span>, and the number of real solutions is determined by the discriminant <span class="math inline">\(\Delta = b^2 - 4ac\)</span>. But notice:</p>
+<p><span class="math display">\[\det A = ac - \frac{b^2}{4} \qquad \Longrightarrow \qquad \Delta = b^2 - 4ac
+= -4\det A\]</span></p>
+<p>So the discriminant and the determinant of <span class="math inline">\(A\)</span> carry the same information. The classification we already derived via eigenvalues reappears:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Eigenvalues of <span class="math inline">\(A\)</span></th>
+<th><span class="math inline">\(\det A\)</span></th>
+<th><span class="math inline">\(\Delta = b^2 - 4ac\)</span></th>
+<th>Escaping directions</th>
+<th>Conic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Same sign</td>
+<td><span class="math inline">\(&gt; 0\)</span></td>
+<td><span class="math inline">\(&lt; 0\)</span></td>
+<td>None</td>
+<td>Ellipse</td>
+</tr>
+<tr class="even">
+<td>One zero</td>
+<td><span class="math inline">\(= 0\)</span></td>
+<td><span class="math inline">\(= 0\)</span></td>
+<td>One (repeated)</td>
+<td>Parabola</td>
+</tr>
+<tr class="odd">
+<td>Opposite sign</td>
+<td><span class="math inline">\(&lt; 0\)</span></td>
+<td><span class="math inline">\(&gt; 0\)</span></td>
+<td>Two (distinct)</td>
+<td>Hyperbola</td>
+</tr>
+</tbody>
+</table>
+<p>The spectral theorem and the classical discriminant are two faces of the same classification. One proof, two languages.</p>
+<p>Let us verify the count more carefully.</p>
+<p><strong>Parabola (<span class="math inline">\(\Delta = 0\)</span>).</strong> The quadratic <span class="math inline">\(at^2 + bt + c = 0\)</span> has a repeated root <span class="math inline">\(t^* = -b/2a\)</span>. Since <span class="math inline">\(t = \hat{u}_1/\hat{u}_2\)</span>, this determines the ratio <span class="math inline">\(\hat{u}_1 : \hat{u}_2 = -b : 2a\)</span>, giving direction vector <span class="math inline">\((-b, 2a)^\top\)</span> unique up to nonzero scale. But <span class="math inline">\(\hat{\mathbf{u}}\)</span> and <span class="math inline">\(-\hat{\mathbf{u}}\)</span> represent the same direction — they point along the same line through the origin, just in opposite senses. So there is exactly <strong>one</strong> escaping direction.</p>
+<p><strong>Hyperbola (<span class="math inline">\(\Delta &gt; 0\)</span>).</strong> The quadratic <span class="math inline">\(at^2 + bt + c = 0\)</span> has two distinct roots <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span>, giving two direction vectors <span class="math inline">\(\hat{\mathbf{u}}_1\)</span> and <span class="math inline">\(\hat{\mathbf{u}}_2\)</span>. Together with their negatives, we have four unit vectors on the unit circle: <span class="math inline">\(\hat{\mathbf{u}}_1\)</span>, <span class="math inline">\(-\hat{\mathbf{u}}_1\)</span>, <span class="math inline">\(\hat{\mathbf{u}}_2\)</span>, <span class="math inline">\(-\hat{\mathbf{u}}_2\)</span>. Since opposite vectors represent the same direction, there are exactly <strong>two</strong> distinct escaping directions — one for each branch of the hyperbola.</p>
+<p>These escaping directions are the limiting directions of the conic in <span class="math inline">\(\mathbb{R}^2\)</span> — directions the curve approaches but never reaches. We will see shortly that <span class="math inline">\(\mathbb{P}^2\)</span> is exactly the space built to give these directions a home.</p>
+</section>
+<section id="why-u_3-0" class="level4">
+<h4 class="anchored" data-anchor-id="why-u_3-0">Why <span class="math inline">\(u_3 = 0\)</span>?</h4>
+<p>The limiting direction <span class="math inline">\(\hat{\mathbf{u}} = (\hat{u}_1, \hat{u}_2)^\top\)</span> is a unit vector in <span class="math inline">\(\mathbb{R}^2\)</span>. It encodes a direction, not a point — you cannot write it as a finite point <span class="math inline">\((x, y)^\top\)</span> on the conic. It has no home in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+<p>But we already know where directions live. Recall from Part 1: the equivalence classes with <span class="math inline">\(u_3 = 0\)</span> in <span class="math inline">\(\mathbb{P}^2\)</span> are precisely the directions in <span class="math inline">\(\mathbb{R}^2\)</span> — one class per direction, with no home in <span class="math inline">\(\mathbb{R}^2\)</span> itself. Lifting <span class="math inline">\(\hat{\mathbf{u}} = (\hat{u}_1, \hat{u}_2)^\top\)</span> to <span class="math inline">\([\hat{u}_1 : \hat{u}_2 : 0]\)</span> is not a trick — it is the natural home for a direction the conic is escaping toward.</p>
+<p>In the next section, we will lift the entire conic equation to <span class="math inline">\(\mathbb{P}^2\)</span> and see that setting <span class="math inline">\(u_3 = 0\)</span> in the projective conic equation recovers exactly <span class="math inline">\(\hat{\mathbf{u}}^\top A \hat{\mathbf{u}} = 0\)</span>. The escaping sequence argument and the algebraic condition will agree exactly.</p>
+<p><span class="math inline">\(\mathbb{P}^2\)</span> is not inventing new geometry. It is giving a home to directions the algebra was always going to produce.</p>
+</section>
+</section>
+</section>
+<section id="lifting-the-conic-to-mathbbp2" class="level2">
+<h2 class="anchored" data-anchor-id="lifting-the-conic-to-mathbbp2">Lifting the Conic to <span class="math inline">\(\mathbb{P}^2\)</span></h2>
+<p>So far we have been working in <span class="math inline">\(\mathbb{R}^2\)</span>. The conic is the zero set of <span class="math inline">\(F(x, y) = 0\)</span> — a degree-2 polynomial in two variables. But we have seen that <span class="math inline">\(\mathbb{R}^2\)</span> is too small: it has no room for the limiting directions the conic produces when it escapes to infinity.</p>
+<p>The fix is the same one we used in Part 1. Represent the point <span class="math inline">\((x, y)^\top\)</span> by a triple <span class="math inline">\((u_1, u_2, u_3)^\top\)</span> with <span class="math inline">\(x = u_1/u_3\)</span> and <span class="math inline">\(y = u_2/u_3\)</span>, and substitute into <span class="math inline">\(F(x, y) = 0\)</span>.</p>
+<section id="substituting-into-the-conic-equation" class="level3">
+<h3 class="anchored" data-anchor-id="substituting-into-the-conic-equation">Substituting into the Conic Equation</h3>
+<p>Substitute <span class="math inline">\(x = u_1/u_3\)</span> and <span class="math inline">\(y = u_2/u_3\)</span> into:</p>
+<p><span class="math display">\[F(x, y) = ax^2 + bxy + cy^2 + dx + ey + f = 0\]</span></p>
+<p><span class="math display">\[a\frac{u_1^2}{u_3^2} + b\frac{u_1 u_2}{u_3^2} + c\frac{u_2^2}{u_3^2} +
+d\frac{u_1}{u_3} + e\frac{u_2}{u_3} + f = 0\]</span></p>
+<p>Multiply through by <span class="math inline">\(u_3^2\)</span>:</p>
+<p><span class="math display">\[au_1^2 + bu_1u_2 + cu_2^2 + du_1u_3 + eu_2u_3 + fu_3^2 = 0\]</span></p>
+<p>This is a homogeneous degree-2 equation in <span class="math inline">\((u_1, u_2, u_3)^\top\)</span>. It can be written compactly as:</p>
+<p><span class="math display">\[\mathbf{u}^\top C \mathbf{u} = 0\]</span></p>
+<p>where <span class="math inline">\(C\)</span> is the <span class="math inline">\(3 \times 3\)</span> symmetric matrix:</p>
+<p><span class="math display">\[C = \begin{pmatrix} a &amp; b/2 &amp; d/2 \\ b/2 &amp; c &amp; e/2 \\ d/2 &amp; e/2 &amp; f
+\end{pmatrix}\]</span></p>
+</section>
+<section id="well-definedness-on-equivalence-classes" class="level3">
+<h3 class="anchored" data-anchor-id="well-definedness-on-equivalence-classes">Well-Definedness on Equivalence Classes</h3>
+<p>Does <span class="math inline">\(\mathbf{u}^\top C \mathbf{u} = 0\)</span> make sense as an equation on equivalence classes? If <span class="math inline">\(\mathbf{u}_0\)</span> satisfies it, does <span class="math inline">\(\lambda\mathbf{u}_0\)</span> also satisfy it for any <span class="math inline">\(\lambda \neq 0\)</span>?</p>
+<p><span class="math display">\[(\lambda\mathbf{u}_0)^\top C (\lambda\mathbf{u}_0) = \lambda^2 \mathbf{u}_0^\top
+C \mathbf{u}_0 = \lambda^2 \cdot 0 = 0 \checkmark\]</span></p>
+<p>Yes. The conic equation is well-defined on equivalence classes — it lives naturally in <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+</section>
+<section id="the-connection-to-points-at-infinity" class="level3">
+<h3 class="anchored" data-anchor-id="the-connection-to-points-at-infinity">The Connection to Points at Infinity</h3>
+<p>Now set <span class="math inline">\(u_3 = 0\)</span> in <span class="math inline">\(\mathbf{u}^\top C \mathbf{u} = 0\)</span>:</p>
+<p><span class="math display">\[au_1^2 + bu_1u_2 + cu_2^2 = 0\]</span></p>
+<p>This is exactly <span class="math inline">\(\hat{\mathbf{u}}^\top A \hat{\mathbf{u}} = 0\)</span> with <span class="math inline">\(\hat{\mathbf{u}} = (u_1, u_2)^\top\)</span> — the condition we derived from the escaping sequence argument. The two calculations agree exactly. The points at infinity of the conic are the <span class="math inline">\(u_3 = 0\)</span> classes satisfying the projective conic equation.</p>
+<p><span class="math inline">\(\mathbb{P}^2\)</span> is not inventing new geometry. It is giving a home to directions the algebra was always going to produce.</p>
+</section>
+<section id="degrees-of-freedom" class="level3">
+<h3 class="anchored" data-anchor-id="degrees-of-freedom">Degrees of Freedom</h3>
+<p>Suppose we have two sets of six numbers <span class="math inline">\((a, b, c, d, e, f)\)</span> and <span class="math inline">\((a', b', c', d', e', f')\)</span>. When do they define the same conic?</p>
+<p>The easy direction is clear: if <span class="math inline">\((a', b', c', d', e', f') = \lambda(a, b, c,
+d, e, f)\)</span> for some <span class="math inline">\(\lambda \neq 0\)</span>, then the two equations are:</p>
+<p><span class="math display">\[ax^2 + bxy + cy^2 + dx + ey + f = 0\]</span> <span class="math display">\[\lambda ax^2 + \lambda bxy + \lambda cy^2 + \lambda dx + \lambda ey + \lambda f = 0\]</span></p>
+<p>The second is just the first multiplied by <span class="math inline">\(\lambda\)</span>. Since <span class="math inline">\(\lambda \neq 0\)</span>, dividing through by <span class="math inline">\(\lambda\)</span> recovers the first equation exactly. The zero sets are identical — same conic.</p>
+<p>The other direction — that the same zero set forces one to be a scalar multiple of the other — is less obvious. It turns out to be true for non-degenerate conics, and the proof is beyond the scope of this post. We will not give the full proof here, but take the result as given.</p>
+<p>So what matters is not the six numbers themselves but their ratios — the equivalence class <span class="math inline">\([a : b : c : d : e : f]\)</span>, an element of <span class="math inline">\(\mathbb{P}^5\)</span>. One degree of freedom is removed for scale.</p>
+<p>For example, <span class="math inline">\(x^2 + 2xy + 3y^2 + 4x + 5y + 6 = 0\)</span> and <span class="math inline">\(2x^2 + 4xy + 6y^2
++ 8x + 10y + 12 = 0\)</span> define the same conic — every coefficient is scaled by <span class="math inline">\(2\)</span>, so the zero sets are identical.</p>
+<p>A conic therefore has <strong>5 degrees of freedom</strong>.</p>
+</section>
+</section>
+<section id="tangent-lines-to-a-conic" class="level2">
+<h2 class="anchored" data-anchor-id="tangent-lines-to-a-conic">Tangent Lines to a Conic</h2>
+<section id="implicit-differentiation-in-mathbbr2" class="level3">
+<h3 class="anchored" data-anchor-id="implicit-differentiation-in-mathbbr2">Implicit Differentiation in <span class="math inline">\(\mathbb{R}^2\)</span></h3>
+<p>The conic is <span class="math inline">\(F(x, y) = ax^2 + bxy + cy^2 + dx + ey + f = 0\)</span>. We want the tangent line at a point <span class="math inline">\((x_0, y_0)\)</span> on the conic. Differentiating implicitly:</p>
+<p><span class="math display">\[2ax + b\left(y + x\frac{dy}{dx}\right) + 2cy\frac{dy}{dx} + d + e\frac{dy}{dx} = 0\]</span></p>
+<p>Solving for <span class="math inline">\(dy/dx\)</span> at <span class="math inline">\((x_0, y_0)\)</span>:</p>
+<p><span class="math display">\[\frac{dy}{dx}\bigg|_{(x_0,y_0)} = -\frac{2ax_0 + by_0 + d}{bx_0 + 2cy_0 + e}\]</span></p>
+<p>The tangent line at <span class="math inline">\((x_0, y_0)\)</span> is:</p>
+<p><span class="math display">\[y - y_0 = -\frac{2ax_0 + by_0 + d}{bx_0 + 2cy_0 + e}(x - x_0)\]</span></p>
+<p>Rearranging:</p>
+<p><span class="math display">\[(2ax_0 + by_0 + d)x + (bx_0 + 2cy_0 + e)y - [(2ax_0 + by_0 + d)x_0 + (bx_0 + 2cy_0 + e)y_0] = 0\]</span></p>
+<p>Now look at the constant term:</p>
+<p><span class="math display">\[(2ax_0 + by_0 + d)x_0 + (bx_0 + 2cy_0 + e)y_0\]</span> <span class="math display">\[= 2ax_0^2 + 2bx_0y_0 + 2cy_0^2 + dx_0 + ey_0\]</span></p>
+<p>Since <span class="math inline">\((x_0, y_0)\)</span> lies on the conic, <span class="math inline">\(F(x_0, y_0) = 0\)</span> gives:</p>
+<p><span class="math display">\[dx_0 + ey_0 = -ax_0^2 - bx_0y_0 - cy_0^2 - f\]</span></p>
+<p>Substituting:</p>
+<p><span class="math display">\[\text{constant} = 2ax_0^2 + 2bx_0y_0 + 2cy_0^2 - ax_0^2 - bx_0y_0 - cy_0^2 - f\]</span> <span class="math display">\[= ax_0^2 + bx_0y_0 + cy_0^2 - f\]</span></p>
+<p>So the tangent line is:</p>
+<p><span class="math display">\[(2ax_0 + by_0 + d)x + (bx_0 + 2cy_0 + e)y + (-ax_0^2 - bx_0y_0 - cy_0^2 + f) = 0\]</span></p>
+<p>Call the coefficients <span class="math inline">\(m_1, m_2, m_3\)</span>:</p>
+<p><span class="math display">\[m_1 x + m_2 y + m_3 = 0\]</span></p>
+<p>Notice that <span class="math inline">\(m_1 = \partial F/\partial x\big|_{(x_0,y_0)}\)</span> and <span class="math inline">\(m_2 = \partial
+F/\partial y\big|_{(x_0,y_0)}\)</span>.</p>
+</section>
+<section id="lifting-to-homogeneous-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="lifting-to-homogeneous-coordinates">Lifting to Homogeneous Coordinates</h3>
+<p>Now lift <span class="math inline">\(\mathbf{x}_0 = (x_0, y_0)^\top\)</span> to <span class="math inline">\(\tilde{\mathbf{u}}_0 = (x_0,
+y_0, 1)^\top\)</span>. Let us write <span class="math inline">\(C = [\mathbf{c}_1\ \mathbf{c}_2\ \mathbf{c}_3]\)</span> where <span class="math inline">\(\mathbf{c}_i\)</span> denotes the <span class="math inline">\(i\)</span>-th column of <span class="math inline">\(C\)</span>.</p>
+<p><strong><span class="math inline">\(m_1\)</span>:</strong></p>
+<p><span class="math display">\[m_1 = 2ax_0 + by_0 + d = (2a, b, d) \cdot (x_0, y_0, 1)\]</span></p>
+<p>But the first row of <span class="math inline">\(C\)</span> is <span class="math inline">\((a, b/2, d/2)\)</span>, so <span class="math inline">\((2a, b, d) = 2 \times\)</span> first row of <span class="math inline">\(C\)</span>. Since <span class="math inline">\(C\)</span> is symmetric, the first row equals the first column <span class="math inline">\(\mathbf{c}_1^\top\)</span>. So:</p>
+<p><span class="math display">\[m_1 = 2\mathbf{c}_1^\top \tilde{\mathbf{u}}_0\]</span></p>
+<p><strong><span class="math inline">\(m_2\)</span>:</strong> By the same argument with the second column:</p>
+<p><span class="math display">\[m_2 = 2\mathbf{c}_2^\top \tilde{\mathbf{u}}_0\]</span></p>
+<p><strong><span class="math inline">\(m_3\)</span>:</strong> Is <span class="math inline">\(m_3 = 2\mathbf{c}_3^\top \tilde{\mathbf{u}}_0\)</span>? Let us check. The third column of <span class="math inline">\(C\)</span> is <span class="math inline">\(\mathbf{c}_3 = (d/2, e/2, f)^\top\)</span>, so:</p>
+<p><span class="math display">\[2\mathbf{c}_3^\top \tilde{\mathbf{u}}_0 = 2\left(\frac{d}{2}x_0 + \frac{e}{2}y_0 + f\right) = dx_0 + ey_0 + 2f\]</span></p>
+<p>Using <span class="math inline">\(F(x_0, y_0) = 0\)</span>: <span class="math inline">\(dx_0 + ey_0 = -ax_0^2 - bx_0y_0 - cy_0^2 - f\)</span>. Substituting:</p>
+<p><span class="math display">\[2\mathbf{c}_3^\top \tilde{\mathbf{u}}_0 = -ax_0^2 - bx_0y_0 - cy_0^2 - f + 2f = -ax_0^2 - bx_0y_0 - cy_0^2 + f = m_3 \checkmark\]</span></p>
+<p>So all three coefficients satisfy <span class="math inline">\(m_i = 2\mathbf{c}_i^\top \tilde{\mathbf{u}}_0\)</span>. Stacking:</p>
+<p><span class="math display">\[\begin{pmatrix} m_1 \\ m_2 \\ m_3 \end{pmatrix} = 2 \begin{pmatrix} \mathbf{c}_1^\top \\ \mathbf{c}_2^\top \\ \mathbf{c}_3^\top \end{pmatrix} \tilde{\mathbf{u}}_0 = 2C\tilde{\mathbf{u}}_0\]</span></p>
+<p>The tangent line at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> is:</p>
+<p><span class="math display">\[\boxed{\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0}\]</span></p>
+<p>The factor of <span class="math inline">\(2\)</span> disappears because lines in <span class="math inline">\(\mathbb{P}^2\)</span> are defined only up to nonzero scale — <span class="math inline">\(\boldsymbol{\ell}\)</span> and <span class="math inline">\(2\boldsymbol{\ell}\)</span> represent the same line.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/madhavpr191221\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Madhav Prashanth Ramachandran</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/madhavpr191221">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/madhavpr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
