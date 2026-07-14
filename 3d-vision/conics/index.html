@@ -182,6 +182,9 @@ window.Quarto = {
   <li><a href="#conics" id="toc-conics" class="nav-link" data-scroll-target="#conics">Conics</a></li>
   <li><a href="#lifting-the-conic-to-mathbbp2" id="toc-lifting-the-conic-to-mathbbp2" class="nav-link" data-scroll-target="#lifting-the-conic-to-mathbbp2">Lifting the Conic to <span class="math inline">\(\mathbb{P}^2\)</span></a></li>
   <li><a href="#tangent-lines-to-a-conic" id="toc-tangent-lines-to-a-conic" class="nav-link" data-scroll-target="#tangent-lines-to-a-conic">Tangent Lines to a Conic</a></li>
+  <li><a href="#the-dual-conic" id="toc-the-dual-conic" class="nav-link" data-scroll-target="#the-dual-conic">The Dual Conic</a></li>
+  <li><a href="#degenerate-conics" id="toc-degenerate-conics" class="nav-link" data-scroll-target="#degenerate-conics">Degenerate Conics</a></li>
+  <li><a href="#what-does-any-of-this-have-to-do-with-3d-vision" id="toc-what-does-any-of-this-have-to-do-with-3d-vision" class="nav-link" data-scroll-target="#what-does-any-of-this-have-to-do-with-3d-vision">What Does Any of This Have to Do with 3D Vision?</a></li>
   </ul>
 </nav>
     </div>
@@ -629,6 +632,27 @@ d, e, f)\)</span> for some <span class="math inline">\(\lambda \neq 0\)</span>, 
 <p><span class="math display">\[m_1 x + m_2 y + m_3 = 0\]</span></p>
 <p>Notice that <span class="math inline">\(m_1 = \partial F/\partial x\big|_{(x_0,y_0)}\)</span> and <span class="math inline">\(m_2 = \partial
 F/\partial y\big|_{(x_0,y_0)}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What if the Denominator is Zero?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We computed:</p>
+<p><span class="math display">\[\frac{dy}{dx}\bigg|_{(x_0,y_0)} = -\frac{2ax_0 + by_0 + d}{bx_0 + 2cy_0 + e}\]</span></p>
+<p>What if the denominator <span class="math inline">\(bx_0 + 2cy_0 + e = 0\)</span> at the point of interest? Then <span class="math inline">\(dy/dx\)</span> is undefined — the tangent line is vertical, and we cannot express it as <span class="math inline">\(y = mx + k\)</span> for any finite slope <span class="math inline">\(m\)</span>. This is not a problem for the geometry — a vertical line is a perfectly valid tangent line — but it is a limitation of the <span class="math inline">\(dy/dx\)</span> formulation.</p>
+<p>The implicit function theorem tells us precisely when we can locally express <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span> (or vice versa) near a point <span class="math inline">\((x_0, y_0)\)</span> on the curve <span class="math inline">\(F(x, y) = 0\)</span>:</p>
+<p><strong>Implicit Function Theorem (<span class="math inline">\(\mathbb{R}^2\)</span>).</strong> Let <span class="math inline">\(F : \mathbb{R}^2 \to
+\mathbb{R}\)</span> be continuously differentiable near <span class="math inline">\((x_0, y_0)\)</span> with <span class="math inline">\(F(x_0,
+y_0) = 0\)</span>. If <span class="math inline">\(\partial F / \partial y\big|_{(x_0, y_0)} \neq 0\)</span>, then there exists a neighbourhood of <span class="math inline">\(x_0\)</span> and a unique continuously differentiable function <span class="math inline">\(y = g(x)\)</span> such that <span class="math inline">\(F(x, g(x)) = 0\)</span> near <span class="math inline">\((x_0, y_0)\)</span>, with:</p>
+<p><span class="math display">\[g'(x_0) = -\frac{\partial F/\partial x}{\partial F/\partial y}\bigg|_{(x_0,y_0)}\]</span></p>
+<p>When <span class="math inline">\(\partial F/\partial y = 0\)</span> but <span class="math inline">\(\partial F/\partial x \neq 0\)</span>, the roles of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> swap — we can express <span class="math inline">\(x\)</span> as a function of <span class="math inline">\(y\)</span> instead, and the tangent line is vertical. The formula <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span> handles both cases uniformly — no special treatment needed.</p>
+</div>
+</div>
 </section>
 <section id="lifting-to-homogeneous-coordinates" class="level3">
 <h3 class="anchored" data-anchor-id="lifting-to-homogeneous-coordinates">Lifting to Homogeneous Coordinates</h3>
@@ -649,9 +673,226 @@ y_0, 1)^\top\)</span>. Let us write <span class="math inline">\(C = [\mathbf{c}_
 <p>The tangent line at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> is:</p>
 <p><span class="math display">\[\boxed{\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0}\]</span></p>
 <p>The factor of <span class="math inline">\(2\)</span> disappears because lines in <span class="math inline">\(\mathbb{P}^2\)</span> are defined only up to nonzero scale — <span class="math inline">\(\boldsymbol{\ell}\)</span> and <span class="math inline">\(2\boldsymbol{\ell}\)</span> represent the same line.</p>
-
-
 </section>
+<section id="the-converse-is-boldsymbolell-ctildemathbfu_0-always-a-tangent" class="level3">
+<h3 class="anchored" data-anchor-id="the-converse-is-boldsymbolell-ctildemathbfu_0-always-a-tangent">The Converse: Is <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span> Always a Tangent?</h3>
+<p>We showed that if <span class="math inline">\(\boldsymbol{\ell}\)</span> is tangent to the conic at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>, then <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span>. Is the converse true? If <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span> for some point <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> on the conic, is <span class="math inline">\(\boldsymbol{\ell}\)</span> necessarily tangent?</p>
+<p>A line is tangent to the conic at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> if two conditions hold: the line passes through <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>, and the line meets the conic only at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>.</p>
+<p><strong>Condition 1: Does <span class="math inline">\(\boldsymbol{\ell}\)</span> pass through <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>?</strong></p>
+<p>Check the incidence condition <span class="math inline">\(\boldsymbol{\ell}^\top \tilde{\mathbf{u}}_0 = 0\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top \tilde{\mathbf{u}}_0 = (C\tilde{\mathbf{u}}_0)^\top
+\tilde{\mathbf{u}}_0 = \tilde{\mathbf{u}}_0^\top C^\top \tilde{\mathbf{u}}_0
+= \tilde{\mathbf{u}}_0^\top C \tilde{\mathbf{u}}_0 = 0\]</span></p>
+<p>where we used <span class="math inline">\(C^\top = C\)</span> (symmetry) and the fact that <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> lies on the conic. So yes — <span class="math inline">\(\boldsymbol{\ell}\)</span> passes through <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>. <span class="math inline">\(\checkmark\)</span></p>
+<p><strong>Condition 2: Does <span class="math inline">\(\boldsymbol{\ell}\)</span> meet the conic only at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>?</strong></p>
+<p>Suppose for contradiction that <span class="math inline">\(\boldsymbol{\ell}\)</span> meets the conic at two distinct points <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> and <span class="math inline">\(\mathbf{w}_0\)</span>. Since both lie on the line <span class="math inline">\(\boldsymbol{\ell}\)</span>, the incidence condition gives:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top \tilde{\mathbf{u}}_0 = 0 \qquad \text{and} \qquad
+\boldsymbol{\ell}^\top \mathbf{w}_0 = 0\]</span></p>
+<p>Substituting <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span>:</p>
+<p><span class="math display">\[(C\tilde{\mathbf{u}}_0)^\top \mathbf{w}_0 = 0 \qquad \Longrightarrow \qquad
+\tilde{\mathbf{u}}_0^\top C \mathbf{w}_0 = 0\]</span></p>
+<p>Now consider the line joining <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> and <span class="math inline">\(\mathbf{w}_0\)</span>, parametrized as:</p>
+<p><span class="math display">\[\mathbf{u}(\lambda) = \tilde{\mathbf{u}}_0 + \lambda \mathbf{w}_0\]</span></p>
+<p>Substitute into the conic equation:</p>
+<p><span class="math display">\[\mathbf{u}(\lambda)^\top C \mathbf{u}(\lambda) = (\tilde{\mathbf{u}}_0 +
+\lambda\mathbf{w}_0)^\top C (\tilde{\mathbf{u}}_0 + \lambda\mathbf{w}_0)\]</span></p>
+<p><span class="math display">\[= \tilde{\mathbf{u}}_0^\top C \tilde{\mathbf{u}}_0 + 2\lambda
+\tilde{\mathbf{u}}_0^\top C \mathbf{w}_0 + \lambda^2 \mathbf{w}_0^\top C
+\mathbf{w}_0\]</span></p>
+<p><span class="math display">\[= 0 + 2\lambda \cdot 0 + \lambda^2 \cdot 0 = 0\]</span></p>
+<p>for all <span class="math inline">\(\lambda\)</span>. So every point on the line joining <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> and <span class="math inline">\(\mathbf{w}_0\)</span> lies on the conic.</p>
+<p>But the conic <span class="math inline">\(\mathbf{u}^\top C \mathbf{u} = 0\)</span> is a degree-2 polynomial equation. A line intersects a degree-2 curve in at most 2 points — unless the entire line lies on the curve. We have just shown that infinitely many points on the line lie on the conic, which is a contradiction.</p>
+<p>Therefore <span class="math inline">\(\boldsymbol{\ell}\)</span> meets the conic only at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>. <span class="math inline">\(\checkmark\)</span></p>
+<p>Both conditions hold. The converse is true: <span class="math inline">\(\boldsymbol{\ell} =
+C\tilde{\mathbf{u}}_0\)</span> is always a tangent line to the conic at <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+</section>
+</section>
+<section id="the-dual-conic" class="level2">
+<h2 class="anchored" data-anchor-id="the-dual-conic">The Dual Conic</h2>
+<p>We understand the tangency condition in one direction: given a point <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> on the conic, the tangent line is <span class="math inline">\(\boldsymbol{\ell} =
+C\tilde{\mathbf{u}}_0\)</span>.</p>
+<p>The natural dual question is: given a line <span class="math inline">\(\boldsymbol{\ell}\)</span>, is it tangent to the conic? And if so, what is the point of tangency?</p>
+<p>My approach to working math problems is this: <em>suppose the problem is solved, see what has to happen</em>. I have borrowed this from Prof.&nbsp;Brad Osgood (Stanford University), whose <a href="https://www.youtube.com/playlist?list=PLB24BC7956EE040CD">lectures on Fourier transforms</a> are the best mathematical lectures ever recorded.</p>
+<p>So suppose <span class="math inline">\(\boldsymbol{\ell}\)</span> is tangent to the conic. Then there exists a point of tangency <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> on the conic such that:</p>
+<p><span class="math display">\[\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\]</span></p>
+<p>If <span class="math inline">\(C\)</span> is invertible, we can solve for <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span>:</p>
+<p><span class="math display">\[\tilde{\mathbf{u}}_0 = C^{-1}\boldsymbol{\ell}\]</span></p>
+<p>Since <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> is a point on the conic, it satisfies <span class="math inline">\(\tilde{\mathbf{u}}_0^\top C \tilde{\mathbf{u}}_0 = 0\)</span>. Substituting <span class="math inline">\(\tilde{\mathbf{u}}_0 = C^{-1}\boldsymbol{\ell}\)</span>:</p>
+<p><span class="math display">\[(C^{-1}\boldsymbol{\ell})^\top C (C^{-1}\boldsymbol{\ell}) = 0\]</span></p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top (C^{-1})^\top C C^{-1} \boldsymbol{\ell} = 0\]</span></p>
+<p>Since <span class="math inline">\(C\)</span> is symmetric, <span class="math inline">\(C^\top = C\)</span>, which gives <span class="math inline">\((C^{-1})^\top =
+(C^\top)^{-1} = C^{-1}\)</span>. And <span class="math inline">\(C^{-1} \cdot C \cdot C^{-1} = C^{-1}\)</span>. So:</p>
+<p><span class="math display">\[\boxed{\boldsymbol{\ell}^\top C^{-1} \boldsymbol{\ell} = 0}\]</span></p>
+<p>This is the <strong>dual conic</strong>. A line <span class="math inline">\(\boldsymbol{\ell}\)</span> is tangent to the conic <span class="math inline">\(\mathbf{u}^\top C \mathbf{u} = 0\)</span> if and only if it satisfies <span class="math inline">\(\boldsymbol{\ell}^\top C^{-1} \boldsymbol{\ell} = 0\)</span>.</p>
+<p>The dual conic is itself a conic — but one whose points are lines in <span class="math inline">\(\mathbb{P}^2\)</span> rather than points. The set of all tangent lines to a conic forms a conic in the dual space, with matrix <span class="math inline">\(C^{-1}\)</span>.</p>
+<section id="picturing-the-dual-conic" class="level3">
+<h3 class="anchored" data-anchor-id="picturing-the-dual-conic">Picturing the Dual Conic</h3>
+<p>Take the ellipse <span class="math inline">\(\frac{x^2}{4} + y^2 = 1\)</span>, or equivalently:</p>
+<p><span class="math display">\[\frac{x^2}{4} + y^2 - 1 = 0\]</span></p>
+<p>The conic matrix is:</p>
+<p><span class="math display">\[C = \begin{pmatrix} 1/4 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix}\]</span></p>
+<p>As you walk around the ellipse, at each point <span class="math inline">\(\tilde{\mathbf{u}}_0\)</span> you get one tangent line <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span>. Let us compute a few.</p>
+<p><strong>At <span class="math inline">\((2, 0)^\top\)</span></strong>, i.e.&nbsp;<span class="math inline">\(\tilde{\mathbf{u}}_0 = (2, 0, 1)^\top\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0 = \begin{pmatrix} 1/4 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix} \begin{pmatrix} 2 \\ 0 \\ 1 \end{pmatrix}
+= \begin{pmatrix} 1/2 \\ 0 \\ -1 \end{pmatrix}\]</span></p>
+<p>The tangent line is <span class="math inline">\(\frac{1}{2}x - 1 = 0\)</span>, i.e.&nbsp;<span class="math inline">\(x = 2\)</span>. A vertical line at the rightmost point of the ellipse — as expected.</p>
+<p><strong>At <span class="math inline">\((0, 1)^\top\)</span></strong>, i.e.&nbsp;<span class="math inline">\(\tilde{\mathbf{u}}_0 = (0, 1, 1)^\top\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0 = \begin{pmatrix} 1/4 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix} \begin{pmatrix} 0 \\ 1 \\ 1 \end{pmatrix}
+= \begin{pmatrix} 0 \\ 1 \\ -1 \end{pmatrix}\]</span></p>
+<p>The tangent line is <span class="math inline">\(y - 1 = 0\)</span>, i.e.&nbsp;<span class="math inline">\(y = 1\)</span>. A horizontal line at the topmost point — again as expected.</p>
+<p><strong>At <span class="math inline">\((1, \sqrt{3}/2)^\top\)</span></strong>, i.e.&nbsp;<span class="math inline">\(\tilde{\mathbf{u}}_0 = (1, \sqrt{3}/2,
+1)^\top\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0 = \begin{pmatrix} 1/4 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix} \begin{pmatrix} 1 \\ \sqrt{3}/2 \\ 1
+\end{pmatrix} = \begin{pmatrix} 1/4 \\ \sqrt{3}/2 \\ -1 \end{pmatrix}\]</span></p>
+<p>The tangent line is <span class="math inline">\(\frac{1}{4}x + \frac{\sqrt{3}}{2}y - 1 = 0\)</span>, or equivalently <span class="math inline">\(x + 2\sqrt{3}y - 4 = 0\)</span>. A diagonal line, as you would expect at a point partway around the ellipse.</p>
+<p>Now, the dual conic <span class="math inline">\(\boldsymbol{\ell}^\top C^{-1} \boldsymbol{\ell} = 0\)</span> is the set of all such tangent lines — one for each point on the ellipse. As you walk around the ellipse, the tangent line rotates and sweeps out a family of lines. That family is the dual conic.</p>
+<p>Let us compute <span class="math inline">\(C^{-1}\)</span>:</p>
+<p><span class="math display">\[C^{-1} = \begin{pmatrix} 4 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix}\]</span></p>
+<p>So the dual conic equation <span class="math inline">\(\boldsymbol{\ell}^\top C^{-1} \boldsymbol{\ell} =
+0\)</span> for a line <span class="math inline">\(\boldsymbol{\ell} = (l_1, l_2, l_3)^\top\)</span> is:</p>
+<p><span class="math display">\[4l_1^2 + l_2^2 - l_3^2 = 0\]</span></p>
+<p>This is a conic in the space of lines — its “points” are the tangent lines to the ellipse. In <span class="math inline">\(\mathbb{R}^2\)</span>, the dual conic is not a curve you draw on paper — it is the <strong>envelope</strong> of the tangent lines, the boundary of the region they collectively carve out. The ellipse and its dual conic encode the same geometric object from two different perspectives: one as a locus of points, the other as a family of lines.</p>
+</section>
+<section id="verification" class="level3">
+<h3 class="anchored" data-anchor-id="verification">Verification</h3>
+<p>Let us verify that our three tangent lines satisfy the dual conic equation <span class="math inline">\(4l_1^2 + l_2^2 - l_3^2 = 0\)</span>.</p>
+<p><strong>Tangent at <span class="math inline">\((2, 0)^\top\)</span>:</strong> The line <span class="math inline">\(x = 2\)</span> is <span class="math inline">\(x - 2 = 0\)</span>, so <span class="math inline">\(\boldsymbol{\ell} = (1, 0, -2)^\top\)</span>:</p>
+<p><span class="math display">\[4(1)^2 + (0)^2 - (-2)^2 = 4 + 0 - 4 = 0 \checkmark\]</span></p>
+<p><strong>Tangent at <span class="math inline">\((0, 1)^\top\)</span>:</strong> The line <span class="math inline">\(y = 1\)</span> is <span class="math inline">\(y - 1 = 0\)</span>, so <span class="math inline">\(\boldsymbol{\ell} = (0, 1, -1)^\top\)</span>:</p>
+<p><span class="math display">\[4(0)^2 + (1)^2 - (-1)^2 = 0 + 1 - 1 = 0 \checkmark\]</span></p>
+<p><strong>Tangent at <span class="math inline">\((1, \sqrt{3}/2)^\top\)</span>:</strong> The line <span class="math inline">\(x + 2\sqrt{3}y - 4 = 0\)</span>, so <span class="math inline">\(\boldsymbol{\ell} = (1, 2\sqrt{3}, -4)^\top\)</span>:</p>
+<p><span class="math display">\[4(1)^2 + (2\sqrt{3})^2 - (-4)^2 = 4 + 12 - 16 = 0 \checkmark\]</span></p>
+<p>All three tangent lines satisfy the dual conic equation — exactly as they should.</p>
+</section>
+<section id="what-does-the-dual-conic-look-like" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-the-dual-conic-look-like">What Does the Dual Conic Look Like?</h3>
+<p>The dual conic <span class="math inline">\(\boldsymbol{\ell}^\top C^{-1} \boldsymbol{\ell} = 0\)</span> is an equation in the coefficients <span class="math inline">\((l_1, l_2, l_3)\)</span> of a line. Its “points” are lines in <span class="math inline">\(\mathbb{P}^2\)</span>, not points in <span class="math inline">\(\mathbb{R}^2\)</span>. So what does it look like?</p>
+<p>We can answer this by looking at the matrix <span class="math inline">\(C^{-1}\)</span> and applying the same eigenvalue classification we developed earlier. For our ellipse <span class="math inline">\(x^2/4 + y^2 = 1\)</span>:</p>
+<p><span class="math display">\[C^{-1} = \begin{pmatrix} 4 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \end{pmatrix}\]</span></p>
+<p>The <span class="math inline">\(2 \times 2\)</span> quadratic part (top-left block) is:</p>
+<p><span class="math display">\[\begin{pmatrix} 4 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}\]</span></p>
+<p>Both eigenvalues are <span class="math inline">\(4\)</span> and <span class="math inline">\(1\)</span> — same sign, both positive. By our classification from earlier, this is the ellipse family. So the dual conic of an ellipse is itself an ellipse — but in the space of lines.</p>
+<p>Why does this make sense? Taking <span class="math inline">\(C^{-1}\)</span> replaces each eigenvalue <span class="math inline">\(\lambda_i\)</span> of <span class="math inline">\(C\)</span> with <span class="math inline">\(1/\lambda_i\)</span>. Reciprocals preserve sign:</p>
+<ul>
+<li><span class="math inline">\(\lambda_i &gt; 0 \Rightarrow 1/\lambda_i &gt; 0\)</span></li>
+<li><span class="math inline">\(\lambda_i &lt; 0 \Rightarrow 1/\lambda_i &lt; 0\)</span></li>
+</ul>
+<p>So the sign pattern of the eigenvalues is unchanged, and the conic type is preserved under duality:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Primal conic</th>
+<th>Dual conic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ellipse</td>
+<td>Ellipse (in line space)</td>
+</tr>
+<tr class="even">
+<td>Hyperbola</td>
+<td>Hyperbola (in line space)</td>
+</tr>
+<tr class="odd">
+<td>Parabola</td>
+<td>Parabola (in line space)</td>
+</tr>
+</tbody>
+</table>
+<p>The dual of an ellipse is an ellipse. The dual of a hyperbola is a hyperbola. The type is invariant under duality.</p>
+<p>But what does “ellipse in line space” actually mean geometrically? In <span class="math inline">\(\mathbb{R}^2\)</span>, the dual conic is not a curve you draw — it is the <strong>envelope</strong> of the tangent lines. If you drew every tangent line to the ellipse <span class="math inline">\(x^2/4 + y^2 = 1\)</span>, the boundary of the region they collectively fill in traces out the original ellipse. The dual conic encodes this family of lines algebraically, and its type tells you how that family is organized.</p>
+</section>
+</section>
+<section id="degenerate-conics" class="level2">
+<h2 class="anchored" data-anchor-id="degenerate-conics">Degenerate Conics</h2>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p>A conic <span class="math inline">\(\mathbf{u}^\top C \mathbf{u} = 0\)</span> is called <strong>degenerate</strong> when it splits into simpler geometric objects — a pair of lines, a repeated line, or a single point — rather than a proper ellipse, parabola, or hyperbola. We already saw these cases emerge from the eigenvalue classification when <span class="math inline">\(\rho =
+0\)</span> or when <span class="math inline">\(h_2 = 0\)</span>. Here we give them a unified algebraic characterization.</p>
+<p>The condition for degeneracy is <span class="math inline">\(\det C = 0\)</span> — the conic matrix is singular.</p>
+</section>
+<section id="a-pair-of-lines" class="level3">
+<h3 class="anchored" data-anchor-id="a-pair-of-lines">A Pair of Lines</h3>
+<p>Suppose the conic equation factors as:</p>
+<p><span class="math display">\[F(x, y) = (p_1 x + q_1 y + r_1)(p_2 x + q_2 y + r_2) = 0\]</span></p>
+<p>This is a pair of lines — the zero set consists of all points lying on either line. Expanding:</p>
+<p><span class="math display">\[F(x, y) = p_1 p_2 x^2 + (p_1 q_2 + p_2 q_1)xy + q_1 q_2 y^2 +
+(p_1 r_2 + p_2 r_1)x + (q_1 r_2 + q_2 r_1)y + r_1 r_2\]</span></p>
+<p>Identifying the coefficients:</p>
+<p><span class="math display">\[a = p_1 p_2, \quad b = p_1 q_2 + p_2 q_1, \quad c = q_1 q_2\]</span> <span class="math display">\[d = p_1 r_2 + p_2 r_1, \quad e = q_1 r_2 + q_2 r_1, \quad f = r_1 r_2\]</span></p>
+</section>
+<section id="the-conic-matrix-as-a-sum-of-outer-products" class="level3">
+<h3 class="anchored" data-anchor-id="the-conic-matrix-as-a-sum-of-outer-products">The Conic Matrix as a Sum of Outer Products</h3>
+<p>Let <span class="math inline">\(\boldsymbol{\ell}_1 = (p_1, q_1, r_1)^\top\)</span> and <span class="math inline">\(\boldsymbol{\ell}_2 =
+(p_2, q_2, r_2)^\top\)</span>. Form the conic matrix <span class="math inline">\(C\)</span>. After substituting the coefficients above:</p>
+<p><span class="math display">\[C = \frac{1}{2}\left(\boldsymbol{\ell}_1 \boldsymbol{\ell}_2^\top +
+\boldsymbol{\ell}_2 \boldsymbol{\ell}_1^\top\right)\]</span></p>
+<p>This is a symmetric matrix — as it should be — written as a symmetrized sum of two rank-1 outer products.</p>
+</section>
+<section id="the-rank-of-c" class="level3">
+<h3 class="anchored" data-anchor-id="the-rank-of-c">The Rank of <span class="math inline">\(C\)</span></h3>
+<p>What is the rank of <span class="math inline">\(C\)</span>? We use two facts.</p>
+<p><strong>Fact 1.</strong> The rank of an outer product <span class="math inline">\(\boldsymbol{\ell}\boldsymbol{\ell}^\top\)</span> is at most 1. Why? The column space of <span class="math inline">\(\boldsymbol{\ell}\boldsymbol{\ell}^\top\)</span> consists of all vectors of the form <span class="math inline">\(\boldsymbol{\ell}\boldsymbol{\ell}^\top
+\mathbf{v} = (\boldsymbol{\ell}^\top \mathbf{v})\boldsymbol{\ell}\)</span> — scalar multiples of <span class="math inline">\(\boldsymbol{\ell}\)</span>. So the column space is spanned by a single vector <span class="math inline">\(\boldsymbol{\ell}\)</span>, giving rank at most 1.</p>
+<p><strong>Fact 2.</strong> For any two matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>:</p>
+<p><span class="math display">\[\text{rank}(A + B) \leq \text{rank}(A) + \text{rank}(B)\]</span></p>
+<p>Applying both facts:</p>
+<p><span class="math display">\[\text{rank}(C) = \text{rank}\left(\frac{1}{2}(\boldsymbol{\ell}_1
+\boldsymbol{\ell}_2^\top + \boldsymbol{\ell}_2 \boldsymbol{\ell}_1^\top)\right)
+\leq \text{rank}(\boldsymbol{\ell}_1 \boldsymbol{\ell}_2^\top) +
+\text{rank}(\boldsymbol{\ell}_2 \boldsymbol{\ell}_1^\top) \leq 1 + 1 = 2\]</span></p>
+<p>So <span class="math inline">\(\text{rank}(C) \leq 2 &lt; 3\)</span>, which means <span class="math inline">\(C\)</span> is singular and <span class="math inline">\(\det C = 0\)</span>.</p>
+<p>A degenerate conic — one that factors into a pair of lines — always has a singular conic matrix. The converse is also true: <span class="math inline">\(\det C = 0\)</span> implies the conic is degenerate. The rank of <span class="math inline">\(C\)</span> tells you exactly what kind of degeneracy:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\text{rank}(C)\)</span></th>
+<th>Degenerate conic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(2\)</span></td>
+<td>Pair of distinct lines</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1\)</span></td>
+<td>Repeated line</td>
+</tr>
+</tbody>
+</table>
+<p>Note also that when <span class="math inline">\(C\)</span> is singular, <span class="math inline">\(C^{-1}\)</span> does not exist — the dual conic is not defined. Geometrically, a degenerate conic has no well-defined family of tangent lines in the usual sense.</p>
+</section>
+<section id="the-converse" class="level3">
+<h3 class="anchored" data-anchor-id="the-converse">The Converse</h3>
+<p>Is the converse true? If <span class="math inline">\(C\)</span> is singular, is the conic necessarily degenerate?</p>
+<p>Yes. Since <span class="math inline">\(C\)</span> is singular, <span class="math inline">\(\text{rank}(C) &lt; 3\)</span>. There are two cases.</p>
+<p><strong>Case 1: <span class="math inline">\(\text{rank}(C) = 1\)</span>.</strong> Then <span class="math inline">\(C = \boldsymbol{\ell}\boldsymbol{\ell}^\top\)</span> for some nonzero <span class="math inline">\(\boldsymbol{\ell} \in \mathbb{R}^3\)</span>. The conic equation becomes:</p>
+<p><span class="math display">\[\mathbf{u}^\top C \mathbf{u} = \mathbf{u}^\top \boldsymbol{\ell}
+\boldsymbol{\ell}^\top \mathbf{u} = (\boldsymbol{\ell}^\top \mathbf{u})^2 = 0\]</span></p>
+<p>This gives <span class="math inline">\(\boldsymbol{\ell}^\top \mathbf{u} = 0\)</span> — a single line, repeated. Degenerate.</p>
+<p><strong>Case 2: <span class="math inline">\(\text{rank}(C) = 2\)</span>.</strong> One eigenvalue of <span class="math inline">\(C\)</span> is zero. By the spectral theorem, <span class="math inline">\(C\)</span> can be diagonalized and the same eigenvalue machinery from the classification section applies — one zero eigenvalue leads to the conic splitting into two lines. We will not redo the proof here.</p>
+<p>In both cases the conic is degenerate. <span class="math inline">\(\blacksquare\)</span></p>
+<p>So the characterization is complete: a conic is degenerate if and only if <span class="math inline">\(\det C = 0\)</span>.</p>
+</section>
+</section>
+<section id="what-does-any-of-this-have-to-do-with-3d-vision" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-any-of-this-have-to-do-with-3d-vision">What Does Any of This Have to Do with 3D Vision?</h2>
+<p>Fair question. We spent this entire post deriving lines through points, classifying conics by eigenvalues, and computing tangent lines via matrix multiplication. Nothing here looks like a depth map, a point cloud, or a 3D reconstruction.</p>
+<p>But let me give you a concrete example.</p>
+<p>Suppose you have a photograph of a sphere — a ball, a planet, a dome. In the image, the sphere appears as an ellipse. Not a circle — an ellipse, because the camera is viewing it from a finite distance and at some angle. Now here is the question: can you recover the 3D position and size of the sphere from just that ellipse in the image?</p>
+<p>The answer is yes — and the tool you need is exactly the dual conic <span class="math inline">\(C^{-1}\)</span>.</p>
+<p>The ellipse in the image is a conic. The camera projects the sphere onto the image plane via the camera matrix <span class="math inline">\(P\)</span>. The relationship between the 3D sphere and the 2D ellipse is encoded in how <span class="math inline">\(P\)</span> transforms conics — and that transformation involves <span class="math inline">\(C^{-1}\)</span> directly. This is not a coincidence. The silhouette of a smooth 3D surface — the outline you actually see in the image — is computed via the dual conic. You are literally seeing <span class="math inline">\(C^{-1}\)</span> in action every time you look at a photograph of a ball.</p>
+<p>Or take a parabolic antenna. Its cross-section is a parabola — a degenerate conic with one point at infinity, one escaping direction, discriminant <span class="math inline">\(\Delta
+= 0\)</span>. From a single photograph of the antenna, can you recover its focal length, its orientation, its 3D shape? Again yes — and the answer runs through the projective geometry of conics and the camera matrix.</p>
+<p>This is why we are doing all of this. The camera matrix <span class="math inline">\(P\)</span> maps <span class="math inline">\(\mathbb{P}^3\)</span> to <span class="math inline">\(\mathbb{P}^2\)</span> — the 3D world to the 2D image. Understanding what <span class="math inline">\(P\)</span> does to points, lines, and conics is the foundation of everything in 3D vision: calibration, reconstruction, pose estimation, stereo matching. None of it makes sense without the language we have been building.</p>
+<p>So yes, this is 3D vision. It still does not look like it. But we are getting closer.</p>
+
+
 </section>
 
 </main> <!-- /main -->
