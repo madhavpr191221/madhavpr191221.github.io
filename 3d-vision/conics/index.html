@@ -176,15 +176,57 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
-  <ul class="collapse">
+  <ul>
   <li><a href="#summary-of-part-1" id="toc-summary-of-part-1" class="nav-link active" data-scroll-target="#summary-of-part-1">Summary of Part 1</a></li>
-  <li><a href="#projective-duality" id="toc-projective-duality" class="nav-link" data-scroll-target="#projective-duality">Projective Duality</a></li>
-  <li><a href="#conics" id="toc-conics" class="nav-link" data-scroll-target="#conics">Conics</a></li>
-  <li><a href="#lifting-the-conic-to-mathbbp2" id="toc-lifting-the-conic-to-mathbbp2" class="nav-link" data-scroll-target="#lifting-the-conic-to-mathbbp2">Lifting the Conic to <span class="math inline">\(\mathbb{P}^2\)</span></a></li>
-  <li><a href="#tangent-lines-to-a-conic" id="toc-tangent-lines-to-a-conic" class="nav-link" data-scroll-target="#tangent-lines-to-a-conic">Tangent Lines to a Conic</a></li>
-  <li><a href="#the-dual-conic" id="toc-the-dual-conic" class="nav-link" data-scroll-target="#the-dual-conic">The Dual Conic</a></li>
-  <li><a href="#degenerate-conics" id="toc-degenerate-conics" class="nav-link" data-scroll-target="#degenerate-conics">Degenerate Conics</a></li>
-  <li><a href="#why-this-matters-for-3d-computer-vision" id="toc-why-this-matters-for-3d-computer-vision" class="nav-link" data-scroll-target="#why-this-matters-for-3d-computer-vision">Why This Matters for 3D Computer Vision</a></li>
+  <li><a href="#projective-duality" id="toc-projective-duality" class="nav-link" data-scroll-target="#projective-duality">Projective Duality</a>
+  <ul class="collapse">
+  <li><a href="#the-line-through-two-points" id="toc-the-line-through-two-points" class="nav-link" data-scroll-target="#the-line-through-two-points">The Line Through Two Points</a></li>
+  <li><a href="#well-definedness" id="toc-well-definedness" class="nav-link" data-scroll-target="#well-definedness">Well-Definedness</a></li>
+  <li><a href="#the-symmetry" id="toc-the-symmetry" class="nav-link" data-scroll-target="#the-symmetry">The Symmetry</a></li>
+  <li><a href="#collinear-points-and-concurrent-lines" id="toc-collinear-points-and-concurrent-lines" class="nav-link" data-scroll-target="#collinear-points-and-concurrent-lines">Collinear Points and Concurrent Lines</a></li>
+  <li><a href="#the-duality-principle" id="toc-the-duality-principle" class="nav-link" data-scroll-target="#the-duality-principle">The Duality Principle</a></li>
+  </ul></li>
+  <li><a href="#conics" id="toc-conics" class="nav-link" data-scroll-target="#conics">Conics</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-conic" id="toc-what-is-a-conic" class="nav-link" data-scroll-target="#what-is-a-conic">What is a Conic?</a></li>
+  <li><a href="#a-forgotten-view-of-conics" id="toc-a-forgotten-view-of-conics" class="nav-link" data-scroll-target="#a-forgotten-view-of-conics">A (Forgotten?) View of Conics</a></li>
+  <li><a href="#the-matrix-form" id="toc-the-matrix-form" class="nav-link" data-scroll-target="#the-matrix-form">The Matrix Form</a></li>
+  <li><a href="#diagonalizing-via-the-spectral-theorem" id="toc-diagonalizing-via-the-spectral-theorem" class="nav-link" data-scroll-target="#diagonalizing-via-the-spectral-theorem">Diagonalizing via the Spectral Theorem</a></li>
+  <li><a href="#a-change-of-variables" id="toc-a-change-of-variables" class="nav-link" data-scroll-target="#a-change-of-variables">A Change of Variables</a></li>
+  <li><a href="#completing-the-square" id="toc-completing-the-square" class="nav-link" data-scroll-target="#completing-the-square">Completing the Square</a></li>
+  <li><a href="#the-three-cases" id="toc-the-three-cases" class="nav-link" data-scroll-target="#the-three-cases">The Three Cases</a></li>
+  <li><a href="#what-happens-at-infinity" id="toc-what-happens-at-infinity" class="nav-link" data-scroll-target="#what-happens-at-infinity">What Happens at Infinity?</a></li>
+  </ul></li>
+  <li><a href="#lifting-the-conic-to-mathbbp2" id="toc-lifting-the-conic-to-mathbbp2" class="nav-link" data-scroll-target="#lifting-the-conic-to-mathbbp2">Lifting the Conic to <span class="math inline">\(\mathbb{P}^2\)</span></a>
+  <ul class="collapse">
+  <li><a href="#substituting-into-the-conic-equation" id="toc-substituting-into-the-conic-equation" class="nav-link" data-scroll-target="#substituting-into-the-conic-equation">Substituting into the Conic Equation</a></li>
+  <li><a href="#well-definedness-on-equivalence-classes" id="toc-well-definedness-on-equivalence-classes" class="nav-link" data-scroll-target="#well-definedness-on-equivalence-classes">Well-Definedness on Equivalence Classes</a></li>
+  <li><a href="#the-connection-to-points-at-infinity" id="toc-the-connection-to-points-at-infinity" class="nav-link" data-scroll-target="#the-connection-to-points-at-infinity">The Connection to Points at Infinity</a></li>
+  <li><a href="#degrees-of-freedom" id="toc-degrees-of-freedom" class="nav-link" data-scroll-target="#degrees-of-freedom">Degrees of Freedom</a></li>
+  </ul></li>
+  <li><a href="#tangent-lines-to-a-conic" id="toc-tangent-lines-to-a-conic" class="nav-link" data-scroll-target="#tangent-lines-to-a-conic">Tangent Lines to a Conic</a>
+  <ul class="collapse">
+  <li><a href="#implicit-differentiation-in-mathbbr2" id="toc-implicit-differentiation-in-mathbbr2" class="nav-link" data-scroll-target="#implicit-differentiation-in-mathbbr2">Implicit Differentiation in <span class="math inline">\(\mathbb{R}^2\)</span></a></li>
+  <li><a href="#lifting-to-homogeneous-coordinates" id="toc-lifting-to-homogeneous-coordinates" class="nav-link" data-scroll-target="#lifting-to-homogeneous-coordinates">Lifting to Homogeneous Coordinates</a></li>
+  <li><a href="#the-converse-is-boldsymbolell-ctildemathbfu_0-always-a-tangent" id="toc-the-converse-is-boldsymbolell-ctildemathbfu_0-always-a-tangent" class="nav-link" data-scroll-target="#the-converse-is-boldsymbolell-ctildemathbfu_0-always-a-tangent">The Converse: Is <span class="math inline">\(\boldsymbol{\ell} = C\tilde{\mathbf{u}}_0\)</span> Always a Tangent?</a></li>
+  </ul></li>
+  <li><a href="#the-dual-conic" id="toc-the-dual-conic" class="nav-link" data-scroll-target="#the-dual-conic">The Dual Conic</a>
+  <ul class="collapse">
+  <li><a href="#picturing-the-dual-conic" id="toc-picturing-the-dual-conic" class="nav-link" data-scroll-target="#picturing-the-dual-conic">Picturing the Dual Conic</a></li>
+  <li><a href="#verification" id="toc-verification" class="nav-link" data-scroll-target="#verification">Verification</a></li>
+  </ul></li>
+  <li><a href="#degenerate-conics" id="toc-degenerate-conics" class="nav-link" data-scroll-target="#degenerate-conics">Degenerate Conics</a>
+  <ul class="collapse">
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#a-pair-of-lines" id="toc-a-pair-of-lines" class="nav-link" data-scroll-target="#a-pair-of-lines">A Pair of Lines</a></li>
+  <li><a href="#the-conic-matrix-as-a-sum-of-outer-products" id="toc-the-conic-matrix-as-a-sum-of-outer-products" class="nav-link" data-scroll-target="#the-conic-matrix-as-a-sum-of-outer-products">The Conic Matrix as a Sum of Outer Products</a></li>
+  <li><a href="#the-rank-of-c" id="toc-the-rank-of-c" class="nav-link" data-scroll-target="#the-rank-of-c">The Rank of <span class="math inline">\(C\)</span></a></li>
+  <li><a href="#the-converse" id="toc-the-converse" class="nav-link" data-scroll-target="#the-converse">The Converse</a></li>
+  </ul></li>
+  <li><a href="#why-this-matters-for-3d-computer-vision" id="toc-why-this-matters-for-3d-computer-vision" class="nav-link" data-scroll-target="#why-this-matters-for-3d-computer-vision">Why This Matters for 3D Computer Vision</a>
+  <ul class="collapse">
+  <li><a href="#why-im-still-learning-this-in-2026-despite-the-existence-of-foundation-models" id="toc-why-im-still-learning-this-in-2026-despite-the-existence-of-foundation-models" class="nav-link" data-scroll-target="#why-im-still-learning-this-in-2026-despite-the-existence-of-foundation-models">Why I’m still learning this in 2026 despite the existence of foundation models</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
