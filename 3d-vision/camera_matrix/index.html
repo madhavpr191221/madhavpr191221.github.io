@@ -223,6 +223,19 @@ window.Quarto = {
   <li><a href="#one-final-check-dethatr-1" id="toc-one-final-check-dethatr-1" class="nav-link" data-scroll-target="#one-final-check-dethatr-1">One Final Check: <span class="math inline">\(\det\hat{R} = +1\)</span></a></li>
   <li><a href="#summary-everything-we-know-about-the-camera" id="toc-summary-everything-we-know-about-the-camera" class="nav-link" data-scroll-target="#summary-everything-we-know-about-the-camera">Summary: Everything We Know About the Camera</a></li>
   </ul></li>
+  <li><a href="#but-wait-are-we-really-done" id="toc-but-wait-are-we-really-done" class="nav-link" data-scroll-target="#but-wait-are-we-really-done">But Wait — Are We Really Done?</a>
+  <ul class="collapse">
+  <li><a href="#what-did-dlt-actually-minimize" id="toc-what-did-dlt-actually-minimize" class="nav-link" data-scroll-target="#what-did-dlt-actually-minimize">What Did DLT Actually Minimize?</a></li>
+  <li><a href="#what-is-w_i" id="toc-what-is-w_i" class="nav-link" data-scroll-target="#what-is-w_i">What Is <span class="math inline">\(w_i\)</span>?</a></li>
+  <li><a href="#so-why-use-dlt-at-all" id="toc-so-why-use-dlt-at-all" class="nav-link" data-scroll-target="#so-why-use-dlt-at-all">So Why Use DLT At All?</a></li>
+  <li><a href="#minimizing-the-reprojection-error" id="toc-minimizing-the-reprojection-error" class="nav-link" data-scroll-target="#minimizing-the-reprojection-error">Minimizing the Reprojection Error</a></li>
+  </ul></li>
+  <li><a href="#eigenvalue-analysis-of-gauss-newton" id="toc-eigenvalue-analysis-of-gauss-newton" class="nav-link" data-scroll-target="#eigenvalue-analysis-of-gauss-newton">Eigenvalue Analysis of Gauss-Newton</a>
+  <ul class="collapse">
+  <li><a href="#where-levenberg-marquardt-comes-in" id="toc-where-levenberg-marquardt-comes-in" class="nav-link" data-scroll-target="#where-levenberg-marquardt-comes-in">Where Levenberg-Marquardt Comes In</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#whats-next-homographies" id="toc-whats-next-homographies" class="nav-link" data-scroll-target="#whats-next-homographies">What’s Next: Homographies</a></li>
   </ul>
 </nav>
     </div>
@@ -996,9 +1009,281 @@ KR \mid K\mathbf{t} \end{bmatrix}\]</span></p>
 </tbody>
 </table>
 <p>We now know everything about the camera — where it is, how it is oriented, and what its sensor looks like. All from a set of point correspondences and linear algebra.</p>
-
-
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>When Does DLT Fail? The Coplanarity Problem
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This may be treated as a continuation of the trivial null-space discussion above. But it is worth highlighting separately because it is a very common failure mode in practice.</p>
+<p>DLT requires at least 6 point correspondences in <strong>general position</strong> — meaning the 3D points should not all lie on a common plane. If all the points lie on one flat surface — for example, corners of a painting on a wall, markings on a football pitch, or windows on a building facade — the full camera matrix cannot be recovered uniquely, regardless of how many points are used.</p>
+<p><strong>A concrete example.</strong> Suppose you are photographing a flat wall and marking points on it — corners, edges, or any other visible features. All those points lie on the same plane.</p>
+<p>This does not necessarily mean they all have the same depth relative to the camera, because the wall may be tilted. But we can always choose world coordinates so that the plane is described by</p>
+<p><span class="math display">\[
+Z_w=0.
+\]</span></p>
+<p>Now suppose some objects protrude from the wall — a balcony, an air conditioning unit, or a sign board. These points no longer lie on the same plane. The scene now has genuine 3D structure, and the full camera matrix may be recovered.</p>
+<p><strong>Why mathematically?</strong> If all world points satisfy</p>
+<p><span class="math display">\[
+Z_w=0,
+\]</span></p>
+<p>then columns 3, 7, and 11 of the DLT matrix <span class="math inline">\(A\)</span> are identically zero. The entries of the camera matrix multiplying <span class="math inline">\(Z_w\)</span> never appear in any equation.</p>
+<p>The remaining equations determine only a <span class="math inline">\(3\times 3\)</span> transformation from the plane to the image. This matrix has 9 entries but is defined only up to scale, so the generic rank is at most 8:</p>
+<p><span class="math display">\[
+\operatorname{rank}(A)\le 8.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\dim\operatorname{Null}(A)\ge 12-8=4.
+\]</span></p>
+<p>One null-space dimension is the usual overall scale ambiguity. The other three come from the fact that the data provide no information about how the camera acts away from the plane.</p>
+<p>Hence infinitely many <span class="math inline">\(3\times 4\)</span> camera matrices produce exactly the same image measurements for the planar points.</p>
+<p>Geometrically, a flat scene tells us how points on that plane map into the image, but it does not tell us how points away from the plane would project. We can recover a <span class="math inline">\(3\times 3\)</span> matrix relating the plane to the image, called a homography, but not the full <span class="math inline">\(3\times 4\)</span> camera matrix.</p>
+<p>The practical fix is to use points with genuine 3D structure: points at different positions away from any single plane, spread throughout the scene.</p>
+</div>
+</div>
 </section>
+</section>
+<section id="but-wait-are-we-really-done" class="level2">
+<h2 class="anchored" data-anchor-id="but-wait-are-we-really-done">But Wait — Are We Really Done?</h2>
+<p>All the math is correct. Principled and logical. Airtight. But have we really solved the problem?</p>
+<p>Recall that each world point <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> is associated with its observed pixel coordinate <span class="math inline">\(\mathbf{x}_i = (x_i, y_i)^\top\)</span>. If we run the estimated <span class="math inline">\(\hat{P}\)</span> forward — projecting <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> through <span class="math inline">\(\hat{P}\)</span> — we get a predicted pixel coordinate:</p>
+<p><span class="math display">\[\hat{\mathbf{x}}_i = \phi(\hat{P}\tilde{\mathbf{X}}_i) = \begin{pmatrix}
+\hat{\mathbf{p}}_1^\top\tilde{\mathbf{X}}_i / \hat{\mathbf{p}}_3^\top
+\tilde{\mathbf{X}}_i \\ \hat{\mathbf{p}}_2^\top\tilde{\mathbf{X}}_i /
+\hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i \end{pmatrix}\]</span></p>
+<p>The difference <span class="math inline">\(\mathbf{x}_i - \hat{\mathbf{x}}_i\)</span> is the <strong>reprojection error</strong> for point <span class="math inline">\(i\)</span> — the distance in pixels between the observed location and the predicted location. If your camera matrix is good, this should be small for all <span class="math inline">\(i\)</span>.</p>
+<p>The natural objective is to find <span class="math inline">\(P\)</span> that minimizes the total reprojection error:</p>
+<p><span class="math display">\[\mathcal{L}(P) = \sum_{i=1}^n \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2
+= \sum_{i=1}^n \left[(x_i - \hat{x}_i)^2 + (y_i - \hat{y}_i)^2\right]\]</span></p>
+<p>This is exactly analogous to the sum of squared residuals in linear regression — the error between observed and predicted values, summed over all data points.</p>
+<section id="what-did-dlt-actually-minimize" class="level3">
+<h3 class="anchored" data-anchor-id="what-did-dlt-actually-minimize">What Did DLT Actually Minimize?</h3>
+<p>Let us look more carefully at what DLT does. We solved:</p>
+<p><span class="math display">\[\min_{\|\mathbf{p}\|=1} \|A\mathbf{p}\|^2 = \min_{\|\mathbf{p}\|=1}
+\sum_{i=1}^n \left[(x_i\hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i -
+\hat{\mathbf{p}}_1^\top\tilde{\mathbf{X}}_i)^2 + (y_i\hat{\mathbf{p}}_3^\top
+\tilde{\mathbf{X}}_i - \hat{\mathbf{p}}_2^\top\tilde{\mathbf{X}}_i)^2\right]\]</span></p>
+<p>Set <span class="math inline">\(w_i = \hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i\)</span>. Factor out <span class="math inline">\(w_i^2\)</span> from each term:</p>
+<p><span class="math display">\[\|A\mathbf{p}\|^2 = \sum_{i=1}^n w_i^2\left[\left(x_i -
+\frac{\hat{\mathbf{p}}_1^\top\tilde{\mathbf{X}}_i}{w_i}\right)^2 +
+\left(y_i - \frac{\hat{\mathbf{p}}_2^\top\tilde{\mathbf{X}}_i}{w_i}\right)^2
+\right] = \sum_{i=1}^n w_i^2 \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2\]</span></p>
+<p>This is a <strong>weighted</strong> reprojection error — each point’s squared error is multiplied by <span class="math inline">\(w_i^2\)</span>.</p>
+</section>
+<section id="what-is-w_i" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-w_i">What Is <span class="math inline">\(w_i\)</span>?</h3>
+<p><span class="math inline">\(w_i = \hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth of point <span class="math inline">\(i\)</span> in the camera frame — the <span class="math inline">\(Z_c\)</span> coordinate of the point as seen by the camera. Points far from the camera have large <span class="math inline">\(w_i\)</span>, so their reprojection errors are weighted much more heavily than nearby points.</p>
+<p>This is completely arbitrary from a geometric perspective. A good point correspondence should not care how far the point is from the camera. Whether a point is 1 metre away or 100 metres away, we want its pixel coordinates to match, equally. DLT silently upweights distant points and downweights nearby ones — with no geometric justification whatsoever.</p>
+<p>This is the fundamental limitation of DLT. The algebraic error <span class="math inline">\(\|A\mathbf{p}\|^2\)</span> is not the same as the geometric reprojection error <span class="math inline">\(\mathcal{L}(P)\)</span>. DLT minimizes the wrong thing.</p>
+</section>
+<section id="so-why-use-dlt-at-all" class="level3">
+<h3 class="anchored" data-anchor-id="so-why-use-dlt-at-all">So Why Use DLT At All?</h3>
+<p>Simple: it is fast, and it gives a good starting point. DLT has a closed-form solution via SVD — no iterations, no initialisation, no convergence issues. In practice, DLT gets you close enough to the true <span class="math inline">\(P\)</span> that a subsequent refinement step converges quickly. It is the standard first step in virtually every camera estimation pipeline.</p>
+<p>The refinement — minimizing the true reprojection error <span class="math inline">\(\mathcal{L}(P)\)</span> — is what we tackle next.</p>
+</section>
+<section id="minimizing-the-reprojection-error" class="level3">
+<h3 class="anchored" data-anchor-id="minimizing-the-reprojection-error">Minimizing the Reprojection Error</h3>
+<p>The objective is:</p>
+<p><span class="math display">\[\min_{\mathbf{p}} \sum_{i=1}^n \|\mathbf{x}_i - \phi(P\tilde{\mathbf{X}}_i)\|^2\]</span></p>
+<p><strong>The residual vector.</strong> Stack all <span class="math inline">\(2n\)</span> residuals into a single vector <span class="math inline">\(\mathbf{r}(\mathbf{p}) \in \mathbb{R}^{2n}\)</span>:</p>
+<p><span class="math display">\[\mathbf{r}(\mathbf{p}) = \begin{pmatrix} x_1 - \mathbf{p}_1^\top
+\tilde{\mathbf{X}}_1/w_1 \\ y_1 - \mathbf{p}_2^\top\tilde{\mathbf{X}}_1/w_1
+\\ \vdots \\ x_n - \mathbf{p}_1^\top\tilde{\mathbf{X}}_n/w_n \\ y_n -
+\mathbf{p}_2^\top\tilde{\mathbf{X}}_n/w_n \end{pmatrix}\]</span></p>
+<p>where <span class="math inline">\(w_i = \mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth of point <span class="math inline">\(i\)</span> in the camera frame, and <span class="math inline">\(\mathbf{p} \in \mathbb{R}^{12}\)</span> is the vectorized camera matrix:</p>
+<p><span class="math display">\[\mathbf{p} = (p_{11}, p_{12}, p_{13}, p_{14}, p_{21}, p_{22}, p_{23},
+p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top\]</span></p>
+<p>This is nonlinear in <span class="math inline">\(\mathbf{p}\)</span> — because of division by <span class="math inline">\(w_i\)</span>, which itself depends on <span class="math inline">\(\mathbf{p}\)</span>. So the map is:</p>
+<p><span class="math display">\[\mathbf{p} \in \mathbb{R}^{12} \longrightarrow \mathbf{r}(\mathbf{p}) \in
+\mathbb{R}^{2n}\]</span></p>
+<p><strong>The Jacobian.</strong> Let <span class="math inline">\(J = D_\mathbf{p}\mathbf{r}(\mathbf{p}) \in
+\mathbb{R}^{2n \times 12}\)</span> be the Jacobian of <span class="math inline">\(\mathbf{r}\)</span> with respect to <span class="math inline">\(\mathbf{p}\)</span>. Focus on the first residual component:</p>
+<p><span class="math display">\[r_1 = x_1 - \frac{p_{11}X_1 + p_{12}Y_1 + p_{13}Z_1 + p_{14}}{w_1} =
+x_1 - \frac{p_{11}X_1 + p_{12}Y_1 + p_{13}Z_1 + p_{14}}{p_{31}X_1 +
+p_{32}Y_1 + p_{33}Z_1 + p_{34}}\]</span></p>
+<p>The partial derivatives with respect to the entries of <span class="math inline">\(P\)</span> are:</p>
+<p><span class="math display">\[\frac{\partial r_1}{\partial p_{11}} = -\frac{X_1}{w_1}, \quad
+\frac{\partial r_1}{\partial p_{12}} = -\frac{Y_1}{w_1}, \quad
+\frac{\partial r_1}{\partial p_{13}} = -\frac{Z_1}{w_1}, \quad
+\frac{\partial r_1}{\partial p_{14}} = -\frac{1}{w_1}\]</span></p>
+<p><span class="math display">\[\frac{\partial r_1}{\partial p_{21}} = \frac{\partial r_1}{\partial p_{22}}
+= \frac{\partial r_1}{\partial p_{23}} = \frac{\partial r_1}{\partial p_{24}}
+= 0\]</span></p>
+<p><span class="math display">\[\frac{\partial r_1}{\partial p_{31}} = \frac{u_1 X_1}{w_1^2}, \quad
+\frac{\partial r_1}{\partial p_{32}} = \frac{u_1 Y_1}{w_1^2}, \quad
+\frac{\partial r_1}{\partial p_{33}} = \frac{u_1 Z_1}{w_1^2}, \quad
+\frac{\partial r_1}{\partial p_{34}} = \frac{u_1}{w_1^2}\]</span></p>
+<p>where <span class="math inline">\(u_1 = \mathbf{p}_1^\top\tilde{\mathbf{X}}_1\)</span>. So the gradient <span class="math inline">\(\nabla_\mathbf{p} r_1\)</span> is the <span class="math inline">\(1 \times 12\)</span> row vector:</p>
+<p><span class="math display">\[\nabla_\mathbf{p} r_1^\top = \left(-\frac{\tilde{\mathbf{X}}_1^\top}{w_1},\
+\mathbf{0}^\top,\ \frac{u_1\tilde{\mathbf{X}}_1^\top}{w_1^2}\right)\]</span></p>
+<p>By the same calculation for <span class="math inline">\(r_2 = y_1 - \mathbf{p}_2^\top\tilde{\mathbf{X}}_1/w_1\)</span>:</p>
+<p><span class="math display">\[\nabla_\mathbf{p} r_2^\top = \left(\mathbf{0}^\top,\
+-\frac{\tilde{\mathbf{X}}_1^\top}{w_1},\
+\frac{v_1\tilde{\mathbf{X}}_1^\top}{w_1^2}\right)\]</span></p>
+<p>where <span class="math inline">\(v_1 = \mathbf{p}_2^\top\tilde{\mathbf{X}}_1\)</span>.</p>
+<p>The rows <span class="math inline">\(2i-1\)</span> and <span class="math inline">\(2i\)</span> of the Jacobian <span class="math inline">\(J\)</span> corresponding to point <span class="math inline">\(i\)</span> are:</p>
+<p><span class="math display">\[J_{2i-1, :} = \left(-\frac{\tilde{\mathbf{X}}_i^\top}{w_i},\
+\mathbf{0}^\top,\ \frac{u_i\tilde{\mathbf{X}}_i^\top}{w_i^2}\right)\]</span></p>
+<p><span class="math display">\[J_{2i, :} = \left(\mathbf{0}^\top,\ -\frac{\tilde{\mathbf{X}}_i^\top}{w_i},\
+\frac{v_i\tilde{\mathbf{X}}_i^\top}{w_i^2}\right)\]</span></p>
+<p>Stack all <span class="math inline">\(2n\)</span> rows to form the full Jacobian <span class="math inline">\(J = D_\mathbf{p}\mathbf{r}
+(\mathbf{p}) \in \mathbb{R}^{2n \times 12}\)</span>.</p>
+<p><strong>The gradient condition.</strong> Define:</p>
+<p><span class="math display">\[F(\mathbf{p}) = \|\mathbf{r}(\mathbf{p})\|^2\]</span></p>
+<p>This is a composition:</p>
+<p><span class="math display">\[\mathbf{p} \in \mathbb{R}^{12} \xrightarrow{\mathbf{r}} \mathbf{r}(\mathbf{p})
+\in \mathbb{R}^{2n} \xrightarrow{\|\cdot\|^2} F(\mathbf{p}) \in \mathbb{R}\]</span></p>
+<p>By the chain rule for derivative matrices:</p>
+<p><span class="math display">\[DF(\mathbf{p}) = \underbrace{D(\|\cdot\|^2)\big|_{\mathbf{r}(\mathbf{p})}}_{1
+\times 2n} \cdot \underbrace{D\mathbf{r}(\mathbf{p})}_{2n \times 12} =
+2\mathbf{r}(\mathbf{p})^\top J\]</span></p>
+<p>So the gradient is:</p>
+<p><span class="math display">\[\nabla_\mathbf{p} F(\mathbf{p}) = DF(\mathbf{p})^\top = 2J^\top\mathbf{r}
+(\mathbf{p})\]</span></p>
+<p>Setting this to zero gives the necessary condition for a minimum:</p>
+<p><span class="math display">\[J^\top\mathbf{r}(\mathbf{p}) = \mathbf{0}\]</span></p>
+<p>This is a system of 12 equations in 12 unknowns — <span class="math inline">\(J^\top\)</span> is <span class="math inline">\(12 \times
+2n\)</span> and <span class="math inline">\(\mathbf{r}\)</span> is <span class="math inline">\(2n \times 1\)</span>, giving a <span class="math inline">\(12 \times 1\)</span> system. The 12 unknowns are the 12 entries of <span class="math inline">\(P\)</span>.</p>
+<p>If this were a linear system like <span class="math inline">\(A\mathbf{x} = \mathbf{b}\)</span>, standard methods like Gaussian elimination would work. But unfortunately it is not — <span class="math inline">\(J\)</span> itself depends on <span class="math inline">\(\mathbf{p}\)</span> through <span class="math inline">\(w_i =
+\mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span>, making the whole system nonlinear. This is where Gauss-Newton comes in.</p>
+<p><strong>Gauss-Newton.</strong> We do not have a closed-form solution and the system is nonlinear. The standard fix: linearize.</p>
+<p>Let <span class="math inline">\(\mathbf{p}_0\)</span> be the DLT estimate. Taylor expansion of <span class="math inline">\(\mathbf{r}\)</span> around <span class="math inline">\(\mathbf{p}_0\)</span> gives:</p>
+<p><span class="math display">\[\mathbf{r}(\mathbf{p}_0 + \delta\mathbf{p}_0) \approx \mathbf{r}(\mathbf{p}_0)
++ J_0\,\delta\mathbf{p}_0\]</span></p>
+<p>where <span class="math inline">\(J_0 = D\mathbf{r}(\mathbf{p}_0)\)</span> is the Jacobian evaluated at <span class="math inline">\(\mathbf{p}_0\)</span>. The gradient condition <span class="math inline">\(J^\top\mathbf{r}(\mathbf{p}) =
+\mathbf{0}\)</span> must hold at the minimum. Substituting the linearisation:</p>
+<p><span class="math display">\[J_0^\top(\mathbf{r}(\mathbf{p}_0) + J_0\,\delta\mathbf{p}_0) = \mathbf{0}\]</span></p>
+<p><span class="math display">\[\underbrace{(J_0^\top J_0)}_{12 \times 12}\,\delta\mathbf{p}_0 =
+-J_0^\top\mathbf{r}(\mathbf{p}_0)\]</span></p>
+<p>These are the <strong>normal equations</strong>. If you have seen linear regression, this is exactly the same structure — the least-squares solution. Solving:</p>
+<p><span class="math display">\[\delta\mathbf{p}_0 = -(J_0^\top J_0)^{-1}J_0^\top\mathbf{r}(\mathbf{p}_0)\]</span></p>
+<p>We assume <span class="math inline">\(J_0^\top J_0\)</span> is invertible. Non-invertibility means the data does not contain enough information to determine all 12 entries of <span class="math inline">\(P\)</span>. This can happen if the points are coplanar, or if there are too few points.</p>
+<p>Update:</p>
+<p><span class="math display">\[\mathbf{p}_1 = \mathbf{p}_0 + \delta\mathbf{p}_0 = \mathbf{p}_0 -
+(J_0^\top J_0)^{-1}J_0^\top\mathbf{r}(\mathbf{p}_0)\]</span></p>
+<p>Now repeat: evaluate <span class="math inline">\(\mathbf{r}(\mathbf{p}_1)\)</span> and <span class="math inline">\(J_1 = D\mathbf{r}
+(\mathbf{p}_1)\)</span>, linearize around <span class="math inline">\(\mathbf{p}_1\)</span>, solve the normal equations for <span class="math inline">\(\delta\mathbf{p}_1\)</span>, update <span class="math inline">\(\mathbf{p}_2 \leftarrow \mathbf{p}_1 +
+\delta\mathbf{p}_1\)</span>. This gives the Gauss-Newton algorithm.</p>
+<p><strong>Pseudocode.</strong></p>
+<p><strong>Input:</strong> initial estimate <span class="math inline">\(\mathbf{p}_0\)</span> from DLT, correspondences <span class="math inline">\(\{\tilde{\mathbf{X}}_i, \mathbf{x}_i\}_{i=1}^n\)</span></p>
+<p><strong>Repeat:</strong></p>
+<p><span class="math display">\[\mathbf{r}_k \leftarrow \mathbf{r}(\mathbf{p}_k) \in \mathbb{R}^{2n}
+\qquad \text{(residual vector)}\]</span></p>
+<p><span class="math display">\[J_k \leftarrow D\mathbf{r}(\mathbf{p}_k) \in \mathbb{R}^{2n \times 12}
+\qquad \text{(Jacobian)}\]</span></p>
+<p><span class="math display">\[\text{solve } (J_k^\top J_k)\,\delta\mathbf{p}_k = -J_k^\top\mathbf{r}_k
+\qquad \text{(normal equations)}\]</span></p>
+<p><span class="math display">\[\mathbf{p}_{k+1} \leftarrow \mathbf{p}_k + \delta\mathbf{p}_k
+\qquad \text{(update)}\]</span></p>
+<p><strong>Until:</strong></p>
+<p><span class="math display">\[\|\mathbf{r}(\mathbf{p}_{k+1})\|^2 - \|\mathbf{r}(\mathbf{p}_k)\|^2 &lt;
+\varepsilon_1 \qquad \text{(reprojection error stops decreasing)}\]</span></p>
+<p><span class="math display">\[\text{or} \quad \|\delta\mathbf{p}_k\| &lt; \varepsilon_2 \qquad \text{(step
+size becomes negligible)}\]</span></p>
+<p><strong>Output:</strong> <span class="math inline">\(\mathbf{p}_k\)</span> reshaped into <span class="math inline">\(\hat{P} \in \mathbb{R}^{3 \times 4}\)</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What Are We Actually Doing?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The original problem is to minimize <span class="math inline">\(\|\mathbf{r}(\mathbf{p})\|^2\)</span> over <span class="math inline">\(\mathbf{p}\)</span>. The gradient condition <span class="math inline">\(J^\top\mathbf{r}(\mathbf{p}) =
+\mathbf{0}\)</span> is the necessary condition for any minimum — linearized or not. It always holds at the true solution.</p>
+<p>What Gauss-Newton does is convert this nonlinear problem into a sequence of locally linear problems. At each step, we replace <span class="math inline">\(\mathbf{r}(\mathbf{p})\)</span> by its linear approximation <span class="math inline">\(\mathbf{r}(\mathbf{p}_k) + J_k\delta\mathbf{p}\)</span>. The resulting problem — minimize <span class="math inline">\(\|\mathbf{r}(\mathbf{p}_k) +
+J_k\delta\mathbf{p}\|^2\)</span> over <span class="math inline">\(\delta\mathbf{p}\)</span> — is linear in <span class="math inline">\(\delta\mathbf{p}\)</span>, because <span class="math inline">\(\mathbf{r}(\mathbf{p}_k)\)</span> and <span class="math inline">\(J_k\)</span> are both fixed constants at the current iteration. A minimization problem that is quadratic in the unknowns with a linear model is exactly least squares — and has a closed-form solution via the normal equations. We solve it, update, and repeat.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="eigenvalue-analysis-of-gauss-newton" class="level2">
+<h2 class="anchored" data-anchor-id="eigenvalue-analysis-of-gauss-newton">Eigenvalue Analysis of Gauss-Newton</h2>
+<p><strong>Expanding the linearized objective.</strong> At iteration <span class="math inline">\(k\)</span>, we minimize the surrogate:</p>
+<p><span class="math display">\[\|\mathbf{r}_k + J_k\delta\mathbf{p}\|^2 = \|\mathbf{r}_k\|^2 +
+2\mathbf{r}_k^\top J_k\delta\mathbf{p} + \delta\mathbf{p}^\top J_k^\top
+J_k\,\delta\mathbf{p}\]</span></p>
+<p>Let <span class="math inline">\(H_k = J_k^\top J_k\)</span> and define <span class="math inline">\(\mathbf{g}_k = J_k^\top\mathbf{r}_k\)</span> (the gradient). Diagonalize <span class="math inline">\(H_k\)</span> via the spectral theorem:</p>
+<p><span class="math display">\[H_k = Q\Lambda Q^\top, \qquad \Lambda = \text{diag}(\lambda_1, \ldots,
+\lambda_{12})\]</span></p>
+<p>where <span class="math inline">\(\mathbf{q}_1, \ldots, \mathbf{q}_{12}\)</span> are the eigenvectors of <span class="math inline">\(H_k\)</span> and <span class="math inline">\(\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_{12} \geq 0\)</span> are the eigenvalues. Expand <span class="math inline">\(\delta\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{r}_k\)</span> in the eigenbasis:</p>
+<p><span class="math display">\[\delta\mathbf{p} = \sum_{i=1}^{12} d_i\mathbf{q}_i, \qquad \mathbf{g}_k
+= \sum_{i=1}^{12} g_i\mathbf{q}_i\]</span></p>
+<p>where <span class="math inline">\(d_i = \langle \delta\mathbf{p}, \mathbf{q}_i \rangle\)</span> is how much we move along eigenvector <span class="math inline">\(\mathbf{q}_i\)</span>, and <span class="math inline">\(g_i = \langle \mathbf{g}_k,
+\mathbf{q}_i \rangle\)</span>.</p>
+<p>Then:</p>
+<p><span class="math display">\[J_k\delta\mathbf{p} = \sum_{i=1}^{12} g_i d_i \qquad \text{(Parseval)}\]</span></p>
+<p><span class="math display">\[\delta\mathbf{p}^\top H_k\,\delta\mathbf{p} = \sum_{i=1}^{12} \lambda_i
+d_i^2\]</span></p>
+<p>So the linearized objective becomes:</p>
+<p><span class="math display">\[\|\mathbf{r}_k + J_k\delta\mathbf{p}\|^2 = \|\mathbf{r}_k\|^2 +
+\sum_{i=1}^{12}(2g_i d_i + \lambda_i d_i^2)\]</span></p>
+<p>Each eigenvector direction <span class="math inline">\(\mathbf{q}_i\)</span> contributes its own independent one-dimensional quadratic <span class="math inline">\(\phi_i(d_i) = 2g_i d_i + \lambda_i d_i^2\)</span>.</p>
+<p><strong>Minimising over <span class="math inline">\(\delta\mathbf{p}\)</span> means minimising over each <span class="math inline">\(d_i\)</span> independently.</strong> Setting <span class="math inline">\(\phi_i'(d_i) = 2g_i + 2\lambda_i d_i = 0\)</span>:</p>
+<p><span class="math display">\[\boxed{d_i = -\frac{g_i}{\lambda_i}}\]</span></p>
+<p>So the Gauss-Newton correction is:</p>
+<p><span class="math display">\[\delta\mathbf{p} = \sum_{i=1}^{12} d_i\mathbf{q}_i = -\sum_{i=1}^{12}
+\frac{g_i}{\lambda_i}\mathbf{q}_i\]</span></p>
+<p><strong>Connecting to the normal equations.</strong> This is the same solution written in a different form. The normal equations give <span class="math inline">\(H_k\delta\mathbf{p} =
+-\mathbf{g}_k\)</span>. Using <span class="math inline">\(H_k = Q\Lambda Q^\top\)</span>:</p>
+<p><span class="math display">\[H_k^{-1} = (Q\Lambda Q^\top)^{-1} = (Q^\top)^{-1}\Lambda^{-1}Q^{-1} =
+Q\Lambda^{-1}Q^\top\]</span></p>
+<p>So:</p>
+<p><span class="math display">\[\delta\mathbf{p} = -H_k^{-1}\mathbf{g}_k = -Q\Lambda^{-1}Q^\top\mathbf{g}_k
+= -\sum_{i=1}^{12}\frac{g_i}{\lambda_i}\mathbf{q}_i\]</span></p>
+<p>The same solution, two forms.</p>
+<p><strong>What can go wrong?</strong> The danger sits directly in <span class="math inline">\(d_i = -g_i/\lambda_i\)</span>.</p>
+<p><strong>1. Zero eigenvalue (<span class="math inline">\(\lambda_i = 0\)</span>).</strong> Then <span class="math inline">\(d_i = -g_i/0\)</span> is undefined — the step cannot be computed. <span class="math inline">\(H_k\)</span> is not invertible and the normal equations have no unique solution.</p>
+<p>This always happens for the camera matrix. Scale invariance of <span class="math inline">\(\phi\)</span> means <span class="math inline">\(P\)</span> and <span class="math inline">\(\lambda P\)</span> define the same camera. The loss <span class="math inline">\(\|\mathbf{r}(\mathbf{p})
+\|^2\)</span> is flat along the direction <span class="math inline">\(\mathbf{p}\)</span> itself — the loss does not change if you scale <span class="math inline">\(\mathbf{p}\)</span>. This flatness shows up as a zero eigenvalue of <span class="math inline">\(H_k\)</span> at every iteration.</p>
+<p><strong>2. Small but nonzero eigenvalue (<span class="math inline">\(\lambda_i \approx 0\)</span>).</strong> Then <span class="math inline">\(d_i =
+-g_i/\lambda_i\)</span> is huge — a large step along <span class="math inline">\(\mathbf{q}_i\)</span>. But the linearization <span class="math inline">\(\mathbf{r}(\mathbf{p}_k + \delta\mathbf{p}) \approx
+\mathbf{r}_k + J_k\delta\mathbf{p}\)</span> is only valid close to <span class="math inline">\(\mathbf{p}_k\)</span>. A huge step takes us far from <span class="math inline">\(\mathbf{p}_k\)</span> where the linearization breaks down. Gauss-Newton overshoots and may diverge.</p>
+<p><strong>Large eigenvalue (<span class="math inline">\(\lambda_i\)</span> large).</strong> Then <span class="math inline">\(d_i = -g_i/\lambda_i\)</span> is small — a cautious step. The loss is steep in this direction, and a small step is correct. Gauss-Newton works well here.</p>
+<section id="where-levenberg-marquardt-comes-in" class="level3">
+<h3 class="anchored" data-anchor-id="where-levenberg-marquardt-comes-in">Where Levenberg-Marquardt Comes In</h3>
+<p>The fix for small and zero eigenvalues is to regularise the step. Instead of minimising the bare linearised objective:</p>
+<p><span class="math display">\[\|\mathbf{r}_k + J_k\delta\mathbf{p}\|^2\]</span></p>
+<p>add an <span class="math inline">\(\ell_2\)</span> penalty on the step size:</p>
+<p><span class="math display">\[\min_{\delta\mathbf{p}} \|\mathbf{r}_k + J_k\delta\mathbf{p}\|^2 +
+\mu\|\delta\mathbf{p}\|^2\]</span></p>
+<p>The penalty <span class="math inline">\(\mu\|\delta\mathbf{p}\|^2\)</span> discourages large steps — exactly what we need when <span class="math inline">\(\lambda_i\)</span> is small. This discouraging large steps is the same idea as ridge regression or L2-regularization in linear regression.</p>
+<p>Setting the gradient to zero gives:</p>
+<p><span class="math display">\[(J_k^\top J_k + \mu I)\delta\mathbf{p} = -J_k^\top\mathbf{r}_k\]</span></p>
+<p>In the eigenbasis, each step becomes <span class="math inline">\(d_i = -g_i/(\lambda_i + \mu)\)</span>. For large <span class="math inline">\(\mu\)</span>, all steps are small and cautious — gradient descent behaviour. For small <span class="math inline">\(\mu\)</span>, the steps approach Gauss-Newton. The algorithm adapts <span class="math inline">\(\mu\)</span> automatically at each iteration.</p>
+<p>This is <strong>Levenberg-Marquardt</strong> — the standard workhorse for nonlinear least squares in computer vision. OpenCV uses LM internally to minimize reprojection error in functions like <code>solvePnP</code> and <code>calibrateCamera</code>. Note that <code>calibrateCamera</code> implements Zhang’s method — a more sophisticated calibration algorithm that uses a planar checkerboard pattern, not arbitrary 3D-2D correspondences like DLT. That is a story for a later post. For our purposes, the key point is: DLT gives you <span class="math inline">\(\mathbf{p}_0\)</span>, Gauss-Newton (or LM) refines it to minimise the true reprojection error. That is the complete pipeline.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>We started with a grade school observation — light travels in straight lines through a pinhole — and ended with a <span class="math inline">\(3 \times 4\)</span> matrix that encodes everything a camera knows about the world. Along the way we derived the intrinsic matrix <span class="math inline">\(K\)</span> from pixel geometry, the extrinsic matrix <span class="math inline">\([R \mid
+\mathbf{t}]\)</span> from reference frame changes, and the full camera matrix <span class="math inline">\(P =
+K[R \mid \mathbf{t}]\)</span> as their composition. We then asked the inverse question — given point correspondences, can we recover <span class="math inline">\(P\)</span>? — and answered it with the DLT algorithm, SVD, and a row-by-row decomposition back into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span>. Finally, we saw why DLT minimises the wrong thing, derived the true reprojection error, and sketched Gauss-Newton as the refinement step.</p>
+<p>For me, this post is a significant milestone in my journey through computer vision. It is the first time I have stepped away from the image plane and into the 3D world. The camera doesn’t look like a black box anymore — although, there are still many mysteries about it to uncover. The geometry is still not easy for someone with my spatial intuition, but the algebra is clear. And that is enough to keep me going.</p>
+<hr>
+</section>
+<section id="whats-next-homographies" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next-homographies">What’s Next: Homographies</h2>
+<p>In Part 4, we restrict the scene to a special case: all world points lie on a single plane. It turns out that the action of the full camera matrix <span class="math inline">\(P \in \mathbb{R}^{3 \times 4}\)</span> can be represented by a <span class="math inline">\(3 \times 3\)</span> matrix called a <strong>homography</strong>:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}} \sim H\tilde{\mathbf{X}}_{\text{plane}}\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/homography_teaser.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>A homography <span class="math inline">\(H\)</span> maps points <span class="math inline">\(p_1, \ldots, p_5\)</span> on a flat world plane to their projected positions in the image. Part 4 will derive <span class="math inline">\(H\)</span> from first principles.</figcaption>
+</figure>
+</div>
+<p>This is exactly the configuration in which the full 3D DLT problem becomes degenerate. But the planar mapping itself is extraordinarily useful: image stitching, augmented reality markers, document scanning, planar rectification, and several constructions in two-view geometry all run through homographies.</p>
+<p>The derivation will follow the same pattern as DLT — a homogeneous linear system, a null space, SVD — but in a simpler and cleaner setting. And we will finally have a concrete use for the <span class="math inline">\(\mathbb{P}^2\)</span> machinery from Parts 1 and 2. Camera calibration — recovering <span class="math inline">\(K\)</span> from images of a planar pattern, which is what OpenCV’s implements — will follow in Part 5, once we have homographies in hand.</p>
+<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. Homographies are invertible linear maps on <span class="math inline">\(\mathbb{P}^2\)</span>, and all the machinery from Parts 1 and 2 — equivalence classes, the incidence condition, projective duality — will finally get their due.</p>
+
+
 </section>
 
 </main> <!-- /main -->
