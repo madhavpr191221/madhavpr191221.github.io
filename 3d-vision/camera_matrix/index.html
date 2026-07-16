@@ -211,6 +211,17 @@ window.Quarto = {
   <li><a href="#why-does-this-matter" id="toc-why-does-this-matter" class="nav-link" data-scroll-target="#why-does-this-matter">Why Does This Matter?</a></li>
   <li><a href="#the-dlt-algorithm" id="toc-the-dlt-algorithm" class="nav-link" data-scroll-target="#the-dlt-algorithm">The DLT Algorithm</a></li>
   <li><a href="#solving-via-svd" id="toc-solving-via-svd" class="nav-link" data-scroll-target="#solving-via-svd">Solving via SVD</a></li>
+  <li><a href="#scale-invariance-and-normalization" id="toc-scale-invariance-and-normalization" class="nav-link" data-scroll-target="#scale-invariance-and-normalization">Scale Invariance and Normalization</a></li>
+  </ul></li>
+  <li><a href="#recovering-k-r-and-mathbft-from-hatp" id="toc-recovering-k-r-and-mathbft-from-hatp" class="nav-link" data-scroll-target="#recovering-k-r-and-mathbft-from-hatp">Recovering <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> from <span class="math inline">\(\hat{P}\)</span></a>
+  <ul class="collapse">
+  <li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up">Setting Up</a></li>
+  <li><a href="#step-1-recover-mathbfr_3-and-fix-the-scale" id="toc-step-1-recover-mathbfr_3-and-fix-the-scale" class="nav-link" data-scroll-target="#step-1-recover-mathbfr_3-and-fix-the-scale">Step 1: Recover <span class="math inline">\(\mathbf{r}_3\)</span> and Fix the Scale</a></li>
+  <li><a href="#step-2-recover-p_y-f_y-and-mathbfr_2" id="toc-step-2-recover-p_y-f_y-and-mathbfr_2" class="nav-link" data-scroll-target="#step-2-recover-p_y-f_y-and-mathbfr_2">Step 2: Recover <span class="math inline">\(p_y\)</span>, <span class="math inline">\(f_y\)</span>, and <span class="math inline">\(\mathbf{r}_2\)</span></a></li>
+  <li><a href="#step-3-recover-p_x-s-f_x-and-mathbfr_1" id="toc-step-3-recover-p_x-s-f_x-and-mathbfr_1" class="nav-link" data-scroll-target="#step-3-recover-p_x-s-f_x-and-mathbfr_1">Step 3: Recover <span class="math inline">\(p_x\)</span>, <span class="math inline">\(s\)</span>, <span class="math inline">\(f_x\)</span>, and <span class="math inline">\(\mathbf{r}_1\)</span></a></li>
+  <li><a href="#recovering-mathbft-and-the-camera-center-mathbfc" id="toc-recovering-mathbft-and-the-camera-center-mathbfc" class="nav-link" data-scroll-target="#recovering-mathbft-and-the-camera-center-mathbfc">Recovering <span class="math inline">\(\mathbf{t}\)</span> and the Camera Center <span class="math inline">\(\mathbf{c}\)</span></a></li>
+  <li><a href="#one-final-check-dethatr-1" id="toc-one-final-check-dethatr-1" class="nav-link" data-scroll-target="#one-final-check-dethatr-1">One Final Check: <span class="math inline">\(\det\hat{R} = +1\)</span></a></li>
+  <li><a href="#summary-everything-we-know-about-the-camera" id="toc-summary-everything-we-know-about-the-camera" class="nav-link" data-scroll-target="#summary-everything-we-know-about-the-camera">Summary: Everything We Know About the Camera</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -788,7 +799,7 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 <p>If <span class="math inline">\(\operatorname{rank}(A) = 12\)</span>, then the null space is trivial:</p>
 <p><span class="math display">\[\operatorname{Null}(A) = \{\mathbf{0}\}\]</span></p>
 <p>The only exact solution of <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> is therefore <span class="math inline">\(\mathbf{p} = \mathbf{0}\)</span>, which is not a valid camera matrix.</p>
-<p>In practice, noisy measurements usually make the equations inconsistent, so there may be no nonzero exact solution. This is why we use SVD to find the best approximate solution <span class="math inline">\(\mathbf{v}_{12}\)</span>. - <strong><span class="math inline">\(\sigma_{12} = 0\)</span>:</strong> <span class="math inline">\(\mathbf{v}_{12}\)</span> is in the exact null space. A camera matrix perfectly explains all correspondences. Noiseless case. - <strong><span class="math inline">\(\sigma_{12}\)</span> small but nonzero:</strong> <span class="math inline">\(A\)</span> nearly kills <span class="math inline">\(\mathbf{v}_{12}\)</span>. The correspondences are almost consistent with a camera matrix. Small residual, good fit. - <strong><span class="math inline">\(\sigma_{12}\)</span> large:</strong> Even the best <span class="math inline">\(\mathbf{v}_{12}\)</span> gives a large residual. The correspondences are inconsistent — perhaps due to large noise, wrong point matches, or the scene not fitting the pinhole model.</p>
+<p>In practice, noisy measurements usually make the equations inconsistent, so there may be no nonzero exact solution. This is why we use SVD to find the best approximate solution <span class="math inline">\(\mathbf{v}_{12}\)</span>. - <strong><span class="math inline">\(\sigma_{12} = 0\)</span>:</strong> <span class="math inline">\(\mathbf{v}_{12}\)</span> is in the exact null space. A camera matrix perfectly explains all correspondences. Noiseless case. - <strong><span class="math inline">\(\sigma_{12}\)</span> small but nonzero:</strong> <span class="math inline">\(A\)</span> nearly kills <span class="math inline">\(\mathbf{v}_{12}\)</span>. If you turn this into an optimization problem, <span class="math inline">\(\mathbf{v}_{12}\)</span> is the best approximate solution. The camera matrix explains the correspondences well, but not perfectly. This is the usual case in practice. - <strong><span class="math inline">\(\sigma_{12}\)</span> large:</strong> Even the best <span class="math inline">\(\mathbf{v}_{12}\)</span> gives a large residual. The correspondences are inconsistent — perhaps due to large noise, wrong point matches, or the scene not fitting the pinhole model.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -835,6 +846,156 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 </div>
 </div>
 </div>
+</section>
+<section id="scale-invariance-and-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="scale-invariance-and-normalization">Scale Invariance and Normalization</h3>
+<p>The DLT gives us <span class="math inline">\(\hat{\mathbf{p}} = \mathbf{v}_{12}\)</span>, reshaped into a <span class="math inline">\(3 \times 4\)</span> matrix <span class="math inline">\(\hat{P}\)</span>. But there is a subtlety: <span class="math inline">\(\hat{P}\)</span> is only determined up to a nonzero scale factor.</p>
+<p><strong>Why?</strong> Recall that <span class="math inline">\(\phi\)</span> cancels any scalar multiple:</p>
+<p><span class="math display">\[\phi(\lambda P\tilde{\mathbf{X}}) = \phi\begin{pmatrix} \lambda\mathbf{p}_1^\top
+\tilde{\mathbf{X}} \\ \lambda\mathbf{p}_2^\top\tilde{\mathbf{X}} \\
+\lambda\mathbf{p}_3^\top\tilde{\mathbf{X}} \end{pmatrix} = \begin{pmatrix}
+\mathbf{p}_1^\top\tilde{\mathbf{X}} / \mathbf{p}_3^\top\tilde{\mathbf{X}} \\
+\mathbf{p}_2^\top\tilde{\mathbf{X}} / \mathbf{p}_3^\top\tilde{\mathbf{X}}
+\end{pmatrix} = \phi(P\tilde{\mathbf{X}})\]</span></p>
+<p>The <span class="math inline">\(\lambda\)</span> cancels. So <span class="math inline">\(P\)</span> and <span class="math inline">\(\lambda P\)</span> define exactly the same camera for any <span class="math inline">\(\lambda \neq 0\)</span>. The camera matrix lives in an equivalence class <span class="math inline">\(\{\lambda\hat{P} : \lambda \neq 0\}\)</span> — just like points in <span class="math inline">\(\mathbb{P}^2\)</span> from Part 1.</p>
+<p><strong>What does <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> ensure?</strong> The SVD constraint <span class="math inline">\(\|\hat{\mathbf{p}}\| = 1\)</span> picks one representative from this equivalence class — it pins the solution to the unit sphere in <span class="math inline">\(\mathbb{R}^{12}\)</span>, avoiding <span class="math inline">\(\mathbf{p} = \mathbf{0}\)</span>. But it does not fully resolve the ambiguity: Both <span class="math inline">\(\hat{\mathbf{p}}\)</span> and <span class="math inline">\(-\hat{\mathbf{p}}\)</span> have unit norm and both satisfy <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span>. The sign is not fixed.</p>
+<p>So <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> is a convenient normalization for the SVD, not a physically meaningful one. The physically meaningful normalization — the one that will allow us to decompose <span class="math inline">\(\hat{P}\)</span> into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> — comes next.</p>
+</section>
+</section>
+<section id="recovering-k-r-and-mathbft-from-hatp" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-k-r-and-mathbft-from-hatp">Recovering <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> from <span class="math inline">\(\hat{P}\)</span></h2>
+<section id="setting-up" class="level3">
+<h3 class="anchored" data-anchor-id="setting-up">Setting Up</h3>
+<p>The DLT gives us <span class="math inline">\(\hat{P}\)</span> up to scale. Write:</p>
+<p><span class="math display">\[\hat{P} = \hat{K}[\hat{R} \mid \hat{\mathbf{t}}]\]</span></p>
+<p>where <span class="math inline">\(\hat{K}\)</span> is our estimate of the intrinsic matrix, <span class="math inline">\(\hat{R}\)</span> our estimate of the rotation, and <span class="math inline">\(\hat{\mathbf{t}} = -\hat{R}\hat{\mathbf{c}}\)</span> our estimate of the translation. The question is: given <span class="math inline">\(\hat{P}\)</span>, can we recover <span class="math inline">\(\hat{K}\)</span>, <span class="math inline">\(\hat{R}\)</span>, and <span class="math inline">\(\hat{\mathbf{t}}\)</span> separately?</p>
+<p>Write <span class="math inline">\(\hat{P}\)</span> in block form:</p>
+<p><span class="math display">\[\hat{P} = K[R \mid \mathbf{t}] = [KR \mid K\mathbf{t}] = [KR \mid
+-KR\mathbf{c}] = \begin{bmatrix} M \mid \mathbf{m} \end{bmatrix}\]</span></p>
+<p>where <span class="math inline">\(M = KR \in \mathbb{R}^{3 \times 3}\)</span> and <span class="math inline">\(\mathbf{m} = -KR\mathbf{c}
+\in \mathbb{R}^3\)</span>. So the first three columns of <span class="math inline">\(\hat{P}\)</span> give us <span class="math inline">\(M\)</span>, and the last column gives us <span class="math inline">\(\mathbf{m}\)</span>.</p>
+<p>Write <span class="math inline">\(M\)</span> with rows <span class="math inline">\(\mathbf{m}_1^\top\)</span>, <span class="math inline">\(\mathbf{m}_2^\top\)</span>, <span class="math inline">\(\mathbf{m}_3^\top\)</span> and <span class="math inline">\(R\)</span> with rows <span class="math inline">\(\mathbf{r}_1^\top\)</span>, <span class="math inline">\(\mathbf{r}_2^\top\)</span>, <span class="math inline">\(\mathbf{r}_3^\top\)</span>. Then <span class="math inline">\(M = KR\)</span> expands as:</p>
+<p><span class="math display">\[M = \begin{pmatrix} f_x &amp; s &amp; p_x \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1
+\end{pmatrix} \begin{pmatrix} \mathbf{r}_1^\top \\ \mathbf{r}_2^\top \\
+\mathbf{r}_3^\top \end{pmatrix} = \begin{pmatrix} f_x\mathbf{r}_1^\top +
+s\mathbf{r}_2^\top + p_x\mathbf{r}_3^\top \\ f_y\mathbf{r}_2^\top +
+p_y\mathbf{r}_3^\top \\ \mathbf{r}_3^\top \end{pmatrix}\]</span></p>
+<p>The third row of <span class="math inline">\(KR\)</span> is just <span class="math inline">\(\mathbf{r}_3^\top\)</span> — the third row of <span class="math inline">\(R\)</span>. The intrinsic matrix <span class="math inline">\(K\)</span> does not affect the third row at all.</p>
+</section>
+<section id="step-1-recover-mathbfr_3-and-fix-the-scale" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-recover-mathbfr_3-and-fix-the-scale">Step 1: Recover <span class="math inline">\(\mathbf{r}_3\)</span> and Fix the Scale</h3>
+<p>From the expansion above, the third row of <span class="math inline">\(M\)</span> is:</p>
+<p><span class="math display">\[\mathbf{m}_3^\top = \mathbf{r}_3^\top \qquad \Longrightarrow \qquad
+\mathbf{m}_3 = \mathbf{r}_3\]</span></p>
+<p>Since <span class="math inline">\(R\)</span> is orthogonal, <span class="math inline">\(\|\mathbf{r}_3\| = 1\)</span>. So check:</p>
+<p><span class="math display">\[\lambda := \|\hat{\mathbf{m}}_3\|\]</span></p>
+<p>If <span class="math inline">\(\lambda \neq 1\)</span> — which happens because DLT gives <span class="math inline">\(\hat{P}\)</span> up to scale — rescale the entire matrix:</p>
+<p><span class="math display">\[\hat{P} \leftarrow \frac{\hat{P}}{\lambda}, \qquad M \leftarrow
+\frac{M}{\lambda}\]</span></p>
+<p>Why divide the entire matrix and not just the third row? Because <span class="math inline">\(P\)</span> represents a single linear map, defined only up to scale. Changing one row independently would give a different camera altogether. After rescaling:</p>
+<p><span class="math display">\[\hat{\mathbf{r}}_3 = \hat{\mathbf{m}}_3, \qquad \|\hat{\mathbf{r}}_3\|
+= 1 \checkmark\]</span></p>
+</section>
+<section id="step-2-recover-p_y-f_y-and-mathbfr_2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-recover-p_y-f_y-and-mathbfr_2">Step 2: Recover <span class="math inline">\(p_y\)</span>, <span class="math inline">\(f_y\)</span>, and <span class="math inline">\(\mathbf{r}_2\)</span></h3>
+<p>From the second row of <span class="math inline">\(M = KR\)</span>:</p>
+<p><span class="math display">\[\mathbf{m}_2 = f_y\mathbf{r}_2 + p_y\mathbf{r}_3\]</span></p>
+<p>Take the dot product with <span class="math inline">\(\mathbf{r}_3\)</span> and use orthonormality (<span class="math inline">\(\mathbf{r}_2^\top\mathbf{r}_3 = 0\)</span>, <span class="math inline">\(\mathbf{r}_3^\top\mathbf{r}_3 = 1\)</span>):</p>
+<p><span class="math display">\[\hat{p}_y = \mathbf{m}_2^\top\mathbf{r}_3\]</span></p>
+<p>Now subtract the <span class="math inline">\(\mathbf{r}_3\)</span> component from <span class="math inline">\(\mathbf{m}_2\)</span>:</p>
+<p><span class="math display">\[\mathbf{m}_2 - p_y\mathbf{r}_3 = f_y\mathbf{r}_2\]</span></p>
+<p>Set <span class="math inline">\(\mathbf{u}_2 := \mathbf{m}_2 - \hat{p}_y\mathbf{r}_3 = f_y\mathbf{r}_2\)</span>. Since <span class="math inline">\(\|\mathbf{r}_2\| = 1\)</span> and <span class="math inline">\(f_y &gt; 0\)</span>:</p>
+<p><span class="math display">\[\hat{f}_y = \|\mathbf{u}_2\|, \qquad \hat{\mathbf{r}}_2 =
+\frac{\mathbf{u}_2}{\|\mathbf{u}_2\|}\]</span></p>
+<p>In terms of the known quantities:</p>
+<p><span class="math display">\[\hat{\mathbf{r}}_2 = \frac{\mathbf{m}_2 - \hat{p}_y\mathbf{r}_3}
+{\|\mathbf{m}_2 - \hat{p}_y\mathbf{r}_3\|}\]</span></p>
+<p>So from <span class="math inline">\(M\)</span> alone we have recovered: <span class="math inline">\(\mathbf{r}_3 \to p_y \to f_y \to
+\mathbf{r}_2\)</span>.</p>
+</section>
+<section id="step-3-recover-p_x-s-f_x-and-mathbfr_1" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-recover-p_x-s-f_x-and-mathbfr_1">Step 3: Recover <span class="math inline">\(p_x\)</span>, <span class="math inline">\(s\)</span>, <span class="math inline">\(f_x\)</span>, and <span class="math inline">\(\mathbf{r}_1\)</span></h3>
+<p>From the first row of <span class="math inline">\(M = KR\)</span>:</p>
+<p><span class="math display">\[\mathbf{m}_1 = f_x\mathbf{r}_1 + s\mathbf{r}_2 + p_x\mathbf{r}_3\]</span></p>
+<p>Take dot products with <span class="math inline">\(\mathbf{r}_3\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span> respectively, using orthonormality:</p>
+<p><span class="math display">\[\hat{p}_x = \mathbf{m}_1^\top\mathbf{r}_3, \qquad \hat{s} =
+\mathbf{m}_1^\top\mathbf{r}_2\]</span></p>
+<p>Subtract the known components:</p>
+<p><span class="math display">\[\mathbf{m}_1 - \hat{s}\mathbf{r}_2 - \hat{p}_x\mathbf{r}_3 = f_x\mathbf{r}_1\]</span></p>
+<p>Set <span class="math inline">\(\mathbf{u}_1 := \mathbf{m}_1 - \hat{s}\mathbf{r}_2 -
+\hat{p}_x\mathbf{r}_3 = f_x\mathbf{r}_1\)</span>. Since <span class="math inline">\(\|\mathbf{r}_1\| = 1\)</span> and <span class="math inline">\(f_x &gt; 0\)</span>:</p>
+<p><span class="math display">\[\hat{f}_x = \|\mathbf{u}_1\|, \qquad \hat{\mathbf{r}}_1 =
+\frac{\mathbf{u}_1}{\|\mathbf{u}_1\|}\]</span></p>
+</section>
+<section id="recovering-mathbft-and-the-camera-center-mathbfc" class="level3">
+<h3 class="anchored" data-anchor-id="recovering-mathbft-and-the-camera-center-mathbfc">Recovering <span class="math inline">\(\mathbf{t}\)</span> and the Camera Center <span class="math inline">\(\mathbf{c}\)</span></h3>
+<p>From the block structure of <span class="math inline">\(\hat{P}\)</span>:</p>
+<p><span class="math display">\[\hat{P} = \begin{bmatrix} M \mid \mathbf{p}_4 \end{bmatrix} = \begin{bmatrix}
+KR \mid K\mathbf{t} \end{bmatrix}\]</span></p>
+<p>So the last column satisfies <span class="math inline">\(\mathbf{p}_4 = K\mathbf{t}\)</span>. Since <span class="math inline">\(K\)</span> is invertible — <span class="math inline">\(\det K = f_x f_y \neq 0\)</span> as long as the focal lengths are nonzero — we can solve directly:</p>
+<p><span class="math display">\[\boxed{\hat{\mathbf{t}} = \hat{K}^{-1}\mathbf{p}_4}\]</span></p>
+<p>And the camera center in world coordinates:</p>
+<p><span class="math display">\[\mathbf{t} = -R\mathbf{c} \qquad \Longrightarrow \qquad \boxed{\hat{\mathbf{c}}
+= -\hat{R}^\top\hat{\mathbf{t}}}\]</span></p>
+<p>where we used <span class="math inline">\(R^\top = R^{-1}\)</span> for a rotation matrix.</p>
+</section>
+<section id="one-final-check-dethatr-1" class="level3">
+<h3 class="anchored" data-anchor-id="one-final-check-dethatr-1">One Final Check: <span class="math inline">\(\det\hat{R} = +1\)</span></h3>
+<p>By construction, <span class="math inline">\(\hat{R}\)</span> should be a proper rotation matrix with <span class="math inline">\(\det\hat{R}
+= +1\)</span>. But numerical errors from the SVD and the row-by-row recovery can occasionally give <span class="math inline">\(\det\hat{R} = -1\)</span> — an improper rotation (a reflection). This happens when the scale factor <span class="math inline">\(\lambda\)</span> from Step 1 is negative.</p>
+<p>The fix is simple: if <span class="math inline">\(\det\hat{R} = -1\)</span>, replace <span class="math inline">\(\hat{P}\)</span> with <span class="math inline">\(-\hat{P}\)</span> and repeat the decomposition from scratch. Since <span class="math inline">\(\hat{P}\)</span> and <span class="math inline">\(-\hat{P}\)</span> define the same camera, this is always valid.</p>
+<p>In practice, libraries like OpenCV handle this automatically inside their decomposition routines — you do not need to check manually. But it is good to know why it can happen.</p>
+</section>
+<section id="summary-everything-we-know-about-the-camera" class="level3">
+<h3 class="anchored" data-anchor-id="summary-everything-we-know-about-the-camera">Summary: Everything We Know About the Camera</h3>
+<p>Starting from <span class="math inline">\(n \geq 6\)</span> point correspondences and running DLT followed by the row-by-row decomposition, we have recovered:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Meaning</th>
+<th>How recovered</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\hat{f}_x\)</span>, <span class="math inline">\(\hat{f}_y\)</span></td>
+<td>Focal lengths in pixels</td>
+<td><span class="math inline">\(\|\mathbf{u}_1\|\)</span>, <span class="math inline">\(\|\mathbf{u}_2\|\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat{p}_x\)</span>, <span class="math inline">\(\hat{p}_y\)</span></td>
+<td>Principal point</td>
+<td><span class="math inline">\(\mathbf{m}_1^\top\mathbf{r}_3\)</span>, <span class="math inline">\(\mathbf{m}_2^\top\mathbf{r}_3\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat{s}\)</span></td>
+<td>Skew</td>
+<td><span class="math inline">\(\mathbf{m}_1^\top\mathbf{r}_2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat{R}\)</span></td>
+<td>Camera orientation</td>
+<td>Rows <span class="math inline">\(\mathbf{r}_1\)</span>, <span class="math inline">\(\mathbf{r}_2\)</span>, <span class="math inline">\(\mathbf{r}_3\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat{\mathbf{t}}\)</span></td>
+<td>Translation vector</td>
+<td><span class="math inline">\(\hat{K}^{-1}\mathbf{p}_4\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat{\mathbf{c}}\)</span></td>
+<td>Camera center in world</td>
+<td><span class="math inline">\(-\hat{R}^\top\hat{\mathbf{t}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We now know everything about the camera — where it is, how it is oriented, and what its sensor looks like. All from a set of point correspondences and linear algebra.</p>
 
 
 </section>
