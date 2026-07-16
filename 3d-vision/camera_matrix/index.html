@@ -285,7 +285,7 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In Part 1, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction — homogeneous coordinates, equivalence classes, points at infinity. In Part 2, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+<p>In <a href="https://madhavpr191221.github.io/3d-vision/homogeneous-coordinates/">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction — homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
 <p>Enough abstraction. It is time to step into the real world.</p>
 <p>Cameras and real scenes live in three dimensions. A tree, a building, a face — these are 3D objects in <span class="math inline">\(\mathbb{R}^3\)</span>. A camera takes this 3D world and collapses it onto a 2D sensor. The mathematical object that does this collapsing is the <strong>camera matrix</strong> <span class="math inline">\(P\)</span> — a <span class="math inline">\(3 \times 4\)</span> matrix that maps <span class="math inline">\(\mathbb{R}^4\)</span> to <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
 <p>We promised this object at the end of Part 1. Here it is.</p>
@@ -1273,12 +1273,6 @@ K[R \mid \mathbf{t}]\)</span> as their composition. We then asked the inverse qu
 <h2 class="anchored" data-anchor-id="whats-next-homographies">What’s Next: Homographies</h2>
 <p>In Part 4, we restrict the scene to a special case: all world points lie on a single plane. It turns out that the action of the full camera matrix <span class="math inline">\(P \in \mathbb{R}^{3 \times 4}\)</span> can be represented by a <span class="math inline">\(3 \times 3\)</span> matrix called a <strong>homography</strong>:</p>
 <p><span class="math display">\[\tilde{\mathbf{x}} \sim H\tilde{\mathbf{X}}_{\text{plane}}\]</span></p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/homography_teaser.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>A homography <span class="math inline">\(H\)</span> maps points <span class="math inline">\(p_1, \ldots, p_5\)</span> on a flat world plane to their projected positions in the image. Part 4 will derive <span class="math inline">\(H\)</span> from first principles.</figcaption>
-</figure>
-</div>
 <p>This is exactly the configuration in which the full 3D DLT problem becomes degenerate. But the planar mapping itself is extraordinarily useful: image stitching, augmented reality markers, document scanning, planar rectification, and several constructions in two-view geometry all run through homographies.</p>
 <p>The derivation will follow the same pattern as DLT — a homogeneous linear system, a null space, SVD — but in a simpler and cleaner setting. And we will finally have a concrete use for the <span class="math inline">\(\mathbb{P}^2\)</span> machinery from Parts 1 and 2. Camera calibration — recovering <span class="math inline">\(K\)</span> from images of a planar pattern, which is what OpenCV’s implements — will follow in Part 5, once we have homographies in hand.</p>
 <p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. Homographies are invertible linear maps on <span class="math inline">\(\mathbb{P}^2\)</span>, and all the machinery from Parts 1 and 2 — equivalence classes, the incidence condition, projective duality — will finally get their due.</p>
