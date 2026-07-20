@@ -156,7 +156,7 @@
   {
     "objectID": "3d-vision/index.html",
     "href": "3d-vision/index.html",
-    "title": "3D Vision",
+    "title": "3D Computer Vision",
     "section": "",
     "text": "Classical and neural 3D computer vision — learned from scratch, derived from geometry. Cameras, epipolar geometry, structure from motion, point clouds, and neural scene representations.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n3D computer vision from first principles — Part 1\n\n\nHomogeneous coordinates and the projective plane derived via Gaussian elimination\n\n\nHomogeneous coordinates and the projective plane derived from Gaussian elimination — no prior projective geometry assumed.\n\n\n\n\n\nJul 7, 2026\n\n\nMadhav Prashanth Ramachandran\n\n\n\n\n\n\n\n\n\n\n\n\n3D Computer Vision from First Principles — Part 2\n\n\nProjective Duality and Conics in \\(\\mathbb{P}^2\\)\n\n\nProjective duality derived from the symmetry of the incidence condition, and an introduction to conics in the projective plane.\n\n\n\n\n\nJul 13, 2026\n\n\nMadhav Prashanth Ramachandran\n\n\n\n\n\n\n\n\n\n\n\n\n3D Computer Vision from First Principles — Part 3\n\n\nThe Camera Matrix \\(P = K[R \\mid \\mathbf{t}]\\)\n\n\nDeriving the camera matrix from similar triangles to \\(P = K[R \\mid \\mathbf{t}]\\), stage by stage from first principles.\n\n\n\n\n\nJul 15, 2026\n\n\nMadhav Prashanth Ramachandran\n\n\n\n\n\n\n\n\n\n\n\n\n3D Computer Vision from First Principles — Part 4\n\n\nHomographies\n\n\nHomographies derived from the camera matrix restricted to a plane — what they preserve, how to estimate them, and why they are everywhere in computer vision.\n\n\n\n\n\nJul 20, 2026\n\n\nMadhav Prashanth Ramachandran\n\n\n\n\n\nNo matching items"
   },
