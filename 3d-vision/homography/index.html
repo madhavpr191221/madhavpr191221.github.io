@@ -958,8 +958,10 @@ b_1\)</span> with <span class="math inline">\(a_2, b_2\)</span> throughout gives
 <section id="from-two-viewpoints-to-one-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="from-two-viewpoints-to-one-matrix">From Two Viewpoints to One Matrix</h3>
 <p>Suppose the same flat plane is photographed from two different viewpoints, giving images <span class="math inline">\(I_1\)</span> and <span class="math inline">\(I_2\)</span>. Each camera has its own homography mapping world plane coordinates to pixel coordinates:</p>
-<p><span class="math display">\[\mathbf{x}_1 = \phi(H_1\text{Lift}(X, Y)), \qquad \mathbf{x}_2 =
-\phi(H_2\text{Lift}(X, Y))\]</span></p>
+<p><span class="math display">\[\mathbf{x}_1 = (\phi \circ H_1 \circ \text{Lift})(X, Y) =
+\phi(H_1(\text{Lift}(X, Y)))\]</span></p>
+<p><span class="math display">\[\mathbf{x}_2 = (\phi \circ H_2 \circ \text{Lift})(X, Y) =
+\phi(H_2(\text{Lift}(X, Y)))\]</span></p>
 <p>where <span class="math inline">\(\text{Lift}(X, Y) = (X, Y, 1)^\top\)</span>.</p>
 <p>The same world point <span class="math inline">\(\tilde{\mathbf{X}}\)</span> appears at <span class="math inline">\(\mathbf{x}_1\)</span> in image 1 and <span class="math inline">\(\mathbf{x}_2\)</span> in image 2. Eliminating <span class="math inline">\(\tilde{\mathbf{X}}\)</span>:</p>
 <p><span class="math display">\[\tilde{\mathbf{X}} = H_1^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
