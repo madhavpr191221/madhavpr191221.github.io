@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -177,7 +212,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#from-the-camera-matrix-to-a-homography" id="toc-from-the-camera-matrix-to-a-homography" class="nav-link" data-scroll-target="#from-the-camera-matrix-to-a-homography">From the Camera Matrix to a Homography</a>
   <ul class="collapse">
   <li><a href="#recovering-pixel-coordinates" id="toc-recovering-pixel-coordinates" class="nav-link" data-scroll-target="#recovering-pixel-coordinates">Recovering pixel coordinates</a></li>
   </ul></li>
@@ -242,7 +278,16 @@ window.Quarto = {
   <li><a href="#from-camera-coordinates-to-pixels" id="toc-from-camera-coordinates-to-pixels" class="nav-link" data-scroll-target="#from-camera-coordinates-to-pixels">From Camera Coordinates to Pixels</a></li>
   <li><a href="#why-this-is-special" id="toc-why-this-is-special" class="nav-link" data-scroll-target="#why-this-is-special">Why This Is Special</a></li>
   <li><a href="#application-panoramic-image-stitching" id="toc-application-panoramic-image-stitching" class="nav-link" data-scroll-target="#application-panoramic-image-stitching">Application: Panoramic Image Stitching</a></li>
+  <li><a href="#step-1-recover-the-geometry" id="toc-step-1-recover-the-geometry" class="nav-link" data-scroll-target="#step-1-recover-the-geometry">Step 1: Recover the Geometry</a></li>
+  <li><a href="#step-2-choose-a-common-coordinate-system" id="toc-step-2-choose-a-common-coordinate-system" class="nav-link" data-scroll-target="#step-2-choose-a-common-coordinate-system">Step 2: Choose a Common Coordinate System</a></li>
+  <li><a href="#step-3-blend-the-overlap" id="toc-step-3-blend-the-overlap" class="nav-link" data-scroll-target="#step-3-blend-the-overlap">Step 3: Blend the Overlap</a></li>
+  <li><a href="#extending-to-many-images" id="toc-extending-to-many-images" class="nav-link" data-scroll-target="#extending-to-many-images">Extending to Many Images</a></li>
+  <li><a href="#the-closing-condition-for-a-360-panorama" id="toc-the-closing-condition-for-a-360-panorama" class="nav-link" data-scroll-target="#the-closing-condition-for-a-360-panorama">The Closing Condition for a <span class="math inline">\(360°\)</span> Panorama</a></li>
   </ul></li>
+  <li><a href="#why-is-it-called-a-homography" id="toc-why-is-it-called-a-homography" class="nav-link" data-scroll-target="#why-is-it-called-a-homography">Why Is It Called a Homography?</a></li>
+  <li><a href="#cv2.findhomography-what-we-just-derived-in-one-line" id="toc-cv2.findhomography-what-we-just-derived-in-one-line" class="nav-link" data-scroll-target="#cv2.findhomography-what-we-just-derived-in-one-line"><code>cv2.findHomography</code> — What We Just Derived, in One Line</a></li>
+  <li><a href="#closing-thoughts" id="toc-closing-thoughts" class="nav-link" data-scroll-target="#closing-thoughts">Closing Thoughts</a></li>
+  <li><a href="#whats-next-mathbbp3" id="toc-whats-next-mathbbp3" class="nav-link" data-scroll-target="#whats-next-mathbbp3">What’s Next: <span class="math inline">\(\mathbb{P}^3\)</span></a></li>
   </ul>
 </nav>
     </div>
@@ -296,11 +341,20 @@ window.Quarto = {
 <p>I did not know what a homography was until last week.</p>
 <p>I have always wondered how the distance between two points in an image relates to the actual distance between them in the real world. I never bothered to look it up seriously or understand it deeply. But having spent some time with metric spaces and distance functions, I found myself coming back to this question. What if there was something going on here? And it turns out there is — and it is not as complicated as the mathematics I was used to, but it is clean and satisfying in its own way.</p>
 <p>So here is a question for you: if I take a photograph of a flat surface — a road, a football pitch, a tiled floor — and I can see two points in the image, can I figure out the actual distance between them in the real world?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/homography_motivation.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>The question that opens this post. Given two points in a photograph of a flat surface, can we recover their real-world distance? It turns out the answer is yes — and the tool is the homography, which falls out of the camera matrix from Part 3 by a single substitution: set <span class="math inline">\(Z = 0\)</span> and watch one column disappear.</figcaption>
+</figure>
+</div>
 <p>It turns out the answer is yes — and the tool that makes it possible is a homography. A homography maps points on a flat surface to their positions in the image, and its inverse maps image points back to the flat surface. Once you have that inverse, distances in the real world follow immediately.</p>
-<p>And the homography itself is not a mysterious object. It is the camera matrix from Part 3, restricted to a flat scene. Set <span class="math inline">\(Z = 0\)</span> for all world points, substitute into <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, and the <span class="math inline">\(3 \times 4\)</span> matrix collapses to a <span class="math inline">\(3 \times 3\)</span> matrix. That is the homography. One substitution. No new machinery. [Note that <span class="math inline">\(Z = 0\)</span> is a choice of coordinate system, not a restriction on the scene. You are free to choose any coordinate system for the flat surface.]</p>
+<p>And the homography itself is not a mysterious object. It is the <a href="https://madhavpr191221.github.io/3d-vision/camera_matrix/">camera matrix from Part 3</a> restricted to a flat scene. Set <span class="math inline">\(Z = 0\)</span> for all world points, substitute into <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, and the <span class="math inline">\(3 \times 4\)</span> matrix collapses to a <span class="math inline">\(3 \times 3\)</span> matrix. That is the homography. One substitution. No new machinery. [Note that <span class="math inline">\(Z = 0\)</span> is a choice of coordinate system, not a restriction on the scene. You are free to choose any coordinate system for the flat surface.]</p>
 <p>This also means that the degenerate case that broke DLT in Part 3 — all world points lying on a single plane — is not a failure at all. It is a different, simpler, and extraordinarily useful problem. The full camera matrix is overkill when your scene is flat. The homography is exactly what you need.</p>
 <p>In this post we will derive the homography from the camera matrix, understand what it preserves and what it destroys, estimate it from point correspondences, and see why it shows up everywhere — image stitching, document rectification, augmented reality, planar change detection, and eventually camera calibration itself.</p>
-<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. After one post in the real world <span class="math inline">\(\mathbb{R}^3\)</span>, the equivalence classes and projective duality from Parts 1 and 2 are back. They have been waiting. ## From the Camera Matrix to a Homography</p>
+<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. After one post in the real world <span class="math inline">\(\mathbb{R}^3\)</span>, the equivalence classes and projective duality from <a href="https://madhavpr191221.github.io/3d-vision/homogeneous-coordinates/">Parts 1</a> and <a href="https://madhavpr191221.github.io/3d-vision/conics/">2</a> are back. They have been waiting.</p>
+</section>
+<section id="from-the-camera-matrix-to-a-homography" class="level2">
+<h2 class="anchored" data-anchor-id="from-the-camera-matrix-to-a-homography">From the Camera Matrix to a Homography</h2>
 <p>In Part 3, we derived the full camera matrix. A world point <span class="math inline">\((X, Y, Z)^\top\)</span> maps to an image point via:</p>
 <p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = P\begin{pmatrix} X
 \\ Y \\ Z \\ 1 \end{pmatrix} = K\begin{pmatrix} \mathbf{r}_1 &amp;
@@ -477,6 +531,7 @@ b/c)^\top\)</span>.</p>
 <p>Given two pixels <span class="math inline">\((u_1, v_1)^\top\)</span> and <span class="math inline">\((u_2, v_2)^\top\)</span>, apply the three steps above to each to recover world points <span class="math inline">\((X_1, Y_1)^\top\)</span> and <span class="math inline">\((X_2, Y_2)^\top\)</span>. The real-world distance between them is:</p>
 <p><span class="math display">\[d = \sqrt{(X_2 - X_1)^2 + (Y_2 - Y_1)^2}\]</span></p>
 <p>This is the answer to the question from the introduction. No approximation. No guesswork. Just the homography, its inverse, and the Euclidean distance formula.</p>
+<p>But there are more interesting applications of homographies than just measuring distances. One of them is called rectification. If you have ever wondered why Adobe Scan can take a photograph of your Aadhaar card lying at an angle on a table and produce a clean, flat, rectangular scan — that is rectification. If you have ever taken a panoramic photograph by rotating your phone — that is image stitching via homographies. If you have ever wanted to detect whether something changed on a flat surface between two photographs taken from slightly different viewpoints — that is change detection via warping. All of it runs through the same <span class="math inline">\(3 \times 3\)</span> matrix.</p>
 </section>
 </section>
 <section id="document-rectification" class="level2">
@@ -1026,21 +1081,159 @@ u_1 \\ v_1 \\ 1 \end{pmatrix}\]</span></p>
 </section>
 <section id="application-panoramic-image-stitching" class="level3">
 <h3 class="anchored" data-anchor-id="application-panoramic-image-stitching">Application: Panoramic Image Stitching</h3>
-<p>Here is the problem. You want to photograph a wide scene — a mountain range, a cityscape, a room — but it does not fit in a single frame. So you take several overlapping photographs, rotating your phone between each shot. How do you stitch them into one seamless wide image?</p>
-<p>The naive approach fails immediately. Each photograph has its own pixel coordinate system. You cannot just place them side by side — the overlapping regions will not align because perspective distortion makes each image look slightly different from the others.</p>
-<p>The revelation: if the camera centre stays fixed and only the orientation changes — which is exactly what happens when you rotate your phone in place — then every pair of overlapping images is related by a homography of the form <span class="math inline">\(H_{21} = KR_{21}K^{-1}\)</span>. No planar scene assumption needed. No depth information needed. Just a rotation and the intrinsic matrix.</p>
-<p>This means you can warp every image into the coordinate system of a single reference image using the homographies, and the overlapping regions will align perfectly. Stitch enough of them together and you get a full panorama.</p>
-<p>The pipeline:</p>
-<ol type="1">
-<li>Estimate <span class="math inline">\(H_{21}\)</span> from point correspondences in the overlap region via DLT.</li>
-<li>If <span class="math inline">\(K\)</span> is known, recover <span class="math inline">\(R_{21} = K^{-1}H_{21}K\)</span>.</li>
-<li>Warp all images to a common reference orientation using the function composition approach from the previous section.</li>
-<li>Blend the overlapping regions.</li>
-</ol>
-<p>If <span class="math inline">\(K\)</span> is not known, <span class="math inline">\(H_{21}\)</span> still gives a valid warp — you just cannot separate the rotation from the intrinsics. The geometry works either way. This is precisely what your phone’s panorama mode does under the hood.</p>
-
-
+<p>Here is the problem. You want to photograph a wide scene — a mountain range, a cityscape, a room — but it does not fit in a single frame. So you stand in one place and take several overlapping photographs, rotating the camera slightly between each shot.</p>
+<p>For two images, the situation looks like this:</p>
+<p><span class="math display">\[I_1: \quad \text{left mountain} - \text{tree} - \text{temple}\]</span> <span class="math display">\[I_2: \quad \text{temple} - \text{tower} - \text{right mountain}\]</span></p>
+<p>The temple appears in both photographs. The desired panorama is:</p>
+<p><span class="math display">\[\text{left mountain} - \text{tree} - \text{temple} - \text{tower} -
+\text{right mountain}\]</span></p>
+<p>That is the stitching problem.</p>
+<p><strong>Why not simply place the two images side by side?</strong></p>
+<p>Because the same physical scene point does not appear at the same pixel coordinates in both photographs. Suppose the top of the temple appears at <span class="math inline">\((u_1, v_1) = (850, 300)\)</span> in <span class="math inline">\(I_1\)</span>, but at <span class="math inline">\((u_2, v_2) = (120, 292)\)</span> in <span class="math inline">\(I_2\)</span>. These are two measurements of the same physical point. Simply placing the images side by side produces two copies of the temple. The images first need to be aligned.</p>
 </section>
+<section id="step-1-recover-the-geometry" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-recover-the-geometry">Step 1: Recover the Geometry</h3>
+<p>Find several recognizable scene points that appear in both images — the tip of the temple roof, the corner of a window, the top of a tree, the edge of a signboard. Suppose the <span class="math inline">\(i\)</span>-th physical feature appears at <span class="math inline">\((u_{1i}, v_{1i})\)</span> in <span class="math inline">\(I_1\)</span> and <span class="math inline">\((u_{2i}, v_{2i})\)</span> in <span class="math inline">\(I_2\)</span>. We have point correspondences:</p>
+<p><span class="math display">\[(u_{1i}, v_{1i}) \longleftrightarrow (u_{2i}, v_{2i})\]</span></p>
+<p>These are not yet the panorama. They are just measurements of the same physical points in two different images.</p>
+<p>We assume the same camera is used for both photographs, so the intrinsic matrix <span class="math inline">\(K\)</span> is the same. The two images are related via the image-to-image homography:</p>
+<p><span class="math display">\[\boxed{H_{21} = KR_{21}K^{-1}}\]</span></p>
+<p>In practice, we estimate <span class="math inline">\(H_{21}\)</span> directly from the matched image points using DLT. We do not need to know the depth of the temple, the tree, or the mountains. Once <span class="math inline">\(H_{21}\)</span> is estimated from a few point matches, it gives us a dense mapping for the entire overlapping region.</p>
+<p>Define:</p>
+<p><span class="math display">\[\text{Lift}(u, v) = \begin{pmatrix} u \\ v \\ 1 \end{pmatrix}\]</span></p>
+<p>For each output coordinate <span class="math inline">\((u_1, v_1)\)</span>, apply <span class="math inline">\(H_{21}\)</span>:</p>
+<p><span class="math display">\[H_{21}\begin{pmatrix} u_1 \\ v_1 \\ 1 \end{pmatrix} = \begin{pmatrix}
+a \\ b \\ c \end{pmatrix} \qquad \Longrightarrow \qquad u_2 = \frac{a}{c},
+\quad v_2 = \frac{b}{c}\]</span></p>
+<p>We have now mapped a pixel in <span class="math inline">\(I_1\)</span> to the corresponding pixel in <span class="math inline">\(I_2\)</span>. Remember that homography has nothing to do with colors — it is purely geometric. The color at <span class="math inline">\((u_1, v_1)\)</span> in <span class="math inline">\(I_1\)</span> is not necessarily the same as the color at <span class="math inline">\((u_2, v_2)\)</span> in <span class="math inline">\(I_2\)</span>. The homography only tells us where to look in <span class="math inline">\(I_2\)</span> for the corresponding physical point.</p>
+</section>
+<section id="step-2-choose-a-common-coordinate-system" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-choose-a-common-coordinate-system">Step 2: Choose a Common Coordinate System</h3>
+<p>We need a canvas on which the two photographs can be placed. The simplest choice is the coordinate system of <span class="math inline">\(I_1\)</span>. We keep <span class="math inline">\(I_1\)</span> where it is and re-express <span class="math inline">\(I_2\)</span> in the coordinate system of <span class="math inline">\(I_1\)</span>.</p>
+<p>Construct a warped version of <span class="math inline">\(I_2\)</span>:</p>
+<p><span class="math display">\[I_{2\to1}(u_1, v_1) = \tilde{I}_2(u_2, v_2)\]</span></p>
+<p>where <span class="math inline">\(\tilde{I}_2\)</span> denotes the interpolated image and <span class="math inline">\((u_2, v_2) =
+g_{21}(u_1, v_1)\)</span>. Substituting the definition of <span class="math inline">\(g_{21}\)</span>:</p>
+<p><span class="math display">\[\boxed{I_{2\to1} = \tilde{I}_2 \circ \phi \circ H_{21} \circ
+\text{Lift}}\]</span></p>
+<p>This is the complete image warping operation. For each output coordinate <span class="math inline">\((u_1, v_1)\)</span>, we perform the sequence:</p>
+<p><span class="math display">\[(u_1, v_1) \longrightarrow \begin{pmatrix} u_1 \\ v_1 \\ 1
+\end{pmatrix} \xrightarrow{H_{21}} \begin{pmatrix} a \\ b \\ c
+\end{pmatrix} \xrightarrow{\phi} (u_2, v_2) \longrightarrow
+\tilde{I}_2(u_2, v_2)\]</span></p>
+<p>After the warp, the temple in <span class="math inline">\(I_{2\to1}\)</span> lies on top of the temple in <span class="math inline">\(I_1\)</span>. The common region has been aligned.</p>
+</section>
+<section id="step-3-blend-the-overlap" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-blend-the-overlap">Step 3: Blend the Overlap</h3>
+<p>In the overlap region, both images provide a color for the same location. Ideally <span class="math inline">\(I_1(u,v) = I_{2\to1}(u,v)\)</span>, but in practice small differences arise from exposure changes, illumination, sensor noise, and interpolation errors. A sudden switch from one image to the other creates a visible seam. Instead, blend gradually:</p>
+<p><span class="math display">\[I_\text{panorama}(u, v) = \alpha(u,v)\,I_1(u,v) + (1 - \alpha(u,v))\,
+I_{2\to 1}(u,v)\]</span></p>
+<p>where <span class="math inline">\(0 \leq \alpha(u,v) \leq 1\)</span> changes smoothly from <span class="math inline">\(1\)</span> to <span class="math inline">\(0\)</span> across the overlap. Where only <span class="math inline">\(I_1\)</span> has information, use its colors. Where only <span class="math inline">\(I_{2\to1}\)</span> has information, use its colors.</p>
+<p>The complete two-image pipeline:</p>
+<p><span class="math display">\[\text{find repeated scene points} \longrightarrow \text{estimate }
+H_{21} \longrightarrow \text{warp } I_2 \text{ into } I_1 \text{'s frame}
+\longrightarrow \text{blend} \longrightarrow \text{one wider image}\]</span></p>
+<p>This is the essence of panoramic image stitching. And now, it’s a simple matter of repeating the process for more than two images. Here is how it works.</p>
+</section>
+<section id="extending-to-many-images" class="level3">
+<h3 class="anchored" data-anchor-id="extending-to-many-images">Extending to Many Images</h3>
+<p>Now suppose we take <span class="math inline">\(N\)</span> overlapping photographs while progressively rotating the camera:</p>
+<p><span class="math display">\[I_1, I_2, \ldots, I_N\]</span></p>
+<p>Neighbouring images overlap:</p>
+<p><span class="math display">\[I_1 \leftrightarrow I_2, \quad I_2 \leftrightarrow I_3, \quad \ldots,
+\quad I_{N-1} \leftrightarrow I_N\]</span></p>
+<p>Estimate the pairwise homographies <span class="math inline">\(H_{21}, H_{32}, \ldots, H_{N,N-1}\)</span>. Choose <span class="math inline">\(I_1\)</span> as the reference frame. The map from image 1 to image <span class="math inline">\(j\)</span> is obtained by composing the pairwise homographies:</p>
+<p><span class="math display">\[H_{j1} = H_{j,j-1} H_{j-1,j-2} \cdots H_{32} H_{21}\]</span></p>
+<p>The order matters — the rightmost matrix acts first. For each image <span class="math inline">\(I_j\)</span>, construct its warped version in the reference frame:</p>
+<p><span class="math display">\[I_{j \to 1} = \tilde{I}_j \circ \phi \circ H_{j1} \circ \text{Lift}\]</span></p>
+<p>All photographs are now expressed in the same coordinate system. Blending their overlapping regions produces the panorama:</p>
+<p><span class="math display">\[I_\text{panorama} = \text{Blend}(I_1, I_{2 \to 1}, I_{3 \to 1},
+\ldots, I_{N \to 1})\]</span></p>
+</section>
+<section id="the-closing-condition-for-a-360-panorama" class="level3">
+<h3 class="anchored" data-anchor-id="the-closing-condition-for-a-360-panorama">The Closing Condition for a <span class="math inline">\(360°\)</span> Panorama</h3>
+<p>For a complete <span class="math inline">\(360°\)</span> panorama, the final photograph overlaps the first:</p>
+<p><span class="math display">\[I_N \leftrightarrow I_1\]</span></p>
+<p>Starting from <span class="math inline">\(I_1\)</span>, moving through every image, and returning to <span class="math inline">\(I_1\)</span> produces the composition:</p>
+<p><span class="math display">\[H_{1N}H_{N,N-1}\cdots H_{32}H_{21}\]</span></p>
+<p>In an ideal, noise-free construction, this complete trip should return each image-1 coordinate to itself. Since homography matrices are defined up to nonzero scale, there should exist <span class="math inline">\(\lambda \neq 0\)</span> such that:</p>
+<p><span class="math display">\[\boxed{H_{1N}H_{N,N-1}\cdots H_{32}H_{21} = \lambda I}\]</span></p>
+<p>After perspective division, <span class="math inline">\(\lambda I\)</span> produces the identity mapping. The sequence closes:</p>
+<p><span class="math display">\[I_1 \longrightarrow I_2 \longrightarrow \cdots \longrightarrow I_N
+\longrightarrow I_1\]</span></p>
+<p>In practice, small estimation errors accumulate as the homographies are composed. The final overlap provides an additional consistency condition that allows all image orientations to be adjusted together.</p>
+<p>The entire panorama problem summarises as:</p>
+<p><span class="math display">\[\boxed{\text{many narrow photographs} \longrightarrow \text{one common
+geometry} \longrightarrow \text{one wide image}}\]</span></p>
+<p><span class="math display">\[\text{find repeated scene points} \longrightarrow \text{estimate }
+H_{21} \longrightarrow \text{warp } I_2 \text{ into } I_1 \text{'s frame}
+\longrightarrow \text{blend} \longrightarrow \text{one wider image}\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/homography_panoramic_stitching.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>The panoramic stitching pipeline. Left: two overlapping photographs of the same scene — naive side-by-side placement fails because the same physical point appears at different pixel coordinates in each image. Middle: matched points are used to estimate <span class="math inline">\(H_{21} = KR_{21}K^{-1}\)</span>, which warps <span class="math inline">\(I_2\)</span> into the coordinate system of <span class="math inline">\(I_1\)</span>. Right: the warped images are placed on a common canvas and the overlap is blended into a seamless panorama. Bottom: the extension to <span class="math inline">\(N\)</span> images — pairwise homographies are composed as <span class="math inline">\(H_{k1} = H_{k,k-1}\cdots H_{21}\)</span>, with the closed-loop condition <span class="math inline">\(H_{N1} \approx \lambda I\)</span> as a consistency check.</figcaption>
+</figure>
+</div>
+<p>The sparse point matches recover the geometry. The homographies align the coordinate systems. The warps copy the image colors into their correct locations. The blending removes the boundaries between photographs.</p>
+</section>
+</section>
+<section id="why-is-it-called-a-homography" class="level2">
+<h2 class="anchored" data-anchor-id="why-is-it-called-a-homography">Why Is It Called a Homography?</h2>
+<p>The word comes from Greek:</p>
+<p><span class="math display">\[\textit{homos} = \text{same}, \qquad \textit{graphia} = \text{writing,
+drawing, representation}\]</span></p>
+<p>So a homography is, loosely, a <strong>same drawing</strong> — or more precisely, the same configuration represented in a different drawing.</p>
+<p>The “same” does not mean identical in the Euclidean sense. A homography can change lengths, angles, areas, and parallelism. A rectangle may become a quadrilateral. A circle may become an ellipse. Parallel lines may converge.</p>
+<p>What stays the same is the underlying projective configuration:</p>
+<ul>
+<li>Points remain points</li>
+<li>Lines remain lines</li>
+<li>Collinearity is preserved</li>
+<li>Intersections are preserved</li>
+<li>Conics remain conics</li>
+<li>Cross-ratios are preserved</li>
+</ul>
+<p>A homography therefore relates two different perspective drawings of the same projective arrangement. The temple in image 1 and the temple in image 2 are the same temple — just drawn from a different viewpoint. The homography is the map that says so. Now the name makes sense. There is a quote I remember from Prof.&nbsp;Brad Osgood’s <a href="https://www.youtube.com/playlist?list=PLB24BC7956EE040CD">Fourier Transforms lectures</a> — something to the effect of “convolution is what convolution does.” I think homographies have a similar spirit. I did not understand what a homography was by reading the definition. I understood it by watching it act — on lines, on conics, on parallel lines that converge, on rectangles that become quadrilaterals, on documents that get rectified, on images that get stitched. The name “same drawing” clicked only after all of that. Not before.</p>
+</section>
+<section id="cv2.findhomography-what-we-just-derived-in-one-line" class="level2">
+<h2 class="anchored" data-anchor-id="cv2.findhomography-what-we-just-derived-in-one-line"><code>cv2.findHomography</code> — What We Just Derived, in One Line</h2>
+<p>Everything we derived in this post is accessible in OpenCV via:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>M, mask <span class="op">=</span> cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, <span class="fl">5.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>src_pts</code> and <code>dst_pts</code> are the matched point coordinates in the two images. <code>M</code> is the <span class="math inline">\(3 \times 3\)</span> homography matrix — the same null space solution we derived via DLT.</p>
+<p>The <code>cv2.RANSAC</code> flag tells OpenCV to use RANSAC (Random Sample Consensus) instead of the basic DLT. In practice, feature matching produces some incorrect matches — RANSAC handles these robustly by finding the homography consistent with the most matches, discarding the rest. We have not covered RANSAC in this series, and will not here — it deserves its own treatment.</p>
+<p>To apply the homography to a set of points:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dst <span class="op">=</span> cv2.perspectiveTransform(pts, M)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>And to warp an entire image — our <span class="math inline">\(I_{2\to1} = \tilde{I}_2 \circ \phi
+\circ H_{21} \circ \text{Lift}\)</span>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>I_warped <span class="op">=</span> cv2.warpPerspective(I2, M, (width, height))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Three function calls. The mathematics behind them took four posts to derive.</p>
+</section>
+<section id="closing-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="closing-thoughts">Closing Thoughts</h2>
+<p>I started this post not knowing what a homography was. And then I spent lots of time understanding it, and now I have derived it from the camera matrix, understood what it preserves and what it destroys, estimated it from point correspondences, and applied it to document rectification, distance measurement from photographs, change detection, and panoramic image stitching. All from one <span class="math inline">\(3 \times 3\)</span> matrix.</p>
+<p>What strikes me most is how much falls out of a single substitution. Set <span class="math inline">\(Z = 0\)</span> in the camera matrix from Part 3 and one column disappears. That is the entire derivation. Everything else — the 8 degrees of freedom, the DLT, the vanishing points, the line at infinity, the cross-ratio, the rectification pipeline — follows from understanding what that matrix does and does not preserve.</p>
+<p>I learned about homographies last week. Before that, they were just a name I had seen in papers and documentation without paying much attention. Now they are one of my favourite objects in this series — simple to state, surprisingly rich in structure, and genuinely useful. Not bad at all for a single substitution. —</p>
+</section>
+<section id="whats-next-mathbbp3" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next-mathbbp3">What’s Next: <span class="math inline">\(\mathbb{P}^3\)</span></h2>
+<p>We derived the camera matrix <span class="math inline">\(P\)</span> in Part 3 and spent this post restricting it to a plane. But we never properly constructed the space on which the full camera matrix acts.</p>
+<p>A projective camera maps</p>
+<p><span class="math display">\[
+P:\mathbb{P}^3\to\mathbb{P}^2,
+\]</span></p>
+<p>from three-dimensional projective space to the projective image plane. A homography appears when this map is restricted to one plane inside <span class="math inline">\(\mathbb{P}^3\)</span>.</p>
+<p>So the next step is to return to the full space.</p>
+<p>Part 5 will build <span class="math inline">\(\mathbb{P}^3\)</span> from scratch: points, planes, incidence, the plane at infinity <span class="math inline">\(\pi_\infty\)</span>, and quadrics.</p>
+<p>Along the way, we will discover a rather strange object called the <strong>absolute conic</strong>: a conic that lies entirely on the plane at infinity and quietly encodes the Euclidean geometry of the world — lengths, angles, orthogonality, and ultimately the internal geometry of the camera.</p>
+<p>Its image provides the clean projective-geometric route to camera calibration. That is where we are headed.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/p3_teaser.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>A preview of <span class="math inline">\(\mathbb{P}^3\)</span>. Points, planes, and lines live together in one unified projective space. The plane at infinity <span class="math inline">\(\pi_\infty\)</span> holds all direction points — the <span class="math inline">\(\mathbb{P}^3\)</span> analogue of <span class="math inline">\(\ell_\infty\)</span> from Part 1. A projective camera <span class="math inline">\(P : \mathbb{P}^3 \to \mathbb{P}^2\)</span> maps the 3D world to the image plane. When restricted to a single plane <span class="math inline">\(\pi \subset \mathbb{P}^3\)</span>, this map becomes the homography we derived in this post.</figcaption>
+</figure>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
