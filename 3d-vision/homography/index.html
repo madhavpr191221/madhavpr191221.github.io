@@ -557,8 +557,8 @@ v_4)^\top\)</span> — a general quadrilateral, distorted by perspective.</p>
 <ol type="1">
 <li><strong>Detect the four corners</strong> in the image — manually or automatically.</li>
 <li><strong>Estimate <span class="math inline">\(H\)</span></strong> from the four correspondences <span class="math inline">\(\{(\mathbf{X}_i, \tilde{\mathbf{x}}_i)\}_{i=1}^4\)</span> via DLT.</li>
-<li><strong>Apply <span class="math inline">\(H^{-1}\)</span></strong> to every pixel in the image to find its corresponding world coordinate.</li>
-<li><strong>Sample the image</strong> at those world coordinates to produce the rectified output.</li>
+<li>Define the clean rectangular output in world-plane coordinates.</li>
+<li>For every output coordinate <span class="math inline">\((X,Y)\)</span>, apply <span class="math inline">\(H\)</span> to find the corresponding pixel <span class="math inline">\((u,v)\)</span> in the photograph, and copy its colour.</li>
 </ol>
 <p>The result is a flat, undistorted view of the document — as if the camera were directly above it, looking straight down.</p>
 </section>
