@@ -962,16 +962,51 @@ b_1\)</span> with <span class="math inline">\(a_2, b_2\)</span> throughout gives
 \phi(H_1(\text{Lift}(X, Y)))\]</span></p>
 <p><span class="math display">\[\mathbf{x}_2 = (\phi \circ H_2 \circ \text{Lift})(X, Y) =
 \phi(H_2(\text{Lift}(X, Y)))\]</span></p>
-<p>where <span class="math inline">\(\text{Lift}(X, Y) = (X, Y, 1)^\top\)</span>.</p>
-<p>The same world point <span class="math inline">\(\tilde{\mathbf{X}}\)</span> appears at <span class="math inline">\(\mathbf{x}_1\)</span> in image 1 and <span class="math inline">\(\mathbf{x}_2\)</span> in image 2. Eliminating <span class="math inline">\(\tilde{\mathbf{X}}\)</span>:</p>
-<p><span class="math display">\[\tilde{\mathbf{X}} = H_1^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
-\end{pmatrix} \qquad \Longrightarrow \qquad \begin{pmatrix} u_2 \\ v_2 \\
-1 \end{pmatrix} = H_2 H_1^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
-\end{pmatrix}\]</span></p>
-<p>Define:</p>
-<p><span class="math display">\[\boxed{H_{21} = H_2 H_1^{-1}}\]</span></p>
-<p>Then:</p>
-<p><span class="math display">\[\mathbf{x}_2 = \phi(H_{21}\text{Lift}(u_1, v_1))\]</span></p>
+<p>where <span class="math inline">\(\text{Lift}(X, Y) = (X, Y, 1)^\top\)</span>. The same world point <span class="math inline">\(\widetilde{\mathbf X}\)</span> satisfies</p>
+<p><span class="math display">\[
+\lambda_1\widetilde{\mathbf x}_1
+=
+H_1\widetilde{\mathbf X},
+\qquad
+\lambda_2\widetilde{\mathbf x}_2
+=
+H_2\widetilde{\mathbf X},
+\]</span></p>
+<p>where <span class="math inline">\(\lambda_1,\lambda_2\neq0\)</span>.</p>
+<p>From the first equation,</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}
+=
+\lambda_1H_1^{-1}\widetilde{\mathbf x}_1.
+\]</span></p>
+<p>Substituting into the second,</p>
+<p><span class="math display">\[
+\lambda_2\widetilde{\mathbf x}_2
+=
+\lambda_1H_2H_1^{-1}\widetilde{\mathbf x}_1.
+\]</span></p>
+<p>Define</p>
+<p><span class="math display">\[
+H_{21}=H_2H_1^{-1},
+\qquad
+\lambda_{21}=\frac{\lambda_2}{\lambda_1}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\boxed{
+\lambda_{21}\widetilde{\mathbf x}_2
+=
+H_{21}\widetilde{\mathbf x}_1.
+}
+\]</span></p>
+<p>After perspective division,</p>
+<p><span class="math display">\[
+\mathbf x_2
+=
+\phi\left(
+H_{21}\operatorname{Lift}(u_1,v_1)
+\right).
+\]</span></p>
 <p><span class="math inline">\(H_{21}\)</span> maps pixel coordinates in image 1 directly to pixel coordinates in image 2 — no need to go via the world plane explicitly.</p>
 </section>
 <section id="warping-as-function-composition" class="level3">
