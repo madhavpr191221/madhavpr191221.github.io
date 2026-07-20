@@ -212,8 +212,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#from-the-camera-matrix-to-a-homography" id="toc-from-the-camera-matrix-to-a-homography" class="nav-link" data-scroll-target="#from-the-camera-matrix-to-a-homography">From the Camera Matrix to a Homography</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
   <ul class="collapse">
   <li><a href="#recovering-pixel-coordinates" id="toc-recovering-pixel-coordinates" class="nav-link" data-scroll-target="#recovering-pixel-coordinates">Recovering pixel coordinates</a></li>
   </ul></li>
@@ -275,8 +274,11 @@ window.Quarto = {
   <li><a href="#homography-under-pure-camera-rotation" id="toc-homography-under-pure-camera-rotation" class="nav-link" data-scroll-target="#homography-under-pure-camera-rotation">Homography Under Pure Camera Rotation</a>
   <ul class="collapse">
   <li><a href="#the-setup" id="toc-the-setup" class="nav-link" data-scroll-target="#the-setup">The Setup</a></li>
-  <li><a href="#from-camera-coordinates-to-pixels" id="toc-from-camera-coordinates-to-pixels" class="nav-link" data-scroll-target="#from-camera-coordinates-to-pixels">From Camera Coordinates to Pixels</a></li>
+  <li><a href="#making-the-depth-explicit-one-point-at-a-time" id="toc-making-the-depth-explicit-one-point-at-a-time" class="nav-link" data-scroll-target="#making-the-depth-explicit-one-point-at-a-time">Making the Depth Explicit, One Point at a Time</a></li>
+  <li><a href="#from-camera-coordinates-to-pixels-the-matrix-form" id="toc-from-camera-coordinates-to-pixels-the-matrix-form" class="nav-link" data-scroll-target="#from-camera-coordinates-to-pixels-the-matrix-form">From Camera Coordinates to Pixels — the Matrix Form</a></li>
   <li><a href="#why-this-is-special" id="toc-why-this-is-special" class="nav-link" data-scroll-target="#why-this-is-special">Why This Is Special</a></li>
+  <li><a href="#a-concrete-check-two-points-at-different-depths" id="toc-a-concrete-check-two-points-at-different-depths" class="nav-link" data-scroll-target="#a-concrete-check-two-points-at-different-depths">A Concrete Check: Two Points at Different Depths</a></li>
+  <li><a href="#the-physical-reading-of-h_21-kr_21k-1" id="toc-the-physical-reading-of-h_21-kr_21k-1" class="nav-link" data-scroll-target="#the-physical-reading-of-h_21-kr_21k-1">The Physical Reading of <span class="math inline">\(H_{21} = KR_{21}K^{-1}\)</span></a></li>
   <li><a href="#application-panoramic-image-stitching" id="toc-application-panoramic-image-stitching" class="nav-link" data-scroll-target="#application-panoramic-image-stitching">Application: Panoramic Image Stitching</a></li>
   <li><a href="#step-1-recover-the-geometry" id="toc-step-1-recover-the-geometry" class="nav-link" data-scroll-target="#step-1-recover-the-geometry">Step 1: Recover the Geometry</a></li>
   <li><a href="#step-2-choose-a-common-coordinate-system" id="toc-step-2-choose-a-common-coordinate-system" class="nav-link" data-scroll-target="#step-2-choose-a-common-coordinate-system">Step 2: Choose a Common Coordinate System</a></li>
@@ -351,30 +353,27 @@ window.Quarto = {
 <p>And the homography itself is not a mysterious object. It is the <a href="https://madhavpr191221.github.io/3d-vision/camera_matrix/">camera matrix from Part 3</a> restricted to a flat scene. Set <span class="math inline">\(Z = 0\)</span> for all world points, substitute into <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, and the <span class="math inline">\(3 \times 4\)</span> matrix collapses to a <span class="math inline">\(3 \times 3\)</span> matrix. That is the homography. One substitution. No new machinery. [Note that <span class="math inline">\(Z = 0\)</span> is a choice of coordinate system, not a restriction on the scene. You are free to choose any coordinate system for the flat surface.]</p>
 <p>This also means that the degenerate case that broke DLT in Part 3 — all world points lying on a single plane — is not a failure at all. It is a different, simpler, and extraordinarily useful problem. The full camera matrix is overkill when your scene is flat. The homography is exactly what you need.</p>
 <p>In this post we will derive the homography from the camera matrix, understand what it preserves and what it destroys, estimate it from point correspondences, and see why it shows up everywhere — image stitching, document rectification, augmented reality, planar change detection, and eventually camera calibration itself.</p>
-<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. After one post in the real world <span class="math inline">\(\mathbb{R}^3\)</span>, the equivalence classes and projective duality from <a href="https://madhavpr191221.github.io/3d-vision/homogeneous-coordinates/">Parts 1</a> and <a href="https://madhavpr191221.github.io/3d-vision/conics/">2</a> are back. They have been waiting.</p>
-</section>
-<section id="from-the-camera-matrix-to-a-homography" class="level2">
-<h2 class="anchored" data-anchor-id="from-the-camera-matrix-to-a-homography">From the Camera Matrix to a Homography</h2>
+<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. After one post in the real world <span class="math inline">\(\mathbb{R}^3\)</span>, the equivalence classes and projective duality from <a href="https://madhavpr191221.github.io/3d-vision/homogeneous-coordinates/">Parts 1</a> and <a href="https://madhavpr191221.github.io/3d-vision/conics/">2</a> are back. They have been waiting. ## From the Camera Matrix to a Homography</p>
 <p>In Part 3, we derived the full camera matrix. A world point <span class="math inline">\((X, Y, Z)^\top\)</span> maps to an image point via:</p>
-<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = P\begin{pmatrix} X
+<p><span class="math display">\[\lambda\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = P\begin{pmatrix} X
 \\ Y \\ Z \\ 1 \end{pmatrix} = K\begin{pmatrix} \mathbf{r}_1 &amp;
 \mathbf{r}_2 &amp; \mathbf{r}_3 &amp; \mathbf{t} \end{pmatrix} \begin{pmatrix}
-X \\ Y \\ Z \\ 1 \end{pmatrix}\]</span></p>
+X \\ Y \\ Z \\ 1 \end{pmatrix}, \qquad \lambda \neq 0\]</span></p>
 <p>where <span class="math inline">\(\mathbf{r}_1, \mathbf{r}_2, \mathbf{r}_3\)</span> are the columns of <span class="math inline">\(R\)</span> and <span class="math inline">\(\mathbf{t}\)</span> is the translation vector.</p>
 <p>Now set <span class="math inline">\(Z = 0\)</span> for all world points. Substituting:</p>
-<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
+<p><span class="math display">\[\lambda\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
 \mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{r}_3 &amp; \mathbf{t} \end{pmatrix}
-\begin{pmatrix} X \\ Y \\ 0 \\ 1 \end{pmatrix}\]</span></p>
+\begin{pmatrix} X \\ Y \\ 0 \\ 1 \end{pmatrix}, \qquad \lambda \neq 0\]</span></p>
 <p>The column <span class="math inline">\(\mathbf{r}_3\)</span> multiplies zero and disappears:</p>
-<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
+<p><span class="math display">\[\lambda\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
 \mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t} \end{pmatrix} \begin{pmatrix}
-X \\ Y \\ 1 \end{pmatrix}\]</span></p>
+X \\ Y \\ 1 \end{pmatrix}, \qquad \lambda \neq 0\]</span></p>
 <p>Define:</p>
 <p><span class="math display">\[\boxed{H = K\begin{pmatrix} \mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}
 \end{pmatrix} \in \mathbb{R}^{3 \times 3}}\]</span></p>
 <p>Then:</p>
-<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = H\begin{pmatrix} X
-\\ Y \\ 1 \end{pmatrix}\]</span></p>
+<p><span class="math display">\[\lambda\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = H\begin{pmatrix} X
+\\ Y \\ 1 \end{pmatrix}, \qquad \lambda \neq 0\]</span></p>
 <p>This is the <strong>homography</strong>. A <span class="math inline">\(3 \times 3\)</span> matrix that maps points on the world plane <span class="math inline">\((X, Y)^\top\)</span> to image coordinates <span class="math inline">\((u, v)^\top\)</span>.</p>
 <section id="recovering-pixel-coordinates" class="level3">
 <h3 class="anchored" data-anchor-id="recovering-pixel-coordinates">Recovering pixel coordinates</h3>
@@ -530,6 +529,7 @@ b/c)^\top\)</span>.</p>
 <h3 class="anchored" data-anchor-id="back-to-the-distance-question">Back to the Distance Question</h3>
 <p>Given two pixels <span class="math inline">\((u_1, v_1)^\top\)</span> and <span class="math inline">\((u_2, v_2)^\top\)</span>, apply the three steps above to each to recover world points <span class="math inline">\((X_1, Y_1)^\top\)</span> and <span class="math inline">\((X_2, Y_2)^\top\)</span>. The real-world distance between them is:</p>
 <p><span class="math display">\[d = \sqrt{(X_2 - X_1)^2 + (Y_2 - Y_1)^2}\]</span></p>
+<p>Here <span class="math inline">\(d\)</span> is measured in whatever physical units are applicable for the problem.</p>
 <p>This is the answer to the question from the introduction. No approximation. No guesswork. Just the homography, its inverse, and the Euclidean distance formula.</p>
 <p>But there are more interesting applications of homographies than just measuring distances. One of them is called rectification. If you have ever wondered why Adobe Scan can take a photograph of your Aadhaar card lying at an angle on a table and produce a clean, flat, rectangular scan — that is rectification. If you have ever taken a panoramic photograph by rotating your phone — that is image stitching via homographies. If you have ever wanted to detect whether something changed on a flat surface between two photographs taken from slightly different viewpoints — that is change detection via warping. All of it runs through the same <span class="math inline">\(3 \times 3\)</span> matrix.</p>
 </section>
@@ -1058,28 +1058,110 @@ v_1)\right] \cdot M(u_1, v_1)\]</span></p>
 <p><span class="math display">\[\mathbf{X}_{c,2} = R_2(\mathbf{X}_w - \mathbf{c}) = R_2 R_1^\top
 \mathbf{X}_{c,1}\]</span></p>
 <p>Define <span class="math inline">\(R_{21} = R_2 R_1^\top\)</span>. Then:</p>
-<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}\mathbf{X}_{c,1}\]</span></p>
-<p>The two camera coordinate vectors are related by a pure rotation <span class="math inline">\(R_{21}\)</span> — regardless of the depth of the point. The depth cancels because the camera centre is fixed.</p>
+<p><span class="math display">\[\boxed{\mathbf{X}_{c,2} = R_{21}\mathbf{X}_{c,1}}\]</span></p>
+<p>The two camera coordinate vectors are related by a pure rotation <span class="math inline">\(R_{21}\)</span> — regardless of the depth of the point. This holds for <strong>every</strong> 3D point, at any distance from the camera, because the world point <span class="math inline">\(\mathbf{X}_w\)</span> and the camera centre <span class="math inline">\(\mathbf{c}\)</span> never appear on the right-hand side. They cancelled algebraically the moment we substituted one equation into the other.</p>
 </section>
-<section id="from-camera-coordinates-to-pixels" class="level3">
-<h3 class="anchored" data-anchor-id="from-camera-coordinates-to-pixels">From Camera Coordinates to Pixels</h3>
-<p>Applying the intrinsic matrix <span class="math inline">\(K\)</span> (assumed the same for both images):</p>
-<p><span class="math display">\[\begin{pmatrix} u_1 \\ v_1 \\ 1 \end{pmatrix} \sim K\mathbf{X}_{c,1}
-\qquad \Longrightarrow \qquad \mathbf{X}_{c,1} \sim K^{-1}\begin{pmatrix}
-u_1 \\ v_1 \\ 1 \end{pmatrix}\]</span></p>
-<p>Substituting:</p>
-<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}K^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
+<section id="making-the-depth-explicit-one-point-at-a-time" class="level3">
+<h3 class="anchored" data-anchor-id="making-the-depth-explicit-one-point-at-a-time">Making the Depth Explicit, One Point at a Time</h3>
+<p>Before writing the general matrix relation, it is worth watching depth cancel with actual numbers, one coordinate at a time. This is the same argument as above, but nothing is hidden behind <span class="math inline">\(\sim\)</span>.</p>
+<p>Camera 1’s pixel coordinates for a point with camera-frame position <span class="math inline">\((X_1, Y_1, Z_1)^\top\)</span> are:</p>
+<p><span class="math display">\[u_1 = p_x + f_x\frac{X_1}{Z_1}, \qquad v_1 = p_y + f_y\frac{Y_1}{Z_1}\]</span></p>
+<p>Solve for the camera-frame coordinates in terms of the pixel and the depth:</p>
+<p><span class="math display">\[X_1 = Z_1\left(\frac{u_1 - p_x}{f_x}\right) =: Z_1x_1, \qquad Y_1 =
+Z_1\left(\frac{v_1 - p_y}{f_y}\right) =: Z_1y_1\]</span></p>
+<p>So the full camera-frame vector is:</p>
+<p><span class="math display">\[\mathbf{X}_{c,1} = Z_1\begin{pmatrix} x_1 \\ y_1 \\ 1
 \end{pmatrix}\]</span></p>
-<p>Applying <span class="math inline">\(K\)</span>:</p>
-<p><span class="math display">\[\begin{pmatrix} u_2 \\ v_2 \\ 1 \end{pmatrix} \sim KR_{21}K^{-1}
-\begin{pmatrix} u_1 \\ v_1 \\ 1 \end{pmatrix}\]</span></p>
-<p>So the homography between the two images is:</p>
-<p><span class="math display">\[\boxed{H_{21} = KR_{21}K^{-1} = KR_2R_1^\top K^{-1}}\]</span></p>
+<p>This looks like a homogeneous coordinate, but it is not one. The factor <span class="math inline">\(Z_1\)</span> here is the actual physical depth of the point — not an arbitrary scale that we are free to discard. Keep it explicit.</p>
+<p>Apply the rotation:</p>
+<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}\mathbf{X}_{c,1} = Z_1 R_{21}
+\begin{pmatrix} x_1 \\ y_1 \\ 1 \end{pmatrix}\]</span></p>
+<p>Write <span class="math inline">\(R_{21}\)</span> with entries <span class="math inline">\(\tilde{r}_{ij}\)</span>:</p>
+<p><span class="math display">\[X_2 = Z_1(\tilde{r}_{11}x_1 + \tilde{r}_{12}y_1 + \tilde{r}_{13}),
+\quad Y_2 = Z_1(\tilde{r}_{21}x_1 + \tilde{r}_{22}y_1 +
+\tilde{r}_{23}), \quad Z_2 = Z_1(\tilde{r}_{31}x_1 + \tilde{r}_{32}y_1
++ \tilde{r}_{33})\]</span></p>
+<p>Now substitute into camera 2’s own projection formula:</p>
+<p><span class="math display">\[u_2 = p_x + f_x\frac{X_2}{Z_2} = p_x + f_x\cdot\frac{Z_1(\tilde{r}_{11}
+x_1 + \tilde{r}_{12}y_1 + \tilde{r}_{13})}{Z_1(\tilde{r}_{31}x_1 +
+\tilde{r}_{32}y_1 + \tilde{r}_{33})}\]</span></p>
+<p><span class="math display">\[v_2 = p_y + f_y\frac{Y_2}{Z_2} = p_y + f_y\cdot\frac{Z_1(\tilde{r}_{21}
+x_1 + \tilde{r}_{22}y_1 + \tilde{r}_{23})}{Z_1(\tilde{r}_{31}x_1 +
+\tilde{r}_{32}y_1 + \tilde{r}_{33})}\]</span></p>
+<p><span class="math inline">\(Z_1\)</span> appears in every term of both the numerator and the denominator and cancels exactly:</p>
+<p><span class="math display">\[\boxed{u_2 = p_x + f_x\frac{\tilde{r}_{11}x_1 + \tilde{r}_{12}y_1 +
+\tilde{r}_{13}}{\tilde{r}_{31}x_1 + \tilde{r}_{32}y_1 +
+\tilde{r}_{33}}, \qquad v_2 = p_y + f_y\frac{\tilde{r}_{21}x_1 +
+\tilde{r}_{22}y_1 + \tilde{r}_{23}}{\tilde{r}_{31}x_1 +
+\tilde{r}_{32}y_1 + \tilde{r}_{33}}}\]</span></p>
+<p><span class="math inline">\(u_2\)</span> and <span class="math inline">\(v_2\)</span> depend only on <span class="math inline">\(u_1\)</span>, <span class="math inline">\(v_1\)</span>, <span class="math inline">\(R_{21}\)</span>, and the fixed camera intrinsics. They do not depend on the point’s depth <span class="math inline">\(Z_1\)</span>.</p>
+</section>
+<section id="from-camera-coordinates-to-pixels-the-matrix-form" class="level3">
+<h3 class="anchored" data-anchor-id="from-camera-coordinates-to-pixels-the-matrix-form">From Camera Coordinates to Pixels — the Matrix Form</h3>
+<p>Now redo this compactly, keeping both depths as named scalars throughout rather than substituting them away early. Define the homogeneous pixel vector <span class="math inline">\(\mathbf{m}_1 = (u_1, v_1, 1)^\top\)</span>. Camera 1’s projection equation, with depth <span class="math inline">\(Z_1\)</span> written explicitly:</p>
+<p><span class="math display">\[K\mathbf{X}_{c,1} = Z_1\mathbf{m}_1 \quad\Longrightarrow\quad
+\mathbf{X}_{c,1} = Z_1K^{-1}\mathbf{m}_1\]</span></p>
+<p>Apply the rotation:</p>
+<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}\mathbf{X}_{c,1} = Z_1R_{21}K^{-1}
+\mathbf{m}_1\]</span></p>
+<p>Camera 2’s own projection equation, with its own depth <span class="math inline">\(Z_2\)</span>:</p>
+<p><span class="math display">\[K\mathbf{X}_{c,2} = Z_2\mathbf{m}_2\]</span></p>
+<p>Substituting:</p>
+<p><span class="math display">\[Z_2\mathbf{m}_2 = Z_1KR_{21}K^{-1}\mathbf{m}_1\]</span></p>
+<p>Define:</p>
+<p><span class="math display">\[\boxed{H_{21} = KR_{21}K^{-1}}\]</span></p>
+<p>so that:</p>
+<p><span class="math display">\[\boxed{Z_1H_{21}\mathbf{m}_1 = Z_2\mathbf{m}_2}\]</span></p>
+<p>This is the desired relation. <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span> are scalars — the actual depths of the same physical point in the two camera frames — and they need not be equal, since the point sits at a different depth along each camera’s own optical axis. What matters is that after perspective division, both cancel:</p>
+<p><span class="math display">\[u_2 = p_x + f_x\frac{X_2}{Z_2}, \qquad v_2 = p_y + f_y\frac{Y_2}{Z_2}\]</span></p>
+<p>depend only on the ratio <span class="math inline">\(\mathbf{X}_{c,2}/Z_2\)</span>, and <span class="math inline">\(\lambda_{21} :=
+Z_2/Z_1\)</span> absorbs into that ratio, giving back exactly the boxed pixel formulas above.</p>
 </section>
 <section id="why-this-is-special" class="level3">
 <h3 class="anchored" data-anchor-id="why-this-is-special">Why This Is Special</h3>
-<p>Notice what is missing: the scene. No <span class="math inline">\(Z = 0\)</span> assumption, no planar world, no homography between a plane and an image. This homography relates two images of an <strong>arbitrary 3D scene</strong> — as long as the camera centre does not move. The depth of each point cancels in the rotation step.</p>
+<p>Notice what is missing: the scene. No <span class="math inline">\(Z_w = 0\)</span> assumption, no planar world, no homography between a plane and an image. This homography relates two images of an <strong>arbitrary 3D scene</strong> — as long as the camera centre does not move. The depth of each point cancels in the rotation step, exactly as the component-wise calculation showed.</p>
 <p>This is the pure rotation exception mentioned in Part 3: a single global homography exists between two images of any scene when the camera undergoes pure rotation.</p>
+</section>
+<section id="a-concrete-check-two-points-at-different-depths" class="level3">
+<h3 class="anchored" data-anchor-id="a-concrete-check-two-points-at-different-depths">A Concrete Check: Two Points at Different Depths</h3>
+<p>To see the cancellation happen with actual numbers, take two scene points at very different depths in camera 1’s frame:</p>
+<p><span class="math display">\[\mathbf{P}_c^{(1)} = \begin{pmatrix} 1 \\ 0 \\ 2 \end{pmatrix} =
+2\begin{pmatrix} 1/2 \\ 0 \\ 1 \end{pmatrix} = Z_P\,\mathbf{d}_P, \qquad
+\mathbf{Q}_c^{(1)} = \begin{pmatrix} 2 \\ 1 \\ 10 \end{pmatrix} =
+10\begin{pmatrix} 1/5 \\ 1/10 \\ 1 \end{pmatrix} = Z_Q\,\mathbf{d}_Q\]</span></p>
+<p>with <span class="math inline">\(Z_P = 2\)</span> and <span class="math inline">\(Z_Q = 10\)</span> — one point five times farther away than the other.</p>
+<p><strong>Project both into camera 1.</strong> Using the perspective formula <span class="math inline">\(u = p_x + f_x(X_c/Z_c)\)</span>, <span class="math inline">\(v = p_y + f_y(Y_c/Z_c)\)</span>:</p>
+<p><span class="math display">\[u_P^{(1)} = p_x + f_x\cdot\frac{1}{2}, \qquad v_P^{(1)} = p_y\]</span></p>
+<p><span class="math display">\[u_Q^{(1)} = p_x + f_x\cdot\frac{1}{5}, \qquad v_Q^{(1)} = p_y +
+f_y\cdot\frac{1}{10}\]</span></p>
+<p><strong>Rotate the camera.</strong> Both points transform by the same <span class="math inline">\(R_{21}\)</span>, but their depths <span class="math inline">\(Z_P\)</span> and <span class="math inline">\(Z_Q\)</span> scale the rotated vectors differently:</p>
+<p><span class="math display">\[\mathbf{P}_c^{(2)} = R_{21}\mathbf{P}_c^{(1)} = R_{21}(Z_P\mathbf{d}_P)
+= Z_P(R_{21}\mathbf{d}_P) = 2\,R_{21}\begin{pmatrix} 1/2 \\ 0 \\ 1
+\end{pmatrix}\]</span></p>
+<p><span class="math display">\[\mathbf{Q}_c^{(2)} = R_{21}\mathbf{Q}_c^{(1)} = Z_Q(R_{21}\mathbf{d}_Q)
+= 10\,R_{21}\begin{pmatrix} 1/5 \\ 1/10 \\ 1 \end{pmatrix}\]</span></p>
+<p>Write <span class="math inline">\(R_{21}\mathbf{d}_P = (a_P, b_P, c_P)^\top\)</span>, so <span class="math inline">\(\mathbf{P}_c^{(2)}
+= (Z_Pa_P,\ Z_Pb_P,\ Z_Pc_P)^\top\)</span>.</p>
+<p><strong>Project into camera 2.</strong></p>
+<p><span class="math display">\[u_P^{(2)} = p_x + f_x\frac{Z_Pa_P}{Z_Pc_P} = p_x +
+f_x\frac{a_P}{c_P}\]</span></p>
+<p><span class="math display">\[v_P^{(2)} = p_y + f_y\frac{Z_Pb_P}{Z_Pc_P} = p_y +
+f_y\frac{b_P}{c_P}\]</span></p>
+<p>The factor <span class="math inline">\(Z_P = 2\)</span> cancelled completely — <strong>it no longer matters</strong> what its numerical value was. Writing <span class="math inline">\(R_{21}\mathbf{d}_Q = (a_Q,
+b_Q, c_Q)^\top\)</span>, the identical calculation gives:</p>
+<p><span class="math display">\[u_Q^{(2)} = p_x + f_x\frac{a_Q}{c_Q}, \qquad v_Q^{(2)} = p_y +
+f_y\frac{b_Q}{c_Q}\]</span></p>
+<p>Here <span class="math inline">\(Z_Q = 10\)</span> also cancelled — <strong>it no longer matters</strong> either, even though <span class="math inline">\(Z_Q\)</span> was five times <span class="math inline">\(Z_P\)</span>. Both points, at wildly different distances from the camera, are correctly related between the two images by the exact same matrix <span class="math inline">\(H_{21}\)</span>, with no depth information required anywhere in the calculation.</p>
+</section>
+<section id="the-physical-reading-of-h_21-kr_21k-1" class="level3">
+<h3 class="anchored" data-anchor-id="the-physical-reading-of-h_21-kr_21k-1">The Physical Reading of <span class="math inline">\(H_{21} = KR_{21}K^{-1}\)</span></h3>
+<p>Read right to left:</p>
+<ul>
+<li><span class="math inline">\(K^{-1}\)</span> <strong>unprojects</strong> a pixel <span class="math inline">\((u_1, v_1, 1)^\top\)</span> into a ray direction in camera 1’s frame.</li>
+<li><span class="math inline">\(R_{21}\)</span> <strong>rotates</strong> that ray, aligning it with camera 2’s orientation.</li>
+<li><span class="math inline">\(K\)</span> <strong>reprojects</strong> the rotated ray back into pixel coordinates, now in camera 2’s frame.</li>
+</ul>
+<p>No step in this chain ever asks how far along the ray the physical point sits. That is exactly why <span class="math inline">\(H_{21}\)</span> works for the whole 3D scene at once, and why panoramic stitching from a single fixed viewpoint needs no depth information — not from stereo, not from a depth sensor, not from anything.</p>
 </section>
 <section id="application-panoramic-image-stitching" class="level3">
 <h3 class="anchored" data-anchor-id="application-panoramic-image-stitching">Application: Panoramic Image Stitching</h3>
@@ -1207,7 +1289,16 @@ drawing, representation}\]</span></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dst <span class="op">=</span> cv2.perspectiveTransform(pts, M)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>And to warp an entire image — our <span class="math inline">\(I_{2\to1} = \tilde{I}_2 \circ \phi
 \circ H_{21} \circ \text{Lift}\)</span>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>I_warped <span class="op">=</span> cv2.warpPerspective(I2, M, (width, height))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The mathematical warp we derived, <span class="math inline">\(I_{2\to1}(u_1,v_1) =
+\tilde{I}_2\big(\phi(H_{21}\,\text{Lift}(u_1,v_1))\big)\)</span>, uses <span class="math inline">\(H_{21}\)</span> as a <em>destination-to-source</em> lookup — for each output pixel in image 1’s frame, it finds the corresponding source pixel in image 2. <code>cv2.warpPerspective</code> by default treats its matrix argument as a <em>source-to-destination</em> map and inverts it internally before sampling. Passing <code>WARP_INVERSE_MAP</code> instead tells OpenCV that the matrix supplied is already the destination-to-source map, skipping that internal inversion. Getting this backwards silently produces a plausible-looking but geometrically wrong warp, so it is worth being explicit:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># M maps image-1 coordinates to image-2 coordinates (M = H_21),</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># matching the warp direction derived above.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>I_warped <span class="op">=</span> cv2.warpPerspective(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    I2,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    H21,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    (width, height),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    flags<span class="op">=</span>cv2.INTER_LINEAR <span class="op">|</span> cv2.WARP_INVERSE_MAP,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Three function calls. The mathematics behind them took four posts to derive.</p>
 </section>
 <section id="closing-thoughts" class="level2">
