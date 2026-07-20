@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Madhav Prashanth Ramachandran">
+<meta name="dcterms.date" content="2026-07-20">
+<meta name="description" content="Homographies derived from the camera matrix restricted to a plane — what they preserve, how to estimate them, and why they are everywhere in computer vision.">
+
+<title>3D Computer Vision from First Principles — Part 4 – Madhav Prashanth</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Madhav Prashanth</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../world-models/index.html"> 
+<span class="menu-text">World Models</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../transformers/index.html"> 
+<span class="menu-text">Transformers &amp; Perception</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../survival-analysis/index.html"> 
+<span class="menu-text">Survival Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../3d-vision/index.html"> 
+<span class="menu-text">3D Vision</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/madhavpr191221"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/madhavpr/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#recovering-pixel-coordinates" id="toc-recovering-pixel-coordinates" class="nav-link" data-scroll-target="#recovering-pixel-coordinates">Recovering pixel coordinates</a></li>
+  </ul></li>
+  <li><a href="#where-does-a-homography-live" id="toc-where-does-a-homography-live" class="nav-link" data-scroll-target="#where-does-a-homography-live">Where Does a Homography Live?</a></li>
+  <li><a href="#estimating-the-homography" id="toc-estimating-the-homography" class="nav-link" data-scroll-target="#estimating-the-homography">Estimating the Homography</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#from-correspondences-to-a-linear-system" id="toc-from-correspondences-to-a-linear-system" class="nav-link" data-scroll-target="#from-correspondences-to-a-linear-system">From Correspondences to a Linear System</a></li>
+  <li><a href="#solving-via-svd" id="toc-solving-via-svd" class="nav-link" data-scroll-target="#solving-via-svd">Solving via SVD</a></li>
+  </ul></li>
+  <li><a href="#invertibility-of-the-homography" id="toc-invertibility-of-the-homography" class="nav-link" data-scroll-target="#invertibility-of-the-homography">Invertibility of the Homography</a>
+  <ul class="collapse">
+  <li><a href="#when-is-h-invertible" id="toc-when-is-h-invertible" class="nav-link" data-scroll-target="#when-is-h-invertible">When is <span class="math inline">\(H\)</span> invertible?</a></li>
+  <li><a href="#recovering-world-coordinates-from-a-pixel" id="toc-recovering-world-coordinates-from-a-pixel" class="nav-link" data-scroll-target="#recovering-world-coordinates-from-a-pixel">Recovering World Coordinates from a Pixel</a></li>
+  <li><a href="#back-to-the-distance-question" id="toc-back-to-the-distance-question" class="nav-link" data-scroll-target="#back-to-the-distance-question">Back to the Distance Question</a></li>
+  </ul></li>
+  <li><a href="#document-rectification" id="toc-document-rectification" class="nav-link" data-scroll-target="#document-rectification">Document Rectification</a>
+  <ul class="collapse">
+  <li><a href="#setup-1" id="toc-setup-1" class="nav-link" data-scroll-target="#setup-1">Setup</a></li>
+  <li><a href="#the-plan" id="toc-the-plan" class="nav-link" data-scroll-target="#the-plan">The Plan</a></li>
+  <li><a href="#the-mathematics-of-rectification" id="toc-the-mathematics-of-rectification" class="nav-link" data-scroll-target="#the-mathematics-of-rectification">The Mathematics of Rectification</a></li>
+  <li><a href="#step-1-define-the-rectified-output" id="toc-step-1-define-the-rectified-output" class="nav-link" data-scroll-target="#step-1-define-the-rectified-output">Step 1: Define the Rectified Output</a></li>
+  <li><a href="#step-2-fill-the-output-image" id="toc-step-2-fill-the-output-image" class="nav-link" data-scroll-target="#step-2-fill-the-output-image">Step 2: Fill the Output Image</a></li>
+  <li><a href="#the-full-rectification-pipeline" id="toc-the-full-rectification-pipeline" class="nav-link" data-scroll-target="#the-full-rectification-pipeline">The Full Rectification Pipeline</a></li>
+  <li><a href="#a-concrete-example" id="toc-a-concrete-example" class="nav-link" data-scroll-target="#a-concrete-example">A Concrete Example</a></li>
+  <li><a href="#why-does-this-work" id="toc-why-does-this-work" class="nav-link" data-scroll-target="#why-does-this-work">Why Does This Work?</a></li>
+  </ul></li>
+  <li><a href="#what-does-a-homography-preserve" id="toc-what-does-a-homography-preserve" class="nav-link" data-scroll-target="#what-does-a-homography-preserve">What Does a Homography Preserve?</a>
+  <ul class="collapse">
+  <li><a href="#homographies-map-lines-to-lines" id="toc-homographies-map-lines-to-lines" class="nav-link" data-scroll-target="#homographies-map-lines-to-lines">Homographies Map Lines to Lines</a></li>
+  <li><a href="#homographies-preserve-intersections" id="toc-homographies-preserve-intersections" class="nav-link" data-scroll-target="#homographies-preserve-intersections">Homographies Preserve Intersections</a></li>
+  <li><a href="#homographies-map-conics-to-conics" id="toc-homographies-map-conics-to-conics" class="nav-link" data-scroll-target="#homographies-map-conics-to-conics">Homographies Map Conics to Conics</a></li>
+  <li><a href="#homographies-and-parallelism" id="toc-homographies-and-parallelism" class="nav-link" data-scroll-target="#homographies-and-parallelism">Homographies and Parallelism</a></li>
+  <li><a href="#vanishing-points" id="toc-vanishing-points" class="nav-link" data-scroll-target="#vanishing-points">Vanishing Points</a></li>
+  <li><a href="#the-line-at-infinity" id="toc-the-line-at-infinity" class="nav-link" data-scroll-target="#the-line-at-infinity">The Line at Infinity</a></li>
+  <li><a href="#a-homography-acts-on-the-whole-projective-plane" id="toc-a-homography-acts-on-the-whole-projective-plane" class="nav-link" data-scroll-target="#a-homography-acts-on-the-whole-projective-plane">A Homography Acts on the Whole Projective Plane</a></li>
+  <li><a href="#affine-maps-as-a-special-case-of-homographies" id="toc-affine-maps-as-a-special-case-of-homographies" class="nav-link" data-scroll-target="#affine-maps-as-a-special-case-of-homographies">Affine Maps as a Special Case of Homographies</a></li>
+  <li><a href="#affine-maps-preserve-parallelism" id="toc-affine-maps-preserve-parallelism" class="nav-link" data-scroll-target="#affine-maps-preserve-parallelism">Affine Maps Preserve Parallelism</a></li>
+  </ul></li>
+  <li><a href="#what-does-a-homography-preserve-a-summary" id="toc-what-does-a-homography-preserve-a-summary" class="nav-link" data-scroll-target="#what-does-a-homography-preserve-a-summary">What Does a Homography Preserve? A Summary</a></li>
+  <li><a href="#the-cross-ratio" id="toc-the-cross-ratio" class="nav-link" data-scroll-target="#the-cross-ratio">The Cross-Ratio</a>
+  <ul class="collapse">
+  <li><a href="#how-does-a-homography-act-on-a-line" id="toc-how-does-a-homography-act-on-a-line" class="nav-link" data-scroll-target="#how-does-a-homography-act-on-a-line">How Does a Homography Act on a Line?</a></li>
+  <li><a href="#four-points-on-the-line" id="toc-four-points-on-the-line" class="nav-link" data-scroll-target="#four-points-on-the-line">Four Points on the Line</a></li>
+  <li><a href="#ordinary-differences-are-not-preserved" id="toc-ordinary-differences-are-not-preserved" class="nav-link" data-scroll-target="#ordinary-differences-are-not-preserved">Ordinary Differences Are Not Preserved</a></li>
+  <li><a href="#try-a-ratio-of-differences" id="toc-try-a-ratio-of-differences" class="nav-link" data-scroll-target="#try-a-ratio-of-differences">Try a Ratio of Differences</a></li>
+  <li><a href="#construct-the-second-ratio" id="toc-construct-the-second-ratio" class="nav-link" data-scroll-target="#construct-the-second-ratio">Construct the Second Ratio</a></li>
+  <li><a href="#measuring-a-defect-from-an-oblique-photograph" id="toc-measuring-a-defect-from-an-oblique-photograph" class="nav-link" data-scroll-target="#measuring-a-defect-from-an-oblique-photograph">Measuring a Defect from an Oblique Photograph</a></li>
+  </ul></li>
+  <li><a href="#two-homographies-and-image-warping" id="toc-two-homographies-and-image-warping" class="nav-link" data-scroll-target="#two-homographies-and-image-warping">Two Homographies and Image Warping</a>
+  <ul class="collapse">
+  <li><a href="#from-two-viewpoints-to-one-matrix" id="toc-from-two-viewpoints-to-one-matrix" class="nav-link" data-scroll-target="#from-two-viewpoints-to-one-matrix">From Two Viewpoints to One Matrix</a></li>
+  <li><a href="#warping-as-function-composition" id="toc-warping-as-function-composition" class="nav-link" data-scroll-target="#warping-as-function-composition">Warping as Function Composition</a></li>
+  <li><a href="#change-detection" id="toc-change-detection" class="nav-link" data-scroll-target="#change-detection">Change Detection</a></li>
+  <li><a href="#the-interpolation-problem" id="toc-the-interpolation-problem" class="nav-link" data-scroll-target="#the-interpolation-problem">The Interpolation Problem</a></li>
+  <li><a href="#the-validity-mask" id="toc-the-validity-mask" class="nav-link" data-scroll-target="#the-validity-mask">The Validity Mask</a></li>
+  <li><a href="#other-factors-that-affect-the-difference-image" id="toc-other-factors-that-affect-the-difference-image" class="nav-link" data-scroll-target="#other-factors-that-affect-the-difference-image">Other Factors That Affect the Difference Image</a></li>
+  </ul></li>
+  <li><a href="#homography-under-pure-camera-rotation" id="toc-homography-under-pure-camera-rotation" class="nav-link" data-scroll-target="#homography-under-pure-camera-rotation">Homography Under Pure Camera Rotation</a>
+  <ul class="collapse">
+  <li><a href="#the-setup" id="toc-the-setup" class="nav-link" data-scroll-target="#the-setup">The Setup</a></li>
+  <li><a href="#from-camera-coordinates-to-pixels" id="toc-from-camera-coordinates-to-pixels" class="nav-link" data-scroll-target="#from-camera-coordinates-to-pixels">From Camera Coordinates to Pixels</a></li>
+  <li><a href="#why-this-is-special" id="toc-why-this-is-special" class="nav-link" data-scroll-target="#why-this-is-special">Why This Is Special</a></li>
+  <li><a href="#application-panoramic-image-stitching" id="toc-application-panoramic-image-stitching" class="nav-link" data-scroll-target="#application-panoramic-image-stitching">Application: Panoramic Image Stitching</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">3D Computer Vision from First Principles — Part 4</h1>
+<p class="subtitle lead">Homographies</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">3d-vision</div>
+    <div class="quarto-category">projective-geometry</div>
+    <div class="quarto-category">linear-algebra</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Homographies derived from the camera matrix restricted to a plane — what they preserve, how to estimate them, and why they are everywhere in computer vision.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Madhav Prashanth Ramachandran </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 20, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>I did not know what a homography was until last week.</p>
+<p>I have always wondered how the distance between two points in an image relates to the actual distance between them in the real world. I never bothered to look it up seriously or understand it deeply. But having spent some time with metric spaces and distance functions, I found myself coming back to this question. What if there was something going on here? And it turns out there is — and it is not as complicated as the mathematics I was used to, but it is clean and satisfying in its own way.</p>
+<p>So here is a question for you: if I take a photograph of a flat surface — a road, a football pitch, a tiled floor — and I can see two points in the image, can I figure out the actual distance between them in the real world?</p>
+<p>It turns out the answer is yes — and the tool that makes it possible is a homography. A homography maps points on a flat surface to their positions in the image, and its inverse maps image points back to the flat surface. Once you have that inverse, distances in the real world follow immediately.</p>
+<p>And the homography itself is not a mysterious object. It is the camera matrix from Part 3, restricted to a flat scene. Set <span class="math inline">\(Z = 0\)</span> for all world points, substitute into <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, and the <span class="math inline">\(3 \times 4\)</span> matrix collapses to a <span class="math inline">\(3 \times 3\)</span> matrix. That is the homography. One substitution. No new machinery. [Note that <span class="math inline">\(Z = 0\)</span> is a choice of coordinate system, not a restriction on the scene. You are free to choose any coordinate system for the flat surface.]</p>
+<p>This also means that the degenerate case that broke DLT in Part 3 — all world points lying on a single plane — is not a failure at all. It is a different, simpler, and extraordinarily useful problem. The full camera matrix is overkill when your scene is flat. The homography is exactly what you need.</p>
+<p>In this post we will derive the homography from the camera matrix, understand what it preserves and what it destroys, estimate it from point correspondences, and see why it shows up everywhere — image stitching, document rectification, augmented reality, planar change detection, and eventually camera calibration itself.</p>
+<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. After one post in the real world <span class="math inline">\(\mathbb{R}^3\)</span>, the equivalence classes and projective duality from Parts 1 and 2 are back. They have been waiting. ## From the Camera Matrix to a Homography</p>
+<p>In Part 3, we derived the full camera matrix. A world point <span class="math inline">\((X, Y, Z)^\top\)</span> maps to an image point via:</p>
+<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = P\begin{pmatrix} X
+\\ Y \\ Z \\ 1 \end{pmatrix} = K\begin{pmatrix} \mathbf{r}_1 &amp;
+\mathbf{r}_2 &amp; \mathbf{r}_3 &amp; \mathbf{t} \end{pmatrix} \begin{pmatrix}
+X \\ Y \\ Z \\ 1 \end{pmatrix}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{r}_1, \mathbf{r}_2, \mathbf{r}_3\)</span> are the columns of <span class="math inline">\(R\)</span> and <span class="math inline">\(\mathbf{t}\)</span> is the translation vector.</p>
+<p>Now set <span class="math inline">\(Z = 0\)</span> for all world points. Substituting:</p>
+<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
+\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{r}_3 &amp; \mathbf{t} \end{pmatrix}
+\begin{pmatrix} X \\ Y \\ 0 \\ 1 \end{pmatrix}\]</span></p>
+<p>The column <span class="math inline">\(\mathbf{r}_3\)</span> multiplies zero and disappears:</p>
+<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = K\begin{pmatrix}
+\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t} \end{pmatrix} \begin{pmatrix}
+X \\ Y \\ 1 \end{pmatrix}\]</span></p>
+<p>Define:</p>
+<p><span class="math display">\[\boxed{H = K\begin{pmatrix} \mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}
+\end{pmatrix} \in \mathbb{R}^{3 \times 3}}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{pmatrix} u \\ v \\ 1 \end{pmatrix} = H\begin{pmatrix} X
+\\ Y \\ 1 \end{pmatrix}\]</span></p>
+<p>This is the <strong>homography</strong>. A <span class="math inline">\(3 \times 3\)</span> matrix that maps points on the world plane <span class="math inline">\((X, Y)^\top\)</span> to image coordinates <span class="math inline">\((u, v)^\top\)</span>.</p>
+<section id="recovering-pixel-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="recovering-pixel-coordinates">Recovering pixel coordinates</h3>
+<p>Given <span class="math inline">\((X, Y)^\top\)</span>, apply <span class="math inline">\(H\)</span>:</p>
+<p><span class="math display">\[H\begin{pmatrix} X \\ Y \\ 1 \end{pmatrix} = \begin{pmatrix} a \\ b \\
+c \end{pmatrix}\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[a = h_{11}X + h_{12}Y + h_{13}, \quad b = h_{21}X + h_{22}Y + h_{23},
+\quad c = h_{31}X + h_{32}Y + h_{33}\]</span></p>
+<p>We have seen this step before — in Part 1, and again in Part 3. The map <span class="math inline">\(\phi\)</span> takes a triple <span class="math inline">\((a, b, c)^\top\)</span> with <span class="math inline">\(c \neq 0\)</span> and returns the Euclidean point:</p>
+<p><span class="math display">\[\phi\begin{pmatrix} a \\ b \\ c \end{pmatrix} = \begin{pmatrix} a/c \\
+b/c \end{pmatrix}\]</span></p>
+<p>Applying <span class="math inline">\(\phi\)</span> to the output of <span class="math inline">\(H\)</span>:</p>
+<p><span class="math display">\[\boxed{\begin{pmatrix} u \\ v \end{pmatrix} = \phi\left(H\begin{pmatrix}
+X \\ Y \\ 1 \end{pmatrix}\right) = \begin{pmatrix} \dfrac{h_{11}X +
+h_{12}Y + h_{13}}{h_{31}X + h_{32}Y + h_{33}} \\[10pt] \dfrac{h_{21}X +
+h_{22}Y + h_{23}}{h_{31}X + h_{32}Y + h_{33}} \end{pmatrix}}\]</span></p>
+<p>provided <span class="math inline">\(c \neq 0\)</span>. The denominator depends on <span class="math inline">\((X, Y)\)</span> — this position-dependent division is what produces perspective distortion. Different parts of the world plane get compressed or stretched differently in the image.</p>
+<p>We will understand the etymology and meaning of the word “homography” after we have studied its properties and actions. The name will make sense then. If I introduce it now, it will be a meaningless word that you will probably forget. So let’s first understand what a homography is based on what a homography does.</p>
+</section>
+</section>
+<section id="where-does-a-homography-live" class="level2">
+<h2 class="anchored" data-anchor-id="where-does-a-homography-live">Where Does a Homography Live?</h2>
+<p>A world point on the plane <span class="math inline">\(Z = 0\)</span> has ordinary coordinates <span class="math inline">\(\mathbf{X} = (X, Y, 0)^\top\)</span>. But the mathematics of the homography invites us to think of it differently — as the lifted vector <span class="math inline">\(\tilde{\mathbf{X}} = (X, Y, 1)^\top\)</span>, the homogeneous coordinate of the plane point. The third coordinate is no longer <span class="math inline">\(0\)</span> (the actual <span class="math inline">\(Z\)</span>) but <span class="math inline">\(1\)</span> (a bookkeeping device that carries the constants through matrix multiplication).</p>
+<p>So <span class="math inline">\(H\)</span> acts on <span class="math inline">\((X, Y, 1)^\top \in \mathbb{R}^3\)</span> and produces <span class="math inline">\((p, q, w)^\top \in \mathbb{R}^3\)</span>. Applying <span class="math inline">\(\phi\)</span> recovers the pixel:</p>
+<p><span class="math display">\[\phi\begin{pmatrix} p \\ q \\ w \end{pmatrix} = \begin{pmatrix} p/w \\
+q/w \end{pmatrix} = \begin{pmatrix} u \\ v \end{pmatrix}\]</span></p>
+<p>Now we know one more fact from Part 1: scaling does not matter for <span class="math inline">\(\phi\)</span>.</p>
+<p><span class="math display">\[\phi\begin{pmatrix} p \\ q \\ w \end{pmatrix} = \phi\begin{pmatrix}
+\lambda p \\ \lambda q \\ \lambda w \end{pmatrix}, \qquad \lambda \neq 0\]</span></p>
+<p>More formally:</p>
+<p><span class="math display">\[\phi(H\tilde{\mathbf{X}}) = \phi(\lambda H\tilde{\mathbf{X}}), \qquad
+\lambda \neq 0\]</span></p>
+<p>This is why, in the literature, a homography matrix is defined only up to a nonzero scale — <span class="math inline">\(H\)</span> and <span class="math inline">\(\lambda H\)</span> represent the same geometric map. In equivalence class notation: <span class="math inline">\([H] = [\lambda H]\)</span>. But for concrete computation we will stick to <span class="math inline">\(=\)</span> and work in <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
+<p>The same scale ambiguity exists on the input side. The vectors <span class="math inline">\((X, Y, 1)^\top\)</span> and <span class="math inline">\((\alpha X, \alpha Y, \alpha)^\top\)</span> represent the same plane point. Since <span class="math inline">\(H\)</span> is linear:</p>
+<p><span class="math display">\[H(\alpha\tilde{\mathbf{X}}) = \alpha H\tilde{\mathbf{X}}\]</span></p>
+<p>Equivalent input representatives produce equivalent output representatives. After applying <span class="math inline">\(H\)</span>, we may replace the output <span class="math inline">\((p, q, w)^\top\)</span> by its equivalence class <span class="math inline">\([p : q : w] \in \mathbb{P}^2\)</span>.</p>
+<p>So both the input and the output live in <span class="math inline">\(\mathbb{P}^2\)</span>. This is why, abstractly, a homography is written as a map:</p>
+<p><span class="math display">\[H : \mathbb{P}^2 \longrightarrow \mathbb{P}^2\]</span></p>
+<p>taking equivalence classes in the world plane to equivalence classes in the image.</p>
+<p>As a first-order mental picture: <span class="math inline">\(H\)</span> maps <span class="math inline">\(\mathbb{R}^3_{\text{plane}}\)</span> — the space of lifted world coordinates <span class="math inline">\((X, Y, 1)^\top\)</span> — to <span class="math inline">\(\mathbb{R}^3_{\text{image}}\)</span> — the space of homogeneous image coordinates <span class="math inline">\((p, q, w)^\top\)</span> with <span class="math inline">\(w \neq 0\)</span>. The pixels are recovered by <span class="math inline">\(\phi\)</span> at the very end.</p>
+<p>We will do two things going forward:</p>
+<ol type="1">
+<li><strong>Abuse notation</strong> and write <span class="math inline">\(H\)</span> for all versions of the map — whether we mean the projective map <span class="math inline">\(H : \mathbb{P}^2 \to \mathbb{P}^2\)</span> or the matrix <span class="math inline">\(H \in \mathbb{R}^{3 \times 3}\)</span>.</li>
+<li><strong>For computation</strong>, pretend everything lives in <span class="math inline">\(\mathbb{R}^3\)</span> and apply <span class="math inline">\(\phi\)</span> at the end to recover pixels.</li>
+</ol>
+</section>
+<section id="estimating-the-homography" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-the-homography">Estimating the Homography</h2>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>Given <span class="math inline">\(n\)</span> corresponding pairs — a point <span class="math inline">\((X_i, Y_i)^\top\)</span> on the world plane and its observed pixel <span class="math inline">\((u_i, v_i)^\top\)</span> in the image — we want to recover the <span class="math inline">\(3 \times 3\)</span> matrix <span class="math inline">\(H\)</span>.</p>
+<p>Lift each world point and each image point:</p>
+<p><span class="math display">\[\tilde{\mathbf{X}}_i = \begin{pmatrix} X_i \\ Y_i \\ 1 \end{pmatrix}
+\in \mathbb{R}^3, \qquad \tilde{\mathbf{x}}_i = \begin{pmatrix} u_i \\
+v_i \\ 1 \end{pmatrix} \in \mathbb{R}^3\]</span></p>
+<p>The homography equation is:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}}_i \sim H\tilde{\mathbf{X}}_i\]</span></p>
+<p>But this is not a direct equality. <span class="math inline">\(H\tilde{\mathbf{X}}_i\)</span> gives a triple <span class="math inline">\((p_i, q_i, w_i)^\top\)</span>, not generally equal to <span class="math inline">\((u_i, v_i, 1)^\top\)</span>. What it means is:</p>
+<p><span class="math display">\[u_i = \frac{p_i}{w_i}, \qquad v_i = \frac{q_i}{w_i}\]</span></p>
+<p>or equivalently:</p>
+<p><span class="math display">\[p_i - u_i w_i = 0, \qquad q_i - v_i w_i = 0\]</span></p>
+<p>This is the condition we will turn into a linear system.</p>
+</section>
+<section id="from-correspondences-to-a-linear-system" class="level3">
+<h3 class="anchored" data-anchor-id="from-correspondences-to-a-linear-system">From Correspondences to a Linear System</h3>
+<p>We already did the hard work in Part 3 for the full camera matrix <span class="math inline">\(P\)</span> via DLT. <span class="math inline">\(H\)</span> is a special case of <span class="math inline">\(P\)</span> with <span class="math inline">\(Z = 0\)</span>, so the same idea applies.</p>
+<p>Recall that <span class="math inline">\(H\)</span> has the form:</p>
+<p><span class="math display">\[H = \begin{pmatrix} h_{11} &amp; h_{12} &amp; h_{13} \\ h_{21} &amp; h_{22} &amp; h_{23}
+\\ h_{31} &amp; h_{32} &amp; h_{33} \end{pmatrix}\]</span></p>
+<p>Write <span class="math inline">\(H\tilde{\mathbf{X}}_i\)</span> explicitly:</p>
+<p><span class="math display">\[H\tilde{\mathbf{X}}_i = \begin{pmatrix} h_{11}X_i + h_{12}Y_i + h_{13}
+\\ h_{21}X_i + h_{22}Y_i + h_{23} \\ h_{31}X_i + h_{32}Y_i + h_{33}
+\end{pmatrix} = \begin{pmatrix} p_i \\ q_i \\ w_i \end{pmatrix}\]</span></p>
+<p>The two conditions <span class="math inline">\(p_i - u_i w_i = 0\)</span> and <span class="math inline">\(q_i - v_i w_i = 0\)</span> become:</p>
+<p><span class="math display">\[(h_{11}X_i + h_{12}Y_i + h_{13}) - u_i(h_{31}X_i + h_{32}Y_i +
+h_{33}) = 0\]</span></p>
+<p><span class="math display">\[(h_{21}X_i + h_{22}Y_i + h_{23}) - v_i(h_{31}X_i + h_{32}Y_i +
+h_{33}) = 0\]</span></p>
+<p>Reshape <span class="math inline">\(H\)</span> as a vector in <span class="math inline">\(\mathbb{R}^9\)</span> by stacking its rows:</p>
+<p><span class="math display">\[\mathbf{h} = (h_{11}, h_{12}, h_{13}, h_{21}, h_{22}, h_{23}, h_{31},
+h_{32}, h_{33})^\top\]</span></p>
+<p>Each correspondence <span class="math inline">\(i\)</span> gives two linear equations in <span class="math inline">\(\mathbf{h}\)</span>, written as <span class="math inline">\(A_i\mathbf{h} = \mathbf{0}\)</span> where:</p>
+<p><span class="math display">\[A_i = \begin{pmatrix} X_i &amp; Y_i &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; -u_iX_i &amp; -u_iY_i
+&amp; -u_i \\ 0 &amp; 0 &amp; 0 &amp; X_i &amp; Y_i &amp; 1 &amp; -v_iX_i &amp; -v_iY_i &amp; -v_i
+\end{pmatrix}\]</span></p>
+<p>Stack all <span class="math inline">\(n\)</span> correspondences into a <span class="math inline">\(2n \times 9\)</span> matrix:</p>
+<p><span class="math display">\[A = \begin{pmatrix} A_1 \\ A_2 \\ \vdots \\ A_n \end{pmatrix}, \qquad
+A\mathbf{h} = \mathbf{0}\]</span></p>
+<p><span class="math inline">\(\mathbf{h}\)</span> lies in the null space of <span class="math inline">\(A\)</span>. This is the same master pattern as before: intersection of lines, line through two points, camera matrix from correspondences — all null spaces.</p>
+</section>
+<section id="solving-via-svd" class="level3">
+<h3 class="anchored" data-anchor-id="solving-via-svd">Solving via SVD</h3>
+<p><strong>Noiseless case.</strong> With <span class="math inline">\(n \geq 4\)</span> correspondences in general position, <span class="math inline">\(A\)</span> has rank <span class="math inline">\(8\)</span> and a one-dimensional null space. The solution <span class="math inline">\(\mathbf{h}\)</span> is the right singular vector of <span class="math inline">\(A\)</span> corresponding to the zero singular value <span class="math inline">\(\sigma_9 = 0\)</span>. Reshape into a <span class="math inline">\(3 \times 3\)</span> matrix to get <span class="math inline">\(\hat{H}\)</span>.</p>
+<p><strong>Noisy case.</strong> In practice <span class="math inline">\(\sigma_9 \neq 0\)</span>. The SVD gives <span class="math inline">\(\mathbf{h}
+= \mathbf{v}_9\)</span> — the last right singular vector, which minimises <span class="math inline">\(\|A\mathbf{h}\|^2\)</span> subject to <span class="math inline">\(\|\mathbf{h}\| = 1\)</span>. Same argument as Part 3, but now in <span class="math inline">\(\mathbb{R}^9\)</span> instead of <span class="math inline">\(\mathbb{R}^{12}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why Four Points?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(H\)</span> has 9 entries but is defined only up to nonzero scale — so 8 degrees of freedom. Each correspondence gives 2 constraints. Four correspondences give 8 constraints — exactly enough to determine <span class="math inline">\(H\)</span> uniquely up to scale, provided no three of the four world points are collinear.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="invertibility-of-the-homography" class="level2">
+<h2 class="anchored" data-anchor-id="invertibility-of-the-homography">Invertibility of the Homography</h2>
+<p>We have <span class="math inline">\(H\)</span> mapping world plane coordinates to image coordinates. The natural next question is: can we go the other way?</p>
+<p>If <span class="math inline">\(H\)</span> is invertible, then <span class="math inline">\(H^{-1}\)</span> maps image points back to world plane coordinates. Apply <span class="math inline">\(\phi\)</span> after <span class="math inline">\(H^{-1}\)</span> and you recover <span class="math inline">\((X, Y)^\top\)</span> from <span class="math inline">\((u, v)^\top\)</span>. This is exactly what we need for real-world distance measurement — observe two pixels, apply <span class="math inline">\(H^{-1}\)</span> to each, recover two world points, compute their Euclidean distance.</p>
+<section id="when-is-h-invertible" class="level3">
+<h3 class="anchored" data-anchor-id="when-is-h-invertible">When is <span class="math inline">\(H\)</span> invertible?</h3>
+<p><span class="math inline">\(H = K[\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{t}]\)</span>. Since <span class="math inline">\(K\)</span> is always invertible, the invertibility of <span class="math inline">\(H\)</span> depends entirely on <span class="math inline">\(B =
+[\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{t}]\)</span>.</p>
+<p>The columns <span class="math inline">\(\mathbf{r}_1\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span> are orthonormal — they are two columns of the rotation matrix <span class="math inline">\(R\)</span>, hence linearly independent. So <span class="math inline">\(B\)</span> fails to be invertible if and only if <span class="math inline">\(\mathbf{t}\)</span> is a linear combination of <span class="math inline">\(\mathbf{r}_1\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span>:</p>
+<p><span class="math display">\[\mathbf{t} = a\mathbf{r}_1 + b\mathbf{r}_2 \quad \text{for some scalars
+} a, b\]</span></p>
+<p>What does this imply? Recall the third column of <span class="math inline">\(R\)</span> — <span class="math inline">\(\mathbf{r}_3\)</span> — which did not appear in <span class="math inline">\(H\)</span> but has not gone away. Since <span class="math inline">\(R\)</span> is orthogonal, <span class="math inline">\(\mathbf{r}_3\)</span> is orthogonal to both <span class="math inline">\(\mathbf{r}_1\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span>. Dotting both sides with <span class="math inline">\(\mathbf{r}_3\)</span>:</p>
+<p><span class="math display">\[\mathbf{t} \cdot \mathbf{r}_3 = a(\mathbf{r}_1 \cdot \mathbf{r}_3) +
+b(\mathbf{r}_2 \cdot \mathbf{r}_3) = 0\]</span></p>
+<p>Now recall from Part 3 that <span class="math inline">\(\mathbf{t} = -R\mathbf{c}\)</span>, where <span class="math inline">\(\mathbf{c}
+= (c_1, c_2, c_3)^\top\)</span> is the camera centre in world coordinates. Expanding:</p>
+<p><span class="math display">\[\mathbf{t} = -R\mathbf{c} = -(c_1\mathbf{r}_1 + c_2\mathbf{r}_2 +
+c_3\mathbf{r}_3)\]</span></p>
+<p>Dotting with <span class="math inline">\(\mathbf{r}_3\)</span>:</p>
+<p><span class="math display">\[\mathbf{t} \cdot \mathbf{r}_3 = -c_3\]</span></p>
+<p>So <span class="math inline">\(\mathbf{t} \cdot \mathbf{r}_3 = 0\)</span> implies <span class="math inline">\(c_3 = 0\)</span>. This means the camera centre is:</p>
+<p><span class="math display">\[\mathbf{c} = \begin{pmatrix} c_1 \\ c_2 \\ 0 \end{pmatrix}\]</span></p>
+<p>The camera centre lies on the world plane <span class="math inline">\(Z = 0\)</span>.</p>
+<p><strong>What does this mean optically?</strong> If the camera centre lies on the world plane, the camera is at the same height as the surface it is trying to image. Think of lying flat on a floor and trying to photograph it — you see only a thin horizontal strip, not the floor surface itself. The plane collapses to a line in the image. No inverse exists because you cannot recover a 2D surface from a 1D sliver.</p>
+<p><strong>Is this realistic?</strong> Not really. In any practical setup — a drone above a field, a camera on a tripod looking at a floor, a phone photographing a document — the camera is above the plane, not level with it. The degenerate case is possible in theory but essentially never encountered in practice.</p>
+</section>
+<section id="recovering-world-coordinates-from-a-pixel" class="level3">
+<h3 class="anchored" data-anchor-id="recovering-world-coordinates-from-a-pixel">Recovering World Coordinates from a Pixel</h3>
+<p>We always assume <span class="math inline">\(H\)</span> is invertible. Given a pixel <span class="math inline">\((u, v)^\top\)</span> and the homography <span class="math inline">\(H = K[\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{t}]\)</span>, here is how to recover the corresponding world plane coordinate.</p>
+<p><strong>Step 1: Lift the pixel.</strong> Form the homogeneous image vector:</p>
+<p><span class="math display">\[\tilde{\mathbf{p}} = \begin{pmatrix} u \\ v \\ 1 \end{pmatrix}\]</span></p>
+<p><strong>Step 2: Apply <span class="math inline">\(H^{-1}\)</span>.</strong> If <span class="math inline">\((a, b, c)^\top\)</span> are the homogeneous world coordinates, then:</p>
+<p><span class="math display">\[H\begin{pmatrix} a \\ b \\ c \end{pmatrix} = \begin{pmatrix} u \\ v \\
+1 \end{pmatrix} \qquad \Longrightarrow \qquad \begin{pmatrix} a \\ b \\ c
+\end{pmatrix} = H^{-1}\begin{pmatrix} u \\ v \\ 1 \end{pmatrix}\]</span></p>
+<p><strong>Step 3: Apply <span class="math inline">\(\phi\)</span>.</strong> The result <span class="math inline">\((a, b, c)^\top\)</span> is not yet in standard form <span class="math inline">\((X, Y, 1)^\top\)</span>. Provided <span class="math inline">\(c \neq 0\)</span>, divide through by <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[X = \frac{a}{c}, \qquad Y = \frac{b}{c}\]</span></p>
+<p>The corresponding world plane coordinate is <span class="math inline">\((X, Y)^\top = (a/c,
+b/c)^\top\)</span>.</p>
+</section>
+<section id="back-to-the-distance-question" class="level3">
+<h3 class="anchored" data-anchor-id="back-to-the-distance-question">Back to the Distance Question</h3>
+<p>Given two pixels <span class="math inline">\((u_1, v_1)^\top\)</span> and <span class="math inline">\((u_2, v_2)^\top\)</span>, apply the three steps above to each to recover world points <span class="math inline">\((X_1, Y_1)^\top\)</span> and <span class="math inline">\((X_2, Y_2)^\top\)</span>. The real-world distance between them is:</p>
+<p><span class="math display">\[d = \sqrt{(X_2 - X_1)^2 + (Y_2 - Y_1)^2}\]</span></p>
+<p>This is the answer to the question from the introduction. No approximation. No guesswork. Just the homography, its inverse, and the Euclidean distance formula.</p>
+</section>
+</section>
+<section id="document-rectification" class="level2">
+<h2 class="anchored" data-anchor-id="document-rectification">Document Rectification</h2>
+<p>Here is a practical problem. You photograph an A4 document lying on a table, but the camera is not directly above it — it is at an angle. The document appears as a quadrilateral in the image, with the corners distorted by perspective. The text is readable but the geometry is wrong. How do you recover a flat, undistorted view of the document?</p>
+<p>Notice that the document appears as a quadrilateral — not some arbitrary curved shape. The straight edges of the document remain straight lines in the image. This is not a coincidence. Homographies send lines to lines — a fact we will prove shortly. For now, we use it: the four straight edges of the A4 sheet appear as four straight lines in the photograph, meeting at four corner points.</p>
+<p>This is the <strong>rectification problem</strong>: given a perspective image of a planar object, produce a corrected image in which the object appears as it would if viewed from directly above.</p>
+<section id="setup-1" class="level3">
+<h3 class="anchored" data-anchor-id="setup-1">Setup</h3>
+<p>An A4 sheet has dimensions <span class="math inline">\(210 \times 297\)</span> mm. Place the world coordinate origin at the bottom-left corner of the document, with <span class="math inline">\(X\)</span> running along the width and <span class="math inline">\(Y\)</span> running along the height. The four corners of the document in world coordinates are:</p>
+<p><span class="math display">\[\mathbf{X}_1 = \begin{pmatrix} 0 \\ 297 \end{pmatrix} \quad
+\text{(top-left)}, \qquad \mathbf{X}_2 = \begin{pmatrix} 210 \\ 297
+\end{pmatrix} \quad \text{(top-right)}\]</span></p>
+<p><span class="math display">\[\mathbf{X}_3 = \begin{pmatrix} 210 \\ 0 \end{pmatrix} \quad
+\text{(bottom-right)}, \qquad \mathbf{X}_4 = \begin{pmatrix} 0 \\ 0
+\end{pmatrix} \quad \text{(bottom-left)}\]</span></p>
+<p>All four corners lie on the plane <span class="math inline">\(Z = 0\)</span>.</p>
+<p>In the photograph, these four corners appear at pixel coordinates <span class="math inline">\((u_1, v_1)^\top\)</span>, <span class="math inline">\((u_2, v_2)^\top\)</span>, <span class="math inline">\((u_3, v_3)^\top\)</span>, <span class="math inline">\((u_4,
+v_4)^\top\)</span> — a general quadrilateral, distorted by perspective.</p>
+</section>
+<section id="the-plan" class="level3">
+<h3 class="anchored" data-anchor-id="the-plan">The Plan</h3>
+<ol type="1">
+<li><strong>Detect the four corners</strong> in the image — manually or automatically.</li>
+<li><strong>Estimate <span class="math inline">\(H\)</span></strong> from the four correspondences <span class="math inline">\(\{(\mathbf{X}_i, \tilde{\mathbf{x}}_i)\}_{i=1}^4\)</span> via DLT.</li>
+<li><strong>Apply <span class="math inline">\(H^{-1}\)</span></strong> to every pixel in the image to find its corresponding world coordinate.</li>
+<li><strong>Sample the image</strong> at those world coordinates to produce the rectified output.</li>
+</ol>
+<p>The result is a flat, undistorted view of the document — as if the camera were directly above it, looking straight down.</p>
+</section>
+<section id="the-mathematics-of-rectification" class="level3">
+<h3 class="anchored" data-anchor-id="the-mathematics-of-rectification">The Mathematics of Rectification</h3>
+<p>For each corner <span class="math inline">\(i\)</span>, the homography satisfies:</p>
+<p><span class="math display">\[H\begin{pmatrix} X_i \\ Y_i \\ 1 \end{pmatrix} = \begin{pmatrix} a_i
+\\ b_i \\ c_i \end{pmatrix}\]</span></p>
+<p>where the observed pixel coordinates are:</p>
+<p><span class="math display">\[u_i = \frac{a_i}{c_i}, \qquad v_i = \frac{b_i}{c_i}\]</span></p>
+<p>So the rectangle on the document — four corners at known world coordinates — corresponds to a quadrilateral in the photograph under the homography.</p>
+</section>
+<section id="step-1-define-the-rectified-output" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-define-the-rectified-output">Step 1: Define the Rectified Output</h3>
+<p>We want to produce a flat, undistorted image of the A4 document. An A4 sheet has dimensions <span class="math inline">\(210 \times 297\)</span> mm. We define the output image as a rectangle:</p>
+<p><span class="math display">\[0 \leq X \leq 210, \qquad 0 \leq Y \leq 297\]</span></p>
+<p>In practice, we choose a pixel resolution for the output — say <span class="math inline">\(210
+\times 297\)</span> pixels (one pixel per mm), or scaled up to <span class="math inline">\(1050 \times 1485\)</span> for a higher resolution output. We create an empty rectangular image of this size.</p>
+<p>Rectification is not just about moving the four corners. It is about moving every point inside the quadrilateral to its correct position in the output rectangle. The corners determine <span class="math inline">\(H\)</span>. The homography then handles the rest.</p>
+</section>
+<section id="step-2-fill-the-output-image" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-fill-the-output-image">Step 2: Fill the Output Image</h3>
+<p>Suppose <span class="math inline">\(H\)</span> is known — either from the physical camera parameters or estimated via DLT from the four corner correspondences.</p>
+<p>For every pixel <span class="math inline">\((X, Y)\)</span> in the output rectangle, we want to know: which pixel in the original photograph does it correspond to?</p>
+<p>Apply <span class="math inline">\(H\)</span> to the output coordinate:</p>
+<p><span class="math display">\[H\begin{pmatrix} X \\ Y \\ 1 \end{pmatrix} = \begin{pmatrix} a \\ b \\
+c \end{pmatrix} \qquad \Longrightarrow \qquad (u, v) = \left(\frac{a}{c},
+\frac{b}{c}\right)\]</span></p>
+<p>This gives the corresponding pixel <span class="math inline">\((u, v)\)</span> in the original photograph. Sample the photograph at <span class="math inline">\((u, v)\)</span> and place that colour value at <span class="math inline">\((X, Y)\)</span> in the output image. Repeat for every pixel in the output rectangle.</p>
+<p>This is called <strong>inverse warping</strong> — instead of pushing pixels from the photograph into the output, we pull pixels from the photograph into each output location. Inverse warping avoids holes and is the standard approach in practice.</p>
+</section>
+<section id="the-full-rectification-pipeline" class="level3">
+<h3 class="anchored" data-anchor-id="the-full-rectification-pipeline">The Full Rectification Pipeline</h3>
+<p>We have the estimated homography <span class="math inline">\(H\)</span> and the distorted photograph. We want to produce a clean, flat output image <span class="math inline">\(I_\text{rect}\)</span> of the A4 page.</p>
+<p><strong>Step 1: Define the output rectangle.</strong></p>
+<p>The output image represents the flat A4 plane. Its pixel locations are:</p>
+<p><span class="math display">\[(X, Y) \in [0, W] \times [0, L], \qquad W = 210, \quad L = 297\]</span></p>
+<p>The four corners of the A4 sheet in world coordinates are:</p>
+<p><span class="math display">\[\mathbf{X}_1 = \begin{pmatrix} 0 \\ L \end{pmatrix} \quad
+\text{(top-left)}, \qquad \mathbf{X}_2 = \begin{pmatrix} W \\ L
+\end{pmatrix} \quad \text{(top-right)}\]</span></p>
+<p><span class="math display">\[\mathbf{X}_3 = \begin{pmatrix} W \\ 0 \end{pmatrix} \quad
+\text{(bottom-right)}, \qquad \mathbf{X}_4 = \begin{pmatrix} 0 \\ 0
+\end{pmatrix} \quad \text{(bottom-left)}\]</span></p>
+<p>We create a fresh, empty output image whose pixels are naturally labelled by <span class="math inline">\((X, Y) \in [0, W] \times [0, L]\)</span>.</p>
+<p><strong>Step 2: For each output location <span class="math inline">\((X, Y)\)</span>, find where it came from.</strong></p>
+<p>The homography <span class="math inline">\(H\)</span> maps plane coordinates to photo coordinates. Apply it:</p>
+<p><span class="math display">\[H\begin{pmatrix} X \\ Y \\ 1 \end{pmatrix} = \begin{pmatrix} a \\ b \\
+c \end{pmatrix} \qquad \Longrightarrow \qquad u = \frac{a}{c}, \quad v =
+\frac{b}{c}\]</span></p>
+<p>The pixel <span class="math inline">\((u, v)\)</span> in the distorted photograph corresponds to the page point <span class="math inline">\((X, Y)\)</span>.</p>
+<p><strong>Step 3: Copy the color.</strong></p>
+<p>The photograph stores colors, not just geometry. Let <span class="math inline">\(I_\text{photo}(u, v)\)</span> denote the color stored in the distorted photograph at pixel <span class="math inline">\((u, v)\)</span>. For example, <span class="math inline">\(I_\text{photo}(u, v) = \text{blue}\)</span>.</p>
+<p>Assign:</p>
+<p><span class="math display">\[I_\text{rect}(X, Y) = I_\text{photo}(u, v) = I_\text{photo}\left(
+\frac{a}{c}, \frac{b}{c}\right)\]</span></p>
+<p>Copy the color from the distorted photograph location <span class="math inline">\((u, v)\)</span> into the clean page location <span class="math inline">\((X, Y)\)</span>.</p>
+<p><strong>Step 4: Repeat for the whole rectangle.</strong></p>
+<p>One point is not enough. Repeat Steps 2 and 3 for every <span class="math inline">\((X, Y) \in [0,
+W] \times [0, L]\)</span>:</p>
+<p><span class="math display">\[\forall\, (X, Y): \quad I_\text{rect}(X, Y) \leftarrow I_\text{photo}
+\left(\frac{a}{c}, \frac{b}{c}\right)\]</span></p>
+<p>The homography answers: <span class="math inline">\((X, Y) \mapsto (u, v)\)</span>. Then we copy.</p>
+</section>
+<section id="a-concrete-example" class="level3">
+<h3 class="anchored" data-anchor-id="a-concrete-example">A Concrete Example</h3>
+<p>Suppose the page point is <span class="math inline">\((X, Y) = (50, 100)\)</span> and the homography gives:</p>
+<p><span class="math display">\[H\begin{pmatrix} 50 \\ 100 \\ 1 \end{pmatrix} = \begin{pmatrix} 600 \\
+900 \\ 3 \end{pmatrix}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[u = \frac{600}{3} = 200, \qquad v = \frac{900}{3} = 300\]</span></p>
+<p>So <span class="math inline">\((50, 100)\)</span> on the clean page corresponds to pixel <span class="math inline">\((200, 300)\)</span> in the distorted photograph. Suppose <span class="math inline">\(I_\text{photo}(200, 300) = \text{blue}\)</span>. Then:</p>
+<p><span class="math display">\[I_\text{rect}(50, 100) = \text{blue}\]</span></p>
+<p>Now take an interior point <span class="math inline">\((X, Y) = (80, 150)\)</span>:</p>
+<p><span class="math display">\[H\begin{pmatrix} 80 \\ 150 \\ 1 \end{pmatrix} = \begin{pmatrix} 960 \\
+1320 \\ 4 \end{pmatrix} \qquad \Longrightarrow \qquad u = \frac{960}{4} =
+240, \quad v = \frac{1320}{4} = 330\]</span></p>
+<p>Suppose <span class="math inline">\(I_\text{photo}(240, 330) = \text{red}\)</span>. Then:</p>
+<p><span class="math display">\[I_\text{rect}(80, 150) = I_\text{photo}(240, 330) = \text{red}\]</span></p>
+<p>The red dot that appears at the distorted location <span class="math inline">\((240, 330)\)</span> in the photograph gets placed at the correct rectangular page location <span class="math inline">\((80,
+150)\)</span>.</p>
+</section>
+<section id="why-does-this-work" class="level3">
+<h3 class="anchored" data-anchor-id="why-does-this-work">Why Does This Work?</h3>
+<p>The output image is built in the flat coordinate system of the A4 sheet. We create a fresh canvas whose pixels are naturally indexed by <span class="math inline">\((X, Y)
+\in [0, W] \times [0, L]\)</span>. At each rectangular location <span class="math inline">\((X, Y)\)</span>, we place the color that actually belongs to the physical page point at <span class="math inline">\((X, Y)\)</span>. The homography is just the tool that tells us where that color is hiding in the distorted photograph.</p>
+<p>Geometry is known. Colors are copied. The result is a clean, undistorted image of the document.</p>
+<p>This is exactly what document scanning apps like Adobe Scan do. You point your phone at an Aadhaar card or a page of notes lying on a table — at whatever angle, in whatever lighting. The app detects the four corners of the document, estimates the homography from those four correspondences, and applies the inverse warp to produce a flat, rectangular output.</p>
+<p>“My photo came out crooked, how do I straighten it?” – turns out to have a clean mathematical answer. It is a <span class="math inline">\(3 \times 3\)</span> matrix, a null space, and an inverse warp. The homography is the invisible engine running underneath.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/homography_rectification.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>The three-step rectification pipeline. Left: a document photographed at an angle — the four corners are detected (coloured dots). Middle: for each output pixel <span class="math inline">\((X, Y)\)</span>, the homography <span class="math inline">\(H\)</span> maps it to the corresponding location <span class="math inline">\((u, v)\)</span> in the distorted photograph. Right: the clean, undistorted output. This is exactly what document scanning apps do under the hood.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="what-does-a-homography-preserve" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-a-homography-preserve">What Does a Homography Preserve?</h2>
+<p>From the A4 example, we know a homography can distort shape dramatically. A rectangle becomes a quadrilateral. Right angles disappear. Equal lengths become unequal. But some structures survive. Let us identify them.</p>
+<section id="homographies-map-lines-to-lines" class="level3">
+<h3 class="anchored" data-anchor-id="homographies-map-lines-to-lines">Homographies Map Lines to Lines</h3>
+<p>Recall from Part 1 that a line <span class="math inline">\(\boldsymbol{\ell}\)</span> in <span class="math inline">\(\mathbb{P}^2\)</span> is the set of points <span class="math inline">\(\mathbf{x}\)</span> satisfying:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top \mathbf{x} = 0\]</span></p>
+<p>Suppose <span class="math inline">\(\mathbf{x}\)</span> lies on this line and is mapped by <span class="math inline">\(H\)</span> to <span class="math inline">\(\mathbf{x}'
+= H\mathbf{x}\)</span>. Then <span class="math inline">\(\mathbf{x} = H^{-1}\mathbf{x}'\)</span>. Substituting:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top H^{-1}\mathbf{x}' = 0\]</span></p>
+<p>Writing this as an inner product:</p>
+<p><span class="math display">\[\langle H^{-\top}\boldsymbol{\ell},\ \mathbf{x}' \rangle = 0\]</span></p>
+<p>Define <span class="math inline">\(\boldsymbol{\ell}' = H^{-\top}\boldsymbol{\ell}\)</span>. Then:</p>
+<p><span class="math display">\[\boldsymbol{\ell}'^\top \mathbf{x}' = 0\]</span></p>
+<p>This is the equation of a line. So every point on the line <span class="math inline">\(\boldsymbol{\ell}\)</span> maps to a point on the line <span class="math inline">\(\boldsymbol{\ell}'\)</span> under <span class="math inline">\(H\)</span>. Lines map to lines.</p>
+<p><strong>In the A4 example.</strong> The top edge of the document is the line <span class="math inline">\(Y = L\)</span>, or <span class="math inline">\(0 \cdot X + 1 \cdot Y - L = 0\)</span>, represented as:</p>
+<p><span class="math display">\[\boldsymbol{\ell}_\text{top} = \begin{pmatrix} 0 \\ 1 \\ -L
+\end{pmatrix}\]</span></p>
+<p>Under the homography, it maps to:</p>
+<p><span class="math display">\[\boldsymbol{\ell}_\text{top}' = H^{-\top}\begin{pmatrix} 0 \\ 1 \\ -L
+\end{pmatrix}\]</span></p>
+<p>This is a line in the image — the top edge of the document appears as a straight line in the photograph. This is why the document appears as a quadrilateral and not some curved shape.</p>
+</section>
+<section id="homographies-preserve-intersections" class="level3">
+<h3 class="anchored" data-anchor-id="homographies-preserve-intersections">Homographies Preserve Intersections</h3>
+<p>Suppose two lines <span class="math inline">\(\boldsymbol{\ell}_1\)</span> and <span class="math inline">\(\boldsymbol{\ell}_2\)</span> meet at a point <span class="math inline">\(\mathbf{x}\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell}_1^\top \mathbf{x} = 0, \qquad \boldsymbol{\ell}_2^\top
+\mathbf{x} = 0\]</span></p>
+<p>Under <span class="math inline">\(H\)</span>, the lines map to <span class="math inline">\(\boldsymbol{\ell}_1' = H^{-\top}
+\boldsymbol{\ell}_1\)</span> and <span class="math inline">\(\boldsymbol{\ell}_2' = H^{-\top}\boldsymbol{\ell}_2\)</span>, and the point maps to <span class="math inline">\(\mathbf{x}' = H\mathbf{x}\)</span>. Then:</p>
+<p><span class="math display">\[\boldsymbol{\ell}_1'^\top \mathbf{x}' = \boldsymbol{\ell}_1^\top
+H^{-1}H\mathbf{x} = \boldsymbol{\ell}_1^\top \mathbf{x} = 0\]</span></p>
+<p>and similarly <span class="math inline">\(\boldsymbol{\ell}_2'^\top \mathbf{x}' = 0\)</span>. The transformed point lies on both transformed lines — intersections are preserved.</p>
+<p><strong>In the A4 example.</strong> The four corners of the document are the intersections of the four edges. Since homographies preserve intersections, the corners of the document map to the corners of the quadrilateral in the photograph. This is exactly why detecting four corner points in the photograph is enough to recover <span class="math inline">\(H\)</span> — the corners tell us everything.</p>
+</section>
+<section id="homographies-map-conics-to-conics" class="level3">
+<h3 class="anchored" data-anchor-id="homographies-map-conics-to-conics">Homographies Map Conics to Conics</h3>
+<p>Recall from Part 2 that a conic in <span class="math inline">\(\mathbb{P}^2\)</span> is the set of points <span class="math inline">\(\mathbf{x}\)</span> satisfying:</p>
+<p><span class="math display">\[\mathbf{x}^\top C \mathbf{x} = 0\]</span></p>
+<p>for a symmetric <span class="math inline">\(3 \times 3\)</span> matrix <span class="math inline">\(C\)</span>. Under <span class="math inline">\(H\)</span>, a point <span class="math inline">\(\mathbf{x}\)</span> maps to <span class="math inline">\(\mathbf{x}' = H\mathbf{x}\)</span>, so <span class="math inline">\(\mathbf{x} = H^{-1}\mathbf{x}'\)</span>. Substituting:</p>
+<p><span class="math display">\[(H^{-1}\mathbf{x}')^\top C (H^{-1}\mathbf{x}') = 0\]</span></p>
+<p><span class="math display">\[\mathbf{x}'^\top (H^{-\top} C H^{-1}) \mathbf{x}' = 0\]</span></p>
+<p>Define <span class="math inline">\(C' = H^{-\top} C H^{-1}\)</span>. Then:</p>
+<p><span class="math display">\[\mathbf{x}'^\top C' \mathbf{x}' = 0\]</span></p>
+<p>This is again a conic equation. So the image of a conic under a homography is another conic.</p>
+<p><strong>But the shape can change.</strong> A circle is a conic. Under a homography, it maps to another conic — but not necessarily a circle. It may become an ellipse, a parabola, or a hyperbola. The conic type is not preserved — only the fact that it is a conic.</p>
+<p>In the A4 example: if you draw a circle on the document, it will appear as an ellipse in the photograph. Rectification maps it back to a circle. This is why the text on a scanned document looks correct after rectification — letters, which contain curved strokes, are restored to their true shapes.</p>
+</section>
+<section id="homographies-and-parallelism" class="level3">
+<h3 class="anchored" data-anchor-id="homographies-and-parallelism">Homographies and Parallelism</h3>
+<p>Parallelism is not preserved under a general homography. This is one of the most visible effects of perspective — parallel lines on the ground appear to converge in a photograph. Let us see why.</p>
+<p>Write <span class="math inline">\(H\)</span> as a partitioned matrix:</p>
+<p><span class="math display">\[H = \begin{pmatrix} A &amp; \mathbf{b} \\ \mathbf{c}^\top &amp; d \end{pmatrix}\]</span></p>
+<p>where <span class="math inline">\(A \in \mathbb{R}^{2 \times 2}\)</span>, <span class="math inline">\(\mathbf{b} \in \mathbb{R}^2\)</span>, <span class="math inline">\(\mathbf{c} \in \mathbb{R}^2\)</span>, and <span class="math inline">\(d \in \mathbb{R}\)</span>. For a plane point <span class="math inline">\(\mathbf{x} = (x, y)^\top\)</span>, the homography acts as:</p>
+<p><span class="math display">\[H\begin{pmatrix} \mathbf{x} \\ 1 \end{pmatrix} = \begin{pmatrix}
+A\mathbf{x} + \mathbf{b} \\ \mathbf{c}^\top\mathbf{x} + d \end{pmatrix}\]</span></p>
+<p>Applying <span class="math inline">\(\phi\)</span>:</p>
+<p><span class="math display">\[f(\mathbf{x}) = \phi\left(H\begin{pmatrix} \mathbf{x} \\ 1
+\end{pmatrix}\right) = \frac{A\mathbf{x} + \mathbf{b}}{\mathbf{c}^\top
+\mathbf{x} + d}\]</span></p>
+<p>Now take two parallel lines in <span class="math inline">\(\mathbb{R}^2\)</span>, parametrized by <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[\mathbf{x}_1(t) = \mathbf{p}_1 + t\mathbf{q}, \qquad \mathbf{x}_2(t)
+= \mathbf{p}_2 + t\mathbf{q}\]</span></p>
+<p>They share the same direction vector <span class="math inline">\(\mathbf{q}\)</span> but start from different points <span class="math inline">\(\mathbf{p}_1 \neq \mathbf{p}_2\)</span>. Apply <span class="math inline">\(f\)</span>:</p>
+<p><span class="math display">\[f(\mathbf{p}_i + t\mathbf{q}) = \frac{A(\mathbf{p}_i + t\mathbf{q}) +
+\mathbf{b}}{\mathbf{c}^\top(\mathbf{p}_i + t\mathbf{q}) + d} =
+\frac{(A\mathbf{p}_i + \mathbf{b}) + t(A\mathbf{q})}{(\mathbf{c}^\top
+\mathbf{p}_i + d) + t(\mathbf{c}^\top\mathbf{q})}\]</span></p>
+<p>The numerator has direction <span class="math inline">\(A\mathbf{q}\)</span> in both cases — the same for both lines. But the denominator depends on <span class="math inline">\(\mathbf{p}_i\)</span> through <span class="math inline">\(\mathbf{c}^\top\mathbf{p}_i + d\)</span>, which differs between the two lines. Therefore, parallel lines under homography do not remain parallel in general.</p>
+<p>The one exception: if <span class="math inline">\(\mathbf{c} = \mathbf{0}\)</span>, the denominator becomes the constant <span class="math inline">\(d\)</span>, and <span class="math inline">\(f(\mathbf{x}) = (A\mathbf{x} + \mathbf{b})/d\)</span> — an affine map. Affine maps do preserve parallelism. We will return to this shortly.</p>
+<p>The one exception: if <span class="math inline">\(\mathbf{c} = \mathbf{0}\)</span>, the denominator becomes the constant <span class="math inline">\(d\)</span>, and <span class="math inline">\(f(\mathbf{x}) = (A\mathbf{x} + \mathbf{b})/d\)</span> — an affine map. Affine maps preserve parallelism. We will return to this shortly.</p>
+</section>
+<section id="vanishing-points" class="level3">
+<h3 class="anchored" data-anchor-id="vanishing-points">Vanishing Points</h3>
+<p>Even though parallelism is lost, something else emerges. Ask: what happens as <span class="math inline">\(t \to \infty\)</span>? Both lines escape to infinity in the direction <span class="math inline">\(\mathbf{q}\)</span>. Divide numerator and denominator by <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[\lim_{t \to \infty} f(\mathbf{p}_i + t\mathbf{q}) = \lim_{t \to \infty}
+\frac{\frac{1}{t}(A\mathbf{p}_i + \mathbf{b}) + A\mathbf{q}}{\frac{1}{t}
+(\mathbf{c}^\top\mathbf{p}_i + d) + \mathbf{c}^\top\mathbf{q}} =
+\frac{A\mathbf{q}}{\mathbf{c}^\top\mathbf{q}}\]</span></p>
+<p>provided <span class="math inline">\(\mathbf{c}^\top\mathbf{q} \neq 0\)</span>. This limit is the same for both lines — it depends only on <span class="math inline">\(\mathbf{q}\)</span>, not on <span class="math inline">\(\mathbf{p}_i\)</span>. Both parallel lines converge to the same finite point in the image as <span class="math inline">\(t \to \infty\)</span>.</p>
+<p>That point is the <strong>vanishing point</strong> of the direction <span class="math inline">\(\mathbf{q}\)</span>.</p>
+<p>And now we have closure on something from Part 1. The railroad tracks — two parallel lines running in the direction <span class="math inline">\(\mathbf{q}\)</span> — converge to a single point in the image. We showed in Part 1 that this convergence point is the equivalence class <span class="math inline">\([\mathbf{q} : 0] \in \mathbb{P}^2\)</span> — the <span class="math inline">\(u_3 = 0\)</span> piece, with no home in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+<p>Now we see the same fact from the homography side. The vanishing point is <span class="math inline">\(A\mathbf{q}/\mathbf{c}^\top\mathbf{q}\)</span> — a perfectly finite point in the image. The point at infinity in the world (<span class="math inline">\(u_3 = 0\)</span> in <span class="math inline">\(\mathbb{P}^2\)</span>) maps to a finite point in the image under the homography. The camera brings the point at infinity down to a finite vanishing point.</p>
+<p>This is why we built <span class="math inline">\(\mathbb{P}^2\)</span> in the first place.</p>
+<p>If <span class="math inline">\(\mathbf{c}^\top\mathbf{q} = 0\)</span>, the limit diverges — the image point escapes to infinity and there is no finite vanishing point. The parallel lines remain parallel in the image. But where exactly does the direction <span class="math inline">\(\mathbf{q}\)</span> go? To answer this, we need to name the object it lands on: the line at infinity.</p>
+</section>
+<section id="the-line-at-infinity" class="level3">
+<h3 class="anchored" data-anchor-id="the-line-at-infinity">The Line at Infinity</h3>
+<p>When <span class="math inline">\(\mathbf{c}^\top\mathbf{q} = 0\)</span>, the image point escapes to infinity — but in <span class="math inline">\(\mathbb{P}^2\)</span>, infinity is not undefined. It is a perfectly valid equivalence class with third coordinate zero.</p>
+<p>This leads us to a beautiful object: the <strong>line at infinity</strong> <span class="math inline">\(\ell_\infty\)</span>.</p>
+<p>Recall from Part 1 that in <span class="math inline">\(\mathbb{P}^2\)</span>, a point <span class="math inline">\(\mathbf{u} = (u, v,
+w)^\top\)</span> is an ordinary point when <span class="math inline">\(w \neq 0\)</span>, and a direction point when <span class="math inline">\(w = 0\)</span>. The direction points are exactly the equivalence classes <span class="math inline">\([q_1 : q_2 : 0]\)</span> — one for each direction <span class="math inline">\(\mathbf{q} = (q_1,
+q_2)^\top\)</span> in <span class="math inline">\(\mathbb{R}^2\)</span>.</p>
+<p>The collection of all direction points is:</p>
+<p><span class="math display">\[\ell_\infty = \left\{ \begin{pmatrix} u \\ v \\ 0 \end{pmatrix} :
+(u, v) \neq (0, 0) \right\}\]</span></p>
+<p>This is the <strong>line at infinity</strong>. It is not a single point but a whole line in <span class="math inline">\(\mathbb{P}^2\)</span> — the boundary of the disk in the disk compression picture from Part 2, with opposite points identified.</p>
+<p><strong>Why is it a line?</strong> For the projective line <span class="math inline">\(\ell_\infty\)</span>, we want all points <span class="math inline">\(\mathbf{u}\)</span> with <span class="math inline">\(w = 0\)</span>. This is the condition:</p>
+<p><span class="math display">\[0 \cdot u + 0 \cdot v + 1 \cdot w = 0\]</span></p>
+<p>So the coefficient vector of <span class="math inline">\(\ell_\infty\)</span> is <span class="math inline">\((0, 0, 1)^\top\)</span>. Check: for any direction point <span class="math inline">\(\mathbf{u}_\infty = (u, v, 0)^\top\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell}_\infty^\top \mathbf{u}_\infty = (0, 0, 1)
+\begin{pmatrix} u \\ v \\ 0 \end{pmatrix} = 0 \checkmark\]</span></p>
+<p>So <span class="math inline">\(\boldsymbol{\ell}_\infty = (0, 0, 1)^\top\)</span> represents the whole line at infinity.</p>
+<p>Going back to our parallel lines <span class="math inline">\(x + 2y = 3\)</span> and <span class="math inline">\(x + 2y = 5\)</span> from Part 1: their direction vector is <span class="math inline">\(\mathbf{q} = (-2, 1)^\top\)</span>, and the corresponding direction point is <span class="math inline">\(\mathbf{u}_\infty = (-2, 1, 0)^\top\)</span>. This lies on <span class="math inline">\(\ell_\infty\)</span>, as it should.</p>
+</section>
+<section id="a-homography-acts-on-the-whole-projective-plane" class="level3">
+<h3 class="anchored" data-anchor-id="a-homography-acts-on-the-whole-projective-plane">A Homography Acts on the Whole Projective Plane</h3>
+<p>In <span class="math inline">\(\mathbb{P}^2\)</span> we have two kinds of points:</p>
+<ul>
+<li><strong>Ordinary points:</strong> <span class="math inline">\(\mathbf{x} = (x, y, 1)^\top\)</span> — points in <span class="math inline">\(\mathbb{R}^2\)</span></li>
+<li><strong>Direction points on <span class="math inline">\(\ell_\infty\)</span>:</strong> <span class="math inline">\(\mathbf{u}_\infty = (q_1, q_2,
+0)^\top\)</span> — directions in <span class="math inline">\(\mathbb{R}^2\)</span></li>
+</ul>
+<p>A homography <span class="math inline">\(H\)</span> acts on both. Let us see how.</p>
+<p><strong>On ordinary points.</strong> Take <span class="math inline">\(\tilde{\mathbf{x}} = (\mathbf{x}, 1)^\top\)</span>:</p>
+<p><span class="math display">\[H\tilde{\mathbf{x}} = \begin{pmatrix} A &amp; \mathbf{b} \\ \mathbf{c}^\top
+&amp; d \end{pmatrix} \begin{pmatrix} \mathbf{x} \\ 1 \end{pmatrix} =
+\begin{pmatrix} A\mathbf{x} + \mathbf{b} \\ \mathbf{c}^\top\mathbf{x} + d
+\end{pmatrix}\]</span></p>
+<p>The last coordinate <span class="math inline">\(\mathbf{c}^\top\mathbf{x} + d\)</span> is nonzero (generically), so the output is an ordinary point:</p>
+<p><span class="math display">\[f(\mathbf{x}) = \frac{A\mathbf{x} + \mathbf{b}}{\mathbf{c}^\top\mathbf{x}
++ d}\]</span></p>
+<p><strong>On direction points.</strong> Take <span class="math inline">\(\mathbf{u}_\infty = (\mathbf{q}, 0)^\top\)</span>:</p>
+<p><span class="math display">\[H\mathbf{u}_\infty = \begin{pmatrix} A &amp; \mathbf{b} \\ \mathbf{c}^\top
+&amp; d \end{pmatrix} \begin{pmatrix} \mathbf{q} \\ 0 \end{pmatrix} =
+\begin{pmatrix} A\mathbf{q} \\ \mathbf{c}^\top\mathbf{q} \end{pmatrix}\]</span></p>
+<p>Two cases:</p>
+<ul>
+<li><p><strong>If <span class="math inline">\(\mathbf{c}^\top\mathbf{q} \neq 0\)</span>:</strong> the output has nonzero third coordinate. The direction point maps to an ordinary finite point — the vanishing point <span class="math inline">\(A\mathbf{q}/\mathbf{c}^\top\mathbf{q}\)</span>. The point at infinity becomes finite.</p></li>
+<li><p><strong>If <span class="math inline">\(\mathbf{c}^\top\mathbf{q} = 0\)</span>:</strong> the output is <span class="math inline">\((A\mathbf{q},
+0)^\top\)</span> — still a direction point. The image still has last coordinate zero, so the direction <span class="math inline">\(\mathbf{q}\)</span> remains on <span class="math inline">\(\ell_\infty\)</span>. Parallel lines with direction <span class="math inline">\(\mathbf{q}\)</span> remain parallel.</p></li>
+</ul>
+<p>So the vanishing point is the finite image of a direction point under <span class="math inline">\(H\)</span>:</p>
+<p><span class="math display">\[H\begin{pmatrix} \mathbf{q} \\ 0 \end{pmatrix} = \begin{pmatrix}
+A\mathbf{q} \\ \mathbf{c}^\top\mathbf{q} \end{pmatrix} \qquad
+\xrightarrow{\mathbf{c}^\top\mathbf{q} \neq 0} \qquad \mathbf{v} =
+\frac{A\mathbf{q}}{\mathbf{c}^\top\mathbf{q}}\]</span></p>
+<p>Equivalently, all parallel lines with direction <span class="math inline">\(\mathbf{q}\)</span> are mapped to lines passing through the vanishing point <span class="math inline">\(\mathbf{v}\)</span>.</p>
+<p>And if <span class="math inline">\(\mathbf{c}^\top\mathbf{q} = 0\)</span> for all <span class="math inline">\(\mathbf{q}\)</span>, meaning <span class="math inline">\(\mathbf{c} = \mathbf{0}\)</span>, then <span class="math inline">\(H\)</span> maps <span class="math inline">\(\ell_\infty\)</span> to itself. No direction point becomes finite. Parallelism is preserved for every direction. This is the affine case.</p>
+</section>
+<section id="affine-maps-as-a-special-case-of-homographies" class="level3">
+<h3 class="anchored" data-anchor-id="affine-maps-as-a-special-case-of-homographies">Affine Maps as a Special Case of Homographies</h3>
+<p>An affine map on <span class="math inline">\(\mathbb{R}^2\)</span> is:</p>
+<p><span class="math display">\[f\begin{pmatrix} x \\ y \end{pmatrix} = A\begin{pmatrix} x \\ y
+\end{pmatrix} + \mathbf{b} = \begin{pmatrix} a_{11}x + a_{12}y + b_1 \\
+a_{21}x + a_{22}y + b_2 \end{pmatrix}\]</span></p>
+<p>We already know from Part 3 that translation is not linear — but becomes linear after lifting to homogeneous coordinates. Lift <span class="math inline">\((x, y)^\top \to
+(x, y, 1)^\top\)</span> and define:</p>
+<p><span class="math display">\[H_\text{aff} = \begin{pmatrix} a_{11} &amp; a_{12} &amp; b_1 \\ a_{21} &amp; a_{22}
+&amp; b_2 \\ 0 &amp; 0 &amp; 1 \end{pmatrix}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[H_\text{aff}\begin{pmatrix} x \\ y \\ 1 \end{pmatrix} = \begin{pmatrix}
+a_{11}x + a_{12}y + b_1 \\ a_{21}x + a_{22}y + b_2 \\ 1 \end{pmatrix}\]</span></p>
+<p>The third coordinate is always <span class="math inline">\(1\)</span>, so <span class="math inline">\(\phi\)</span> just reads off the first two entries:</p>
+<p><span class="math display">\[f(x, y) = (a_{11}x + a_{12}y + b_1,\ a_{21}x + a_{22}y + b_2)^\top\]</span></p>
+<p>exactly as required. The affine map is a homography with <span class="math inline">\(\mathbf{c} =
+\mathbf{0}\)</span> and <span class="math inline">\(d = 1\)</span> — the third row is <span class="math inline">\((0, 0, 1)\)</span>.</p>
+<p><span class="math inline">\(H_\text{aff}\)</span> is invertible because <span class="math inline">\(\det(H_\text{aff}) = \det(A) \neq
+0\)</span>.</p>
+<p>Why? Because we require <span class="math inline">\(A\)</span> to be invertible — if <span class="math inline">\(A\)</span> were singular, an entire line in <span class="math inline">\(\mathbb{R}^2\)</span> would collapse to a single point. For any practical use of a homography, we need a one-to-one correspondence between every original point and its image. Invertibility of <span class="math inline">\(A\)</span> guarantees this, and invertibility of <span class="math inline">\(H_\text{aff}\)</span> follows.</p>
+<p>Compare with the general homography:</p>
+<p><span class="math display">\[u = \frac{h_{11}x + h_{12}y + h_{13}}{h_{31}x + h_{32}y + h_{33}}\]</span></p>
+<p>For <span class="math inline">\(H_\text{aff}\)</span>, the denominator is <span class="math inline">\(0 \cdot x + 0 \cdot y + 1 = 1\)</span> — a constant. No position-dependent division. No perspective distortion.</p>
+</section>
+<section id="affine-maps-preserve-parallelism" class="level3">
+<h3 class="anchored" data-anchor-id="affine-maps-preserve-parallelism">Affine Maps Preserve Parallelism</h3>
+<p>Take two parallel lines in <span class="math inline">\(\mathbb{R}^2\)</span>:</p>
+<p><span class="math display">\[\mathbf{x}_1(t) = \mathbf{p}_1 + t\mathbf{q}, \qquad \mathbf{x}_2(t)
+= \mathbf{p}_2 + t\mathbf{q}\]</span></p>
+<p>Apply <span class="math inline">\(f(\mathbf{x}) = A\mathbf{x} + \mathbf{b}\)</span>:</p>
+<p><span class="math display">\[f(\mathbf{p}_i + t\mathbf{q}) = A\mathbf{p}_i + \mathbf{b} + tA\mathbf{q}\]</span></p>
+<p>Both transformed curves are parametric lines with direction <span class="math inline">\(A\mathbf{q}\)</span> — the same direction for both. They are parallel. The denominator in the general homography formula was the culprit that broke parallelism. Here the denominator is <span class="math inline">\(1\)</span>, so it plays no role.</p>
+<p>As <span class="math inline">\(t \to \infty\)</span>:</p>
+<p><span class="math display">\[f(\mathbf{p}_i + t\mathbf{q}) = (A\mathbf{p}_i + \mathbf{b}) +
+tA\mathbf{q} \to \infty\]</span></p>
+<p>No finite vanishing point. The direction <span class="math inline">\(\mathbf{q}\)</span> maps to the direction <span class="math inline">\(A\mathbf{q}\)</span> — still on <span class="math inline">\(\ell_\infty\)</span>. The line at infinity is preserved.</p>
+</section>
+</section>
+<section id="what-does-a-homography-preserve-a-summary" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-a-homography-preserve-a-summary">What Does a Homography Preserve? A Summary</h2>
+<p>We have seen that a homography can dramatically alter the appearance of a figure. Lengths change. Angles change. Areas change. Parallelism is lost. A circle becomes an ellipse. A rectangle becomes a quadrilateral.</p>
+<p>But some things survive:</p>
+<ul>
+<li><strong>Points map to points</strong> and <strong>lines map to lines</strong></li>
+<li><strong>Collinearity is preserved</strong> — three collinear points remain collinear</li>
+<li><strong>Intersections are preserved</strong> — if two lines meet at a point, their images meet at the image of that point</li>
+<li><strong>Conics map to conics</strong> — though the type may change</li>
+<li><strong>The line at infinity <span class="math inline">\(\ell_\infty\)</span> may or may not be preserved</strong> — it is preserved exactly when the homography is affine</li>
+</ul>
+<p>These are the projective invariants — the properties that survive under a homography. But there is one more invariant, and it is perhaps the most surprising. It is not a geometric object like a line or a conic. Rather, it is a number that remains unchanged under any homography. This number is known as the <strong>cross-ratio</strong>. What is the cross-ratio, and why is it so important in projective geometry? Let’s explore this concept further.</p>
+</section>
+<section id="the-cross-ratio" class="level2">
+<h2 class="anchored" data-anchor-id="the-cross-ratio">The Cross-Ratio</h2>
+<p>We have established that a homography preserves lines, intersections, and conics. But what about numbers? Is there any numerical quantity associated with a configuration of points that survives a homography unchanged?</p>
+<section id="how-does-a-homography-act-on-a-line" class="level3">
+<h3 class="anchored" data-anchor-id="how-does-a-homography-act-on-a-line">How Does a Homography Act on a Line?</h3>
+<p>Let us restrict attention to points on a single line. Parametrize the line as:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}}(t) = \begin{pmatrix} \mathbf{p} + t\mathbf{q} \\ 1
+\end{pmatrix} = \begin{pmatrix} p_1 + tq_1 \\ p_2 + tq_2 \\ 1
+\end{pmatrix}\]</span></p>
+<p>Apply <span class="math inline">\(H\)</span>:</p>
+<p><span class="math display">\[H\tilde{\mathbf{x}}(t) = \begin{pmatrix} a_1 + tb_1 \\ a_2 + tb_2 \\
+a_3 + tb_3 \end{pmatrix}\]</span></p>
+<p>where we define:</p>
+<p><span class="math display">\[a_i = h_{i1}p_1 + h_{i2}p_2 + h_{i3}, \qquad b_i = h_{i1}q_1 +
+h_{i2}q_2\]</span></p>
+<p>After applying <span class="math inline">\(\phi\)</span>:</p>
+<p><span class="math display">\[u(t) = \frac{a_1 + tb_1}{a_3 + tb_3}, \qquad v(t) = \frac{a_2 + tb_2}
+{a_3 + tb_3}\]</span></p>
+<p>Each image coordinate is a <strong>fractional linear function</strong> of <span class="math inline">\(t\)</span> — a ratio of two linear functions of <span class="math inline">\(t\)</span>. The homography acts on the parameter <span class="math inline">\(t\)</span> by a Möbius transformation.</p>
+</section>
+<section id="four-points-on-the-line" class="level3">
+<h3 class="anchored" data-anchor-id="four-points-on-the-line">Four Points on the Line</h3>
+<p>Take four points on the line at parameter values <span class="math inline">\(t_1, t_2, t_3, t_4\)</span>. Their image coordinates are:</p>
+<p><span class="math display">\[u_i' = \frac{a_1 + t_ib_1}{a_3 + t_ib_3}, \qquad v_i' = \frac{a_2 +
+t_ib_2}{a_3 + t_ib_3}\]</span></p>
+<p><strong>Can we find a combination of the original <span class="math inline">\(t_i\)</span>’s that equals the same combination of the image coordinates <span class="math inline">\(u_i'\)</span>?</strong></p>
+</section>
+<section id="ordinary-differences-are-not-preserved" class="level3">
+<h3 class="anchored" data-anchor-id="ordinary-differences-are-not-preserved">Ordinary Differences Are Not Preserved</h3>
+<p>Try the simplest thing: a difference of <span class="math inline">\(u\)</span> coordinates.</p>
+<p><span class="math display">\[u_i' - u_j' = \frac{a_1 + t_ib_1}{a_3 + t_ib_3} - \frac{a_1 +
+t_jb_1}{a_3 + t_jb_3}\]</span></p>
+<p><span class="math display">\[= \frac{(a_1 + t_ib_1)(a_3 + t_jb_3) - (a_1 + t_jb_1)(a_3 +
+t_ib_3)}{(a_3 + t_ib_3)(a_3 + t_jb_3)}\]</span></p>
+<p>Expanding the numerator and cancelling:</p>
+<p><span class="math display">\[= \frac{(t_i - t_j)(b_1a_3 - a_1b_3)}{(a_3 + t_ib_3)(a_3 + t_jb_3)}\]</span></p>
+<p>Let <span class="math inline">\(K = b_1a_3 - a_1b_3\)</span> (a constant depending only on <span class="math inline">\(H\)</span> and the line, not on <span class="math inline">\(i\)</span> or <span class="math inline">\(j\)</span>). Then:</p>
+<p><span class="math display">\[u_i' - u_j' = \frac{(t_i - t_j) \cdot K}{(a_3 + t_ib_3)(a_3 +
+t_jb_3)}\]</span></p>
+<p>The denominator depends on <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> — ordinary differences are not preserved.</p>
+</section>
+<section id="try-a-ratio-of-differences" class="level3">
+<h3 class="anchored" data-anchor-id="try-a-ratio-of-differences">Try a Ratio of Differences</h3>
+<p><span class="math display">\[\frac{u_4' - u_1'}{u_4' - u_2'} = \frac{(t_4 - t_1) \cdot K}{(a_3 +
+t_4b_3)(a_3 + t_1b_3)} \cdot \frac{(a_3 + t_4b_3)(a_3 + t_2b_3)}{(t_4
+- t_2) \cdot K}\]</span></p>
+<p><span class="math display">\[= \frac{(t_4 - t_1)}{(t_4 - t_2)} \cdot \frac{(a_3 + t_2b_3)}{(a_3 +
+t_1b_3)}\]</span></p>
+<p>The <span class="math inline">\(K\)</span> cancels but a ratio of denominators remains. Not quite invariant — the <span class="math inline">\((a_3 + t_ib_3)\)</span> factors do not cancel completely.</p>
+</section>
+<section id="construct-the-second-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="construct-the-second-ratio">Construct the Second Ratio</h3>
+<p><span class="math display">\[\frac{u_3' - u_2'}{u_3' - u_1'} = \frac{(t_3 - t_2)(a_3 + t_1b_3)}
+{(t_3 - t_1)(a_3 + t_2b_3)}\]</span></p>
+<p>Now take the ratio of these two ratios:</p>
+<p><span class="math display">\[\frac{u_4' - u_1'}{u_4' - u_2'} \cdot \frac{u_3' - u_2'}{u_3' - u_1'}
+= \frac{(t_4 - t_1)}{(t_4 - t_2)} \cdot \frac{(a_3 + t_2b_3)}{(a_3 +
+t_1b_3)} \cdot \frac{(t_3 - t_2)(a_3 + t_1b_3)}{(t_3 - t_1)(a_3 +
+t_2b_3)}\]</span></p>
+<p><span class="math display">\[= \frac{(t_4 - t_1)(t_3 - t_2)}{(t_4 - t_2)(t_3 - t_1)}\]</span></p>
+<p>The <span class="math inline">\((a_3 + t_ib_3)\)</span> factors cancel completely. What remains depends only on the original parameter values <span class="math inline">\(t_1, t_2, t_3, t_4\)</span> — not on <span class="math inline">\(H\)</span>.</p>
+<p>This quantity: <span class="math display">\[\boxed{(t_1, t_2; t_3, t_4) = \frac{(t_4 - t_1)(t_3 - t_2)}{(t_4 -
+t_2)(t_3 - t_1)}}\]</span></p>
+<p>is the <strong>cross-ratio</strong>. It is invariant under any homography.</p>
+<p>The same calculation holds for <span class="math inline">\(v_i'\)</span> — by symmetry, replacing <span class="math inline">\(a_1,
+b_1\)</span> with <span class="math inline">\(a_2, b_2\)</span> throughout gives:</p>
+<p><span class="math display">\[\frac{(v_4' - v_1')(v_3' - v_2')}{(v_4' - v_2')(v_3' - v_1')} =
+\frac{(t_4 - t_1)(t_3 - t_2)}{(t_4 - t_2)(t_3 - t_1)}\]</span></p>
+<p>The same cross-ratio. You can use whichever coordinate varies along the line — if the line is nearly vertical in the image, use <span class="math inline">\(v\)</span>; if nearly horizontal, use <span class="math inline">\(u\)</span>. The cross-ratio is the same either way.</p>
+</section>
+<section id="measuring-a-defect-from-an-oblique-photograph" class="level3">
+<h3 class="anchored" data-anchor-id="measuring-a-defect-from-an-oblique-photograph">Measuring a Defect from an Oblique Photograph</h3>
+<p>Here is a concrete application. Suppose you have a metal pipe and you mark four collinear points along it:</p>
+<p><span class="math display">\[A = 0\ \text{cm}, \quad B = 20\ \text{cm}, \quad C = 50\ \text{cm},
+\quad D = ?\]</span></p>
+<p>where <span class="math inline">\(D\)</span> is a defect visible in a photograph, located somewhere between <span class="math inline">\(B\)</span> and <span class="math inline">\(C\)</span>. You cannot measure <span class="math inline">\(D\)</span> directly — perhaps the pipe is inaccessible, or the photograph was taken at an awkward angle.</p>
+<p>From the photograph, you read off the pixel coordinates:</p>
+<p><span class="math display">\[u_A = 500, \quad u_B = 750, \quad u_C = 850, \quad u_D = 800\]</span></p>
+<p><strong>Why naive interpolation fails.</strong></p>
+<p>A natural first attempt: <span class="math inline">\(D\)</span> appears to be <span class="math inline">\(50\)</span> pixels past <span class="math inline">\(B\)</span>, out of <span class="math inline">\(100\)</span> pixels from <span class="math inline">\(B\)</span> to <span class="math inline">\(C\)</span>. So interpolate:</p>
+<p><span class="math display">\[\frac{u_D - u_B}{u_C - u_B} = \frac{800 - 750}{850 - 750} = \frac{50}
+{100} = 0.5\]</span></p>
+<p><span class="math display">\[D_\text{naive} = 20 + 0.5 \times (50 - 20) = 35\ \text{cm}\]</span></p>
+<p>This assumes equal pixel spacing corresponds to equal physical spacing — i.e.&nbsp;that the camera looks straight down at the pipe with no perspective distortion. But the photograph was taken at an angle, so the pixel spacing is not uniform. The naive interpolation is incorrect.</p>
+<p><strong>The cross-ratio gives the right answer.</strong></p>
+<p>The cross-ratio with <span class="math inline">\(t_1 = A\)</span>, <span class="math inline">\(t_2 = B\)</span>, <span class="math inline">\(t_3 = C\)</span>, <span class="math inline">\(t_4 = D\)</span> is:</p>
+<p><span class="math display">\[\text{CR} = \frac{(t_4 - t_1)(t_3 - t_2)}{(t_4 - t_2)(t_3 - t_1)}\]</span></p>
+<p><strong>Step 1: Compute it from the image.</strong></p>
+<p><span class="math display">\[\text{CR} = \frac{(u_D - u_A)(u_C - u_B)}{(u_D - u_B)(u_C - u_A)} =
+\frac{(800 - 500)(850 - 750)}{(800 - 750)(850 - 500)} = \frac{300 \times
+100}{50 \times 350} = \frac{30000}{17500} = \frac{12}{7}\]</span></p>
+<p><strong>Step 2: Set equal to world cross-ratio.</strong></p>
+<p>Since the cross-ratio is preserved:</p>
+<p><span class="math display">\[\frac{(D - A)(C - B)}{(D - B)(C - A)} = \frac{12}{7}\]</span></p>
+<p>Substituting <span class="math inline">\(A = 0\)</span>, <span class="math inline">\(B = 20\)</span>, <span class="math inline">\(C = 50\)</span>:</p>
+<p><span class="math display">\[\frac{D \cdot 30}{(D - 20) \cdot 50} = \frac{12}{7}\]</span></p>
+<p><strong>Step 3: Solve for <span class="math inline">\(D\)</span>.</strong></p>
+<p><span class="math display">\[7 \cdot 30D = 12 \cdot 50(D - 20)\]</span></p>
+<p><span class="math display">\[210D = 600D - 12000\]</span></p>
+<p><span class="math display">\[12000 = 390D\]</span></p>
+<p><span class="math display">\[D \approx 30.8\ \text{cm}\]</span></p>
+<p>The defect is at approximately <span class="math inline">\(30.8\)</span> cm along the pipe.</p>
+<p>The naive interpolation gave <span class="math inline">\(35\)</span> cm. The cross-ratio gives <span class="math inline">\(30.8\)</span> cm. The cross-ratio is the correct answer, because it accounts for the perspective distortion in the photograph.</p>
+<p>Three known physical locations and their image coordinates are enough to locate any fourth point on the same line, purely from the photograph. No camera calibration. No knowledge of the camera position or angle.</p>
+</section>
+</section>
+<section id="two-homographies-and-image-warping" class="level2">
+<h2 class="anchored" data-anchor-id="two-homographies-and-image-warping">Two Homographies and Image Warping</h2>
+<section id="from-two-viewpoints-to-one-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="from-two-viewpoints-to-one-matrix">From Two Viewpoints to One Matrix</h3>
+<p>Suppose the same flat plane is photographed from two different viewpoints, giving images <span class="math inline">\(I_1\)</span> and <span class="math inline">\(I_2\)</span>. Each camera has its own homography mapping world plane coordinates to pixel coordinates:</p>
+<p><span class="math display">\[\mathbf{x}_1 = \phi(H_1\text{Lift}(X, Y)), \qquad \mathbf{x}_2 =
+\phi(H_2\text{Lift}(X, Y))\]</span></p>
+<p>where <span class="math inline">\(\text{Lift}(X, Y) = (X, Y, 1)^\top\)</span>.</p>
+<p>The same world point <span class="math inline">\(\tilde{\mathbf{X}}\)</span> appears at <span class="math inline">\(\mathbf{x}_1\)</span> in image 1 and <span class="math inline">\(\mathbf{x}_2\)</span> in image 2. Eliminating <span class="math inline">\(\tilde{\mathbf{X}}\)</span>:</p>
+<p><span class="math display">\[\tilde{\mathbf{X}} = H_1^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
+\end{pmatrix} \qquad \Longrightarrow \qquad \begin{pmatrix} u_2 \\ v_2 \\
+1 \end{pmatrix} = H_2 H_1^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
+\end{pmatrix}\]</span></p>
+<p>Define:</p>
+<p><span class="math display">\[\boxed{H_{21} = H_2 H_1^{-1}}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\mathbf{x}_2 = \phi(H_{21}\text{Lift}(u_1, v_1))\]</span></p>
+<p><span class="math inline">\(H_{21}\)</span> maps pixel coordinates in image 1 directly to pixel coordinates in image 2 — no need to go via the world plane explicitly.</p>
+</section>
+<section id="warping-as-function-composition" class="level3">
+<h3 class="anchored" data-anchor-id="warping-as-function-composition">Warping as Function Composition</h3>
+<p>Suppose we want to compare the two images — perhaps to detect changes on the plane between two photographs taken at different times.</p>
+<p>The naive approach fails immediately. A physical point at <span class="math inline">\((u_1, v_1)\)</span> in image 1 appears at <span class="math inline">\((u_2, v_2)\)</span> in image 2, where <span class="math inline">\((u_2, v_2) \neq
+(u_1, v_1)\)</span> in general. Computing <span class="math inline">\(I_2(u_1, v_1) - I_1(u_1, v_1)\)</span> compares two different physical points — meaningless.</p>
+<p>What we want is to evaluate <span class="math inline">\(I_2\)</span> at the correct location <span class="math inline">\((u_2, v_2)\)</span> corresponding to <span class="math inline">\((u_1, v_1)\)</span>. But we want to express this using image 1 coordinates throughout.</p>
+<p>The solution: define the <strong>warped image</strong> <span class="math inline">\(\hat{I}_2\)</span> as a function of image 1 coordinates:</p>
+<p><span class="math display">\[\hat{I}_2 = I_2 \circ \phi \circ H_{21} \circ \text{Lift}\]</span></p>
+<p>So:</p>
+<p><span class="math display">\[\hat{I}_2(u_1, v_1) = I_2\left(\phi\left(H_{21}\begin{pmatrix} u_1 \\
+v_1 \\ 1 \end{pmatrix}\right)\right) = I_2(u_2, v_2)\]</span></p>
+<p>This is just a change of coordinates. We have rewritten the value <span class="math inline">\(I_2(u_2, v_2)\)</span> using the original image 1 coordinates <span class="math inline">\((u_1, v_1)\)</span>.</p>
+<p>Most materials on image warping distinguish between forward warping — pushing each source pixel to its target location, which causes holes when some target pixels receive no value — and inverse warping, which avoids holes by iterating over target pixels and pulling from the source using <span class="math inline">\(H^{-1}\)</span>. Our function composition approach is precisely inverse warping, but the distinction never needed to be made explicit. The map <span class="math inline">\(g = \phi \circ
+H_{21} \circ \text{Lift}\)</span> already points from image 1 coordinates to image 2 coordinates, so we iterate over image 1 pixels and pull from image 2. No holes. No <span class="math inline">\(H^{-1}\)</span> to compute separately. The geometry handles it.</p>
+</section>
+<section id="change-detection" class="level3">
+<h3 class="anchored" data-anchor-id="change-detection">Change Detection</h3>
+<p>The difference image is now well-defined:</p>
+<p><span class="math display">\[\boxed{D(u_1, v_1) = \hat{I}_2(u_1, v_1) - I_1(u_1, v_1)}\]</span></p>
+<p>At every pixel location <span class="math inline">\((u_1, v_1)\)</span> in image 1, <span class="math inline">\(D\)</span> compares:</p>
+<ul>
+<li><span class="math inline">\(I_1(u_1, v_1)\)</span>: the color at that location in image 1</li>
+<li><span class="math inline">\(\hat{I}_2(u_1, v_1) = I_2(u_2, v_2)\)</span>: the color at the <strong>corresponding</strong> location in image 2, pulled back to image 1 coordinates</li>
+</ul>
+<p>Where <span class="math inline">\(D \approx 0\)</span>, nothing changed. Where <span class="math inline">\(|D|\)</span> is large, something on the plane changed between the two photographs.</p>
+</section>
+<section id="the-interpolation-problem" class="level3">
+<h3 class="anchored" data-anchor-id="the-interpolation-problem">The Interpolation Problem</h3>
+<p>Our images are digital — pixel values are stored only at integer locations. Define <span class="math inline">\(g = \phi \circ H_{21} \circ \text{Lift}\)</span>, so:</p>
+<p><span class="math display">\[\hat{I}_2 = I_2 \circ g, \qquad \hat{I}_2(u_1, v_1) = I_2(g(u_1, v_1))\]</span></p>
+<p>The problem: <span class="math inline">\(g(u_1, v_1) = (u_2, v_2)\)</span> will not in general be an integer pair. For example:</p>
+<p><span class="math display">\[g(u_1, v_1) = (300.4,\ 199.7)\]</span></p>
+<p>There is no stored pixel with indices <span class="math inline">\((300.4, 199.7)\)</span>. The expression needs an interpolation step.</p>
+<p>We define an interpolated image <span class="math inline">\(I_2^\text{interp} : \mathbb{R}^2 \to
+\mathbb{R}\)</span> (or <span class="math inline">\(\mathbb{R}^3\)</span> for RGB) that agrees with <span class="math inline">\(I_2\)</span> at integer locations:</p>
+<p><span class="math display">\[I_2^\text{interp}(m, n) = I_2(m, n) \quad \text{for all integers }
+(m, n)\]</span></p>
+<p>The change image becomes:</p>
+<p><span class="math display">\[D(u_1, v_1) = I_2^\text{interp}(g(u_1, v_1)) - I_1(u_1, v_1)\]</span></p>
+<p><strong>Simplest choice: rounding.</strong></p>
+<p>Round the mapped location to the nearest integer:</p>
+<p><span class="math display">\[(300.4,\ 199.7) \longrightarrow (300,\ 200)\]</span></p>
+<p>The problem with rounding is that it is discontinuous — a tiny shift in <span class="math inline">\((u_1, v_1)\)</span> can jump the rounded output by a full pixel. The resulting change image has artificial sharp edges and a blocky appearance, not because anything changed on the plane, but because of rounding artifacts.</p>
+<p><strong>Better choice: bilinear interpolation.</strong></p>
+<p>Instead of rounding, take a weighted average of the four nearest integer pixels. For a mapped location <span class="math inline">\((u, v) = (300.4,\ 199.7)\)</span>, the four surrounding integer pixels are:</p>
+<p><span class="math display">\[(300, 199), \quad (301, 199), \quad (300, 200), \quad (301, 200)\]</span></p>
+<p>Let <span class="math inline">\(\alpha = 0.4\)</span> (fractional part of <span class="math inline">\(u\)</span>) and <span class="math inline">\(\beta = 0.7\)</span> (fractional part of <span class="math inline">\(v\)</span>). Bilinear interpolation gives:</p>
+<p><span class="math display">\[I_2^\text{interp}(u, v) = (1-\alpha)(1-\beta)\, I_2(300, 199) +
+\alpha(1-\beta)\, I_2(301, 199)\]</span> <span class="math display">\[+ (1-\alpha)\beta\, I_2(300, 200) + \alpha\beta\, I_2(301, 200)\]</span></p>
+<p>This is a weighted average of the four neighbours, with weights proportional to the area of the rectangle each neighbour subtends at <span class="math inline">\((u, v)\)</span>. It is smooth, continuous, and avoids the blocky artifacts of rounding.</p>
+</section>
+<section id="the-validity-mask" class="level3">
+<h3 class="anchored" data-anchor-id="the-validity-mask">The Validity Mask</h3>
+<p>Not every pixel <span class="math inline">\((u_1, v_1)\)</span> in image 1 has a valid corresponding location in image 2. The mapped point <span class="math inline">\(g(u_1, v_1) = (u_2, v_2)\)</span> may fall outside the boundaries of image 2 or in a region where <span class="math inline">\(I_2\)</span> is undefined.</p>
+<p>Define the validity mask:</p>
+<p><span class="math display">\[M(u_1, v_1) = \begin{cases} 1 &amp; \text{if } g(u_1, v_1) \text{ lies
+inside image 2} \\ 0 &amp; \text{otherwise} \end{cases}\]</span></p>
+<p>The change image is then only meaningful where <span class="math inline">\(M = 1\)</span>:</p>
+<p><span class="math display">\[D(u_1, v_1) = \left[I_2^\text{interp}(g(u_1, v_1)) - I_1(u_1,
+v_1)\right] \cdot M(u_1, v_1)\]</span></p>
+<p>Change detection is only valid on the overlap region — the set of pixels where both cameras actually see the same part of the plane.</p>
+</section>
+<section id="other-factors-that-affect-the-difference-image" class="level3">
+<h3 class="anchored" data-anchor-id="other-factors-that-affect-the-difference-image">Other Factors That Affect the Difference Image</h3>
+<p>Even after warping and masking, the difference image <span class="math inline">\(D\)</span> is not a pure signal of physical change. Several other factors contribute:</p>
+<p><strong>Lighting.</strong> Camera 1 and camera 2 may have been taken under different lighting conditions — different time of day, different shadows, different exposure settings. A uniform brightness shift across the image will produce a nonzero <span class="math inline">\(D\)</span> even if nothing on the plane changed.</p>
+<p><strong>Camera noise.</strong> Digital sensors add random noise to every pixel. Even two photographs of an identical, static scene will differ by a small amount due to sensor noise alone. A small threshold on <span class="math inline">\(|D|\)</span> is usually needed to separate real changes from noise.</p>
+<p><strong>Blur and focus.</strong> If the two cameras have different focal lengths, apertures, or focus settings, the same physical detail may appear sharper in one image than the other. This produces nonzero <span class="math inline">\(D\)</span> at edges and fine-grained textures even when nothing has changed.</p>
+<p>The homography handles the geometry perfectly. Everything else — lighting, noise, blur — requires additional preprocessing or robust thresholding. The geometry is the easy part. Photometry is harder.</p>
+</section>
+</section>
+<section id="homography-under-pure-camera-rotation" class="level2">
+<h2 class="anchored" data-anchor-id="homography-under-pure-camera-rotation">Homography Under Pure Camera Rotation</h2>
+<section id="the-setup" class="level3">
+<h3 class="anchored" data-anchor-id="the-setup">The Setup</h3>
+<p>Suppose the same camera rotates about its optical centre <span class="math inline">\(\mathbf{c}\)</span> without translating — the camera centre stays fixed while the orientation changes. Two images are taken: image 1 with rotation <span class="math inline">\(R_1\)</span> and image 2 with rotation <span class="math inline">\(R_2\)</span>.</p>
+<p>For camera 1, a world point <span class="math inline">\(\mathbf{X}_w\)</span> maps to camera coordinates:</p>
+<p><span class="math display">\[\mathbf{X}_{c,1} = R_1(\mathbf{X}_w - \mathbf{c})\]</span></p>
+<p>so:</p>
+<p><span class="math display">\[\mathbf{X}_w - \mathbf{c} = R_1^\top \mathbf{X}_{c,1}\]</span></p>
+<p>For camera 2:</p>
+<p><span class="math display">\[\mathbf{X}_{c,2} = R_2(\mathbf{X}_w - \mathbf{c}) = R_2 R_1^\top
+\mathbf{X}_{c,1}\]</span></p>
+<p>Define <span class="math inline">\(R_{21} = R_2 R_1^\top\)</span>. Then:</p>
+<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}\mathbf{X}_{c,1}\]</span></p>
+<p>The two camera coordinate vectors are related by a pure rotation <span class="math inline">\(R_{21}\)</span> — regardless of the depth of the point. The depth cancels because the camera centre is fixed.</p>
+</section>
+<section id="from-camera-coordinates-to-pixels" class="level3">
+<h3 class="anchored" data-anchor-id="from-camera-coordinates-to-pixels">From Camera Coordinates to Pixels</h3>
+<p>Applying the intrinsic matrix <span class="math inline">\(K\)</span> (assumed the same for both images):</p>
+<p><span class="math display">\[\begin{pmatrix} u_1 \\ v_1 \\ 1 \end{pmatrix} \sim K\mathbf{X}_{c,1}
+\qquad \Longrightarrow \qquad \mathbf{X}_{c,1} \sim K^{-1}\begin{pmatrix}
+u_1 \\ v_1 \\ 1 \end{pmatrix}\]</span></p>
+<p>Substituting:</p>
+<p><span class="math display">\[\mathbf{X}_{c,2} = R_{21}K^{-1}\begin{pmatrix} u_1 \\ v_1 \\ 1
+\end{pmatrix}\]</span></p>
+<p>Applying <span class="math inline">\(K\)</span>:</p>
+<p><span class="math display">\[\begin{pmatrix} u_2 \\ v_2 \\ 1 \end{pmatrix} \sim KR_{21}K^{-1}
+\begin{pmatrix} u_1 \\ v_1 \\ 1 \end{pmatrix}\]</span></p>
+<p>So the homography between the two images is:</p>
+<p><span class="math display">\[\boxed{H_{21} = KR_{21}K^{-1} = KR_2R_1^\top K^{-1}}\]</span></p>
+</section>
+<section id="why-this-is-special" class="level3">
+<h3 class="anchored" data-anchor-id="why-this-is-special">Why This Is Special</h3>
+<p>Notice what is missing: the scene. No <span class="math inline">\(Z = 0\)</span> assumption, no planar world, no homography between a plane and an image. This homography relates two images of an <strong>arbitrary 3D scene</strong> — as long as the camera centre does not move. The depth of each point cancels in the rotation step.</p>
+<p>This is the pure rotation exception mentioned in Part 3: a single global homography exists between two images of any scene when the camera undergoes pure rotation.</p>
+</section>
+<section id="application-panoramic-image-stitching" class="level3">
+<h3 class="anchored" data-anchor-id="application-panoramic-image-stitching">Application: Panoramic Image Stitching</h3>
+<p>Here is the problem. You want to photograph a wide scene — a mountain range, a cityscape, a room — but it does not fit in a single frame. So you take several overlapping photographs, rotating your phone between each shot. How do you stitch them into one seamless wide image?</p>
+<p>The naive approach fails immediately. Each photograph has its own pixel coordinate system. You cannot just place them side by side — the overlapping regions will not align because perspective distortion makes each image look slightly different from the others.</p>
+<p>The revelation: if the camera centre stays fixed and only the orientation changes — which is exactly what happens when you rotate your phone in place — then every pair of overlapping images is related by a homography of the form <span class="math inline">\(H_{21} = KR_{21}K^{-1}\)</span>. No planar scene assumption needed. No depth information needed. Just a rotation and the intrinsic matrix.</p>
+<p>This means you can warp every image into the coordinate system of a single reference image using the homographies, and the overlapping regions will align perfectly. Stitch enough of them together and you get a full panorama.</p>
+<p>The pipeline:</p>
+<ol type="1">
+<li>Estimate <span class="math inline">\(H_{21}\)</span> from point correspondences in the overlap region via DLT.</li>
+<li>If <span class="math inline">\(K\)</span> is known, recover <span class="math inline">\(R_{21} = K^{-1}H_{21}K\)</span>.</li>
+<li>Warp all images to a common reference orientation using the function composition approach from the previous section.</li>
+<li>Blend the overlapping regions.</li>
+</ol>
+<p>If <span class="math inline">\(K\)</span> is not known, <span class="math inline">\(H_{21}\)</span> still gives a valid warp — you just cannot separate the rotation from the intrinsics. The geometry works either way. This is precisely what your phone’s panorama mode does under the hood.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/madhavpr191221\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Madhav Prashanth Ramachandran</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/madhavpr191221">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/madhavpr/">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -8,7 +8,8 @@
     "items": [
       "/3d-vision/homogeneous-coordinates/index.html",
       "/3d-vision/conics/index.html",
-      "/3d-vision/camera_matrix/index.html"
+      "/3d-vision/camera_matrix/index.html",
+      "/3d-vision/homography/index.html"
     ]
   },
   {

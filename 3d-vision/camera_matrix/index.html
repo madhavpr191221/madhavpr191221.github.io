@@ -285,7 +285,7 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="https://madhavpr191221.github.io/3d-vision/homogeneous-coordinates/">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction — homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+<p>In <a href="">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction — homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
 <p>Enough abstraction. It is time to step into the real world.</p>
 <p>Cameras and real scenes live in three dimensions. A tree, a building, a face — these are 3D objects in <span class="math inline">\(\mathbb{R}^3\)</span>. A camera takes this 3D world and collapses it onto a 2D sensor. The mathematical object that does this collapsing is the <strong>camera matrix</strong> <span class="math inline">\(P\)</span> — a <span class="math inline">\(3 \times 4\)</span> matrix that maps <span class="math inline">\(\mathbb{R}^4\)</span> to <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
 <p>We promised this object at the end of Part 1. Here it is.</p>
@@ -1219,7 +1219,7 @@ J_k\,\delta\mathbf{p}\]</span></p>
 <p>where <span class="math inline">\(d_i = \langle \delta\mathbf{p}, \mathbf{q}_i \rangle\)</span> is how much we move along eigenvector <span class="math inline">\(\mathbf{q}_i\)</span>, and <span class="math inline">\(g_i = \langle \mathbf{g}_k,
 \mathbf{q}_i \rangle\)</span>.</p>
 <p>Then:</p>
-<p><span class="math display">\[J_k\delta\mathbf{p} = \sum_{i=1}^{12} g_i d_i \qquad\]</span></p>
+<p><span class="math display">\[J_k\delta\mathbf{p} = \sum_{i=1}^{12} g_i d_i \qquad \text{(Parseval)}\]</span></p>
 <p><span class="math display">\[\delta\mathbf{p}^\top H_k\,\delta\mathbf{p} = \sum_{i=1}^{12} \lambda_i
 d_i^2\]</span></p>
 <p>So the linearized objective becomes:</p>
