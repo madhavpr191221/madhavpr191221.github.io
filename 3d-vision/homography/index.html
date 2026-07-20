@@ -647,7 +647,7 @@ W] \times [0, L]\)</span>:</p>
 \in [0, W] \times [0, L]\)</span>. At each rectangular location <span class="math inline">\((X, Y)\)</span>, we place the color that actually belongs to the physical page point at <span class="math inline">\((X, Y)\)</span>. The homography is just the tool that tells us where that color is hiding in the distorted photograph.</p>
 <p>Geometry is known. Colors are copied. The result is a clean, undistorted image of the document.</p>
 <p>This is exactly what document scanning apps like Adobe Scan do. You point your phone at an Aadhaar card or a page of notes lying on a table — at whatever angle, in whatever lighting. The app detects the four corners of the document, estimates the homography from those four correspondences, and applies the inverse warp to produce a flat, rectangular output.</p>
-<p>“My photo came out crooked, how do I straighten it?” – turns out to have a clean mathematical answer. It is a <span class="math inline">\(3 \times 3\)</span> matrix, a null space, and an inverse warp. The homography is the invisible engine running underneath.</p>
+<p>“My photo came out crooked, how do I straighten it?” – turns out to have a clean mathematical answer. The homography is the invisible engine running underneath.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/homography_rectification.png" class="img-fluid figure-img" style="width:95.0%"></p>
