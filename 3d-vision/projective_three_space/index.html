@@ -240,6 +240,18 @@ window.Quarto = {
   <li><a href="#the-projective-version" id="toc-the-projective-version" class="nav-link" data-scroll-target="#the-projective-version">The Projective Version</a></li>
   <li><a href="#the-conic-section" id="toc-the-conic-section" class="nav-link" data-scroll-target="#the-conic-section">The Conic Section</a></li>
   </ul></li>
+  <li><a href="#what-is-all-this-abstract-nonsense-good-for" id="toc-what-is-all-this-abstract-nonsense-good-for" class="nav-link" data-scroll-target="#what-is-all-this-abstract-nonsense-good-for">What Is All This Abstract Nonsense Good For?</a>
+  <ul class="collapse">
+  <li><a href="#back-to-the-camera" id="toc-back-to-the-camera" class="nav-link" data-scroll-target="#back-to-the-camera">Back to the Camera</a></li>
+  <li><a href="#a-photograph-of-a-rectangular-room" id="toc-a-photograph-of-a-rectangular-room" class="nav-link" data-scroll-target="#a-photograph-of-a-rectangular-room">A Photograph of a Rectangular Room</a></li>
+  <li><a href="#the-orthogonality-condition" id="toc-the-orthogonality-condition" class="nav-link" data-scroll-target="#the-orthogonality-condition">The Orthogonality Condition</a></li>
+  <li><a href="#every-sphere-meets-pi_infty-in-the-same-conic" id="toc-every-sphere-meets-pi_infty-in-the-same-conic" class="nav-link" data-scroll-target="#every-sphere-meets-pi_infty-in-the-same-conic">Every Sphere Meets <span class="math inline">\(\pi_\infty\)</span> in the Same Conic</a></li>
+  <li><a href="#the-absolute-conic" id="toc-the-absolute-conic" class="nav-link" data-scroll-target="#the-absolute-conic">The Absolute Conic</a></li>
+  <li><a href="#projecting-the-absolute-conic-through-the-camera" id="toc-projecting-the-absolute-conic-through-the-camera" class="nav-link" data-scroll-target="#projecting-the-absolute-conic-through-the-camera">Projecting the Absolute Conic Through the Camera</a></li>
+  <li><a href="#estimating-omega-and-recovering-k" id="toc-estimating-omega-and-recovering-k" class="nav-link" data-scroll-target="#estimating-omega-and-recovering-k">Estimating <span class="math inline">\(\omega\)</span> and Recovering <span class="math inline">\(K\)</span></a></li>
+  </ul></li>
+  <li><a href="#two-routes-to-k" id="toc-two-routes-to-k" class="nav-link" data-scroll-target="#two-routes-to-k">Two Routes to <span class="math inline">\(K\)</span></a></li>
+  <li><a href="#what-the-absolute-conic-bought-us" id="toc-what-the-absolute-conic-bought-us" class="nav-link" data-scroll-target="#what-the-absolute-conic-bought-us">What the Absolute Conic Bought Us</a></li>
   </ul>
 </nav>
     </div>
@@ -903,9 +915,218 @@ B\mathbf{y}, \qquad B = \begin{pmatrix} | &amp; | \\ \mathbf{u} &amp; \mathbf{v}
 <p>Setting <span class="math inline">\(W = 1\)</span> recovers the affine conic equation exactly.</p>
 <p><span class="math display">\[\boxed{\text{plane} \cap \text{quadric} = \text{conic in that plane}}\]</span></p>
 <p>The formula <span class="math inline">\(C = M^\top QM\)</span> is the projective statement. The cutting plane, encoded by <span class="math inline">\(M\)</span>, and the quadric, encoded by <span class="math inline">\(Q\)</span>, combine to give the conic matrix <span class="math inline">\(C\)</span>. Sphere sliced by a plane gives a circle. Cone sliced by a plane gives an ellipse, parabola, or hyperbola depending on the angle — these are the conic sections, and now we see precisely why they are called that.</p>
-
-
 </section>
+</section>
+<section id="what-is-all-this-abstract-nonsense-good-for" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-all-this-abstract-nonsense-good-for">What Is All This Abstract Nonsense Good For?</h2>
+<section id="back-to-the-camera" class="level3">
+<h3 class="anchored" data-anchor-id="back-to-the-camera">Back to the Camera</h3>
+<p>We have spent this post building <span class="math inline">\(\mathbb{P}^3\)</span> from scratch — points, lines, planes, quadrics, the plane at infinity <span class="math inline">\(\pi_\infty\)</span>. It has been abstract. Let me remind you why we are doing this.</p>
+<p>We have a physical camera. It takes photographs. Inside the camera is a sensor, a lens, and a set of parameters that describe how the 3D world maps to 2D pixels. These parameters are collected in the <strong>intrinsic matrix</strong>:</p>
+<p><span class="math display">\[K = \begin{pmatrix} f_x &amp; s &amp; p_x \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}\]</span></p>
+<p>where <span class="math inline">\(f_x, f_y\)</span> are the focal lengths in pixel units, <span class="math inline">\((p_x, p_y)\)</span> is the principal point, and <span class="math inline">\(s\)</span> is the skew (usually zero for modern cameras). The full camera matrix is <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, which maps 3D world points to 2D image pixels.</p>
+<p>In Part 3, we showed how to estimate <span class="math inline">\(P\)</span> from known 3D-to-2D point correspondences via DLT, and then decompose <span class="math inline">\(P\)</span> into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span>. That requires knowing the 3D coordinates of points in the scene — a calibration object, a ruler, something with known geometry.</p>
+<p>But what if you do not have that? What if you only have a photograph?</p>
+<p>It turns out that a photograph of an ordinary scene — a room with right angles, a building with parallel edges — already contains enough geometric information to recover <span class="math inline">\(K\)</span>. No rulers. No calibration object. Just the image and some knowledge about the world.</p>
+<p>The tool that makes this possible is the absolute conic. And the absolute conic lives on <span class="math inline">\(\pi_\infty\)</span>.</p>
+<p>That is why we built all of this.</p>
+</section>
+<section id="a-photograph-of-a-rectangular-room" class="level3">
+<h3 class="anchored" data-anchor-id="a-photograph-of-a-rectangular-room">A Photograph of a Rectangular Room</h3>
+<p>Imagine photographing the corner of a rectangular room. The room has three mutually perpendicular directions — the horizontal edges running along one wall, the edges running that go into the room, and the vertical edges running up to the ceiling.</p>
+<p>In the photograph, lines running in each of these directions appear to converge. The horizontal edges of one wall converge to one point in the image. The horizontal edges of the other wall converge to another point. The vertical edges converge to a third point — possibly outside the image frame, somewhere above or below.</p>
+<p>These convergence points are the <strong>vanishing points</strong> of the three directions. We derived them in Part 4: the vanishing point of a world direction <span class="math inline">\(\mathbf{d}\)</span> is the image of the direction class <span class="math inline">\([(\mathbf{d}, 0)^\top] \in \pi_\infty\)</span> under the camera matrix <span class="math inline">\(P\)</span>.</p>
+<p>Here is the key observation: the three directions are mutually perpendicular in the real world. But their vanishing points in the image do not appear at right angles in pixel coordinates. Perspective projection does not preserve angles.</p>
+<p>This raises a precise question:</p>
+<blockquote class="blockquote">
+<p>Given the vanishing points of two perpendicular world directions, how is their perpendicularity expressed in image coordinates?</p>
+</blockquote>
+<p>Answering this question will lead us to a remarkable object — a conic that encodes the Euclidean geometry of the world and lives on the plane at infinity.</p>
+</section>
+<section id="the-orthogonality-condition" class="level3">
+<h3 class="anchored" data-anchor-id="the-orthogonality-condition">The Orthogonality Condition</h3>
+<p>Let <span class="math inline">\(\mathbf{d}_1, \mathbf{d}_2 \in \mathbb{R}^3\)</span> be two perpendicular world directions:</p>
+<p><span class="math display">\[\mathbf{d}_1^\top\mathbf{d}_2 = 0\]</span></p>
+<p>Let <span class="math inline">\(\mathbf{v}_1, \mathbf{v}_2 \in \mathbb{R}^3\)</span> be the vanishing points of <span class="math inline">\(\mathbf{d}_1\)</span> and <span class="math inline">\(\mathbf{d}_2\)</span> respectively. Since image points live in <span class="math inline">\(\mathbb{P}^2\)</span> — defined only up to nonzero scale — the vanishing point <span class="math inline">\(\mathbf{v}_i\)</span> and the vector <span class="math inline">\(KR\mathbf{d}_i\)</span> represent the same projective point but may differ by a nonzero scalar <span class="math inline">\(\lambda_i\)</span>:</p>
+<p><span class="math display">\[\lambda_1\mathbf{v}_1 = KR\mathbf{d}_1, \qquad \lambda_2\mathbf{v}_2
+= KR\mathbf{d}_2\]</span></p>
+<p>Multiply both sides by <span class="math inline">\(K^{-1}\)</span>:</p>
+<p><span class="math display">\[\lambda_1 K^{-1}\mathbf{v}_1 = R\mathbf{d}_1, \qquad \lambda_2
+K^{-1}\mathbf{v}_2 = R\mathbf{d}_2\]</span></p>
+<p>Since rotations preserve the dot product — <span class="math inline">\(R^\top R = I\)</span> — and <span class="math inline">\(\mathbf{d}_1^\top\mathbf{d}_2 = 0\)</span>:</p>
+<p><span class="math display">\[(R\mathbf{d}_1)^\top(R\mathbf{d}_2) = \mathbf{d}_1^\top R^\top
+R\mathbf{d}_2 = \mathbf{d}_1^\top\mathbf{d}_2 = 0\]</span></p>
+<p>Substituting:</p>
+<p><span class="math display">\[\lambda_1\lambda_2\,\mathbf{v}_1^\top K^{-\top}K^{-1}\mathbf{v}_2 = 0\]</span></p>
+<p>Since <span class="math inline">\(\lambda_1\lambda_2 \neq 0\)</span>:</p>
+<p><span class="math display">\[\boxed{\mathbf{v}_1^\top K^{-\top}K^{-1}\mathbf{v}_2 = 0}\]</span></p>
+<p>The matrix <span class="math inline">\(K^{-\top}K^{-1}\)</span> has appeared naturally from a concrete camera problem. Define:</p>
+<p><span class="math display">\[\boxed{\omega = K^{-\top}K^{-1}}\]</span></p>
+<p>Two vanishing points satisfy <span class="math inline">\(\mathbf{v}_1^\top\omega\mathbf{v}_2 = 0\)</span> if and only if the corresponding world directions are perpendicular. The matrix <span class="math inline">\(\omega\)</span> is telling us something about the Euclidean geometry of the world, expressed entirely in image coordinates.</p>
+<p>But what is <span class="math inline">\(\omega\)</span>? What does it look like? And where does it come from geometrically? To answer that, we need to look at spheres.</p>
+</section>
+<section id="every-sphere-meets-pi_infty-in-the-same-conic" class="level3">
+<h3 class="anchored" data-anchor-id="every-sphere-meets-pi_infty-in-the-same-conic">Every Sphere Meets <span class="math inline">\(\pi_\infty\)</span> in the Same Conic</h3>
+<p>Consider a sphere in <span class="math inline">\(\mathbb{R}^3\)</span> with centre <span class="math inline">\(\mathbf{c}\)</span> and radius <span class="math inline">\(r &gt; 0\)</span>:</p>
+<p><span class="math display">\[(\mathbf{x} - \mathbf{c})^\top(\mathbf{x} - \mathbf{c}) = r^2\]</span></p>
+<p>Lift to homogeneous coordinates and multiply through by <span class="math inline">\(W^2\)</span>:</p>
+<p><span class="math display">\[(\mathbf{X} - W\mathbf{c})^\top(\mathbf{X} - W\mathbf{c}) - r^2W^2 = 0\]</span></p>
+<p>Now intersect with <span class="math inline">\(\pi_\infty\)</span> by setting <span class="math inline">\(W = 0\)</span>:</p>
+<p><span class="math display">\[\boxed{X^2 + Y^2 + Z^2 = 0}\]</span></p>
+<p>The centre <span class="math inline">\(\mathbf{c}\)</span> has disappeared. The radius <span class="math inline">\(r\)</span> has disappeared. Every sphere, regardless of its centre or radius, meets <span class="math inline">\(\pi_\infty\)</span> in exactly the same equation. Now, <span class="math inline">\(X^2 + Y^2 + Z^2 = 0\)</span> is a homogeneous quadratic equation in three homogeneous coordinates <span class="math inline">\([X:Y:Z]\)</span> on <span class="math inline">\(\pi_\infty \cong \mathbb{P}^2\)</span>. That is exactly the form of a conic from Part 2 — one homogeneous quadratic equation in three homogeneous coordinates. So the set of all direction classes satisfying this equation is a conic inside <span class="math inline">\(\pi_\infty\)</span>.</p>
+<p>This conic is called the <strong>absolute conic</strong> <span class="math inline">\(\Omega_\infty\)</span>. It is the conic that every sphere shares on the plane at infinity — the same conic, regardless of where the sphere sits or how large it is.</p>
+<p>There is one problem. Over <span class="math inline">\(\mathbb{R}\)</span>, <span class="math inline">\(X^2 + Y^2 + Z^2 = 0\)</span> forces <span class="math inline">\(X = Y = Z = 0\)</span>, which is excluded. The absolute conic has no real points. We need complex coordinates to see it — but its matrix is perfectly real, and as we will see, perfectly useful.</p>
+</section>
+<section id="the-absolute-conic" class="level3">
+<h3 class="anchored" data-anchor-id="the-absolute-conic">The Absolute Conic</h3>
+<p><span class="math display">\[\boxed{\Omega_\infty = \left\{\left[\begin{pmatrix}\mathbf{d} \\
+0\end{pmatrix}\right] \in \mathbb{P}^3(\mathbb{C}) : \mathbf{d}^\top
+\mathbf{d} = 0\right\}}\]</span></p>
+<p>It lies entirely on <span class="math inline">\(\pi_\infty\)</span>. Inside <span class="math inline">\(\pi_\infty \cong \mathbb{P}^2\)</span>, with homogeneous coordinates <span class="math inline">\([X:Y:Z]\)</span>, the equation <span class="math inline">\(X^2 + Y^2 + Z^2
+= 0\)</span> defines a conic whose matrix is <span class="math inline">\(I_3\)</span> — the identity matrix. The same matrix that defines the Euclidean dot product between real directions:</p>
+<p><span class="math display">\[\langle\mathbf{d}_1, \mathbf{d}_2\rangle = \mathbf{d}_1^\top I_3
+\mathbf{d}_2\]</span></p>
+<p>This is not a coincidence. The absolute conic is a projective encoding of the Euclidean inner product. It stores the information needed to discuss angles and orthogonality among directions.</p>
+<p>It has no real points — over <span class="math inline">\(\mathbb{R}\)</span>, the equation <span class="math inline">\(X^2 + Y^2 +
+Z^2 = 0\)</span> has only the trivial solution. But over <span class="math inline">\(\mathbb{C}\)</span>, nonzero solutions exist. For example:</p>
+<p><span class="math display">\[\mathbf{d} = \begin{pmatrix}1 \\ i \\ 0\end{pmatrix} \qquad
+\text{satisfies} \qquad 1^2 + i^2 + 0^2 = 0\]</span></p>
+<p>We use the bilinear form <span class="math inline">\(\mathbf{d}^\top\mathbf{d}\)</span>, not the Hermitian form <span class="math inline">\(\mathbf{d}^*\mathbf{d}\)</span> — the latter never vanishes for nonzero vectors.</p>
+<p>The absolute conic is not a physical curve that can be seen in the scene. It has no real points. What matters is its matrix <span class="math inline">\(I_3\)</span> — and what happens to it when it passes through a camera.</p>
+</section>
+<section id="projecting-the-absolute-conic-through-the-camera" class="level3">
+<h3 class="anchored" data-anchor-id="projecting-the-absolute-conic-through-the-camera">Projecting the Absolute Conic Through the Camera</h3>
+<p>Before doing the math, let me clarify something that confused me at first. The absolute conic <span class="math inline">\(\Omega_\infty\)</span> consists of direction classes with <span class="math inline">\(W = 0\)</span> — it contains no ordinary scene points. A building, a wall, a table: none of these have points on <span class="math inline">\(\Omega_\infty\)</span>. What lives on <span class="math inline">\(\Omega_\infty\)</span> are directions — the directions of edges, lines, and surfaces in the scene, lifted to <span class="math inline">\(\pi_\infty\)</span>.</p>
+<p>Now the math.</p>
+<p>Take any direction class <span class="math inline">\([(\mathbf{d}, 0)^\top] \in \pi_\infty\)</span> and apply the camera <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>:</p>
+<p><span class="math display">\[\lambda\mathbf{x} = P\begin{pmatrix}\mathbf{d} \\ 0\end{pmatrix} =
+K[R \mid \mathbf{t}]\begin{pmatrix}\mathbf{d} \\ 0\end{pmatrix} =
+KR\mathbf{d}\]</span></p>
+<p>Translation disappears immediately — the column <span class="math inline">\(K\mathbf{t}\)</span> multiplies zero. Solving for <span class="math inline">\(\mathbf{d}\)</span>:</p>
+<p><span class="math display">\[\mathbf{d} = \lambda R^\top K^{-1}\mathbf{x}\]</span></p>
+<p>Now restrict to direction classes on <span class="math inline">\(\Omega_\infty\)</span>, i.e.&nbsp;those satisfying <span class="math inline">\(\mathbf{d}^\top\mathbf{d} = 0\)</span>. Substituting:</p>
+<p><span class="math display">\[\lambda^2\mathbf{x}^\top K^{-\top}RR^\top K^{-1}\mathbf{x} = 0\]</span></p>
+<p>Since <span class="math inline">\(RR^\top = I\)</span>:</p>
+<p><span class="math display">\[\boxed{\mathbf{x}^\top\omega\mathbf{x} = 0, \qquad \omega =
+K^{-\top}K^{-1}}\]</span></p>
+<p>The image of <span class="math inline">\(\Omega_\infty\)</span> under the camera is the conic <span class="math inline">\(\omega\)</span> in <span class="math inline">\(\mathbb{P}^2\)</span> — called the <strong>image of the absolute conic (IAC)</strong>. Two things vanished in the derivation:</p>
+<ul>
+<li>Translation disappeared because direction classes have <span class="math inline">\(W = 0\)</span></li>
+<li>Rotation disappeared because <span class="math inline">\(RR^\top = I\)</span></li>
+</ul>
+<p>What remains is <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>, which depends only on <span class="math inline">\(K\)</span>, the intrinsic matrix. Not on its orientation, where it’s pointing or where it’s placed.</p>
+<p>And now the orthogonality condition from earlier finally makes sense. Perpendicular world directions <span class="math inline">\(\mathbf{d}_1 \perp \mathbf{d}_2\)</span> imply <span class="math inline">\(\mathbf{v}_1^\top\omega\mathbf{v}_2 = 0\)</span> for their vanishing points. Not an algebraic coincidence — <span class="math inline">\(\omega\)</span> carries the Euclidean inner product from the world into the image. The absolute conic is the vehicle. The camera is what drives it there.</p>
+<p>Note that the IAC has no real image points — for any nonzero real <span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\((K^{-1}\mathbf{x})^\top(K^{-1}\mathbf{x}) &gt; 0\)</span>, so <span class="math inline">\(\mathbf{x}^\top\omega\mathbf{x} = 0\)</span> has no real solutions. The IAC is not a visible ellipse. Its value comes entirely from its matrix <span class="math inline">\(\omega\)</span>.</p>
+<p>So how do we estimate <span class="math inline">\(\omega\)</span>? And once we have it, how do we recover <span class="math inline">\(K\)</span>?</p>
+</section>
+<section id="estimating-omega-and-recovering-k" class="level3">
+<h3 class="anchored" data-anchor-id="estimating-omega-and-recovering-k">Estimating <span class="math inline">\(\omega\)</span> and Recovering <span class="math inline">\(K\)</span></h3>
+<p>The matrix <span class="math inline">\(\omega\)</span> is symmetric with 5 degrees of freedom (6 entries, 1 removed for scale). Each pair of perpendicular world directions whose vanishing points <span class="math inline">\(\mathbf{v}_1, \mathbf{v}_2\)</span> are known gives one linear constraint on <span class="math inline">\(\omega\)</span>:</p>
+<p><span class="math display">\[\mathbf{v}_1^\top\omega\mathbf{v}_2 = 0\]</span></p>
+<p>Expanding with <span class="math inline">\(\mathbf{v}_i = (u_i, v_i, w_i)^\top\)</span> and stacking the entries of <span class="math inline">\(\omega\)</span> into a vector <span class="math inline">\(\boldsymbol{\omega} = (\omega_{11},
+\omega_{12}, \omega_{22}, \omega_{13}, \omega_{23}, \omega_{33})^\top\)</span>, this becomes a linear equation <span class="math inline">\(\mathbf{a}^\top\boldsymbol{\omega} = 0\)</span> where:</p>
+<p><span class="math display">\[\mathbf{a}^\top = (u_1u_2,\ u_1v_2 + v_1u_2,\ v_1v_2,\ u_1w_2 +
+w_1u_2,\ v_1w_2 + w_1v_2,\ w_1w_2)\]</span></p>
+<p>Stack enough such constraints into <span class="math inline">\(A\boldsymbol{\omega} = \mathbf{0}\)</span> and solve via SVD — the same null space pattern as every other estimation problem in this series. With noisy measurements, the solution is the last right singular vector of <span class="math inline">\(A\)</span>.</p>
+<p>Five independent constraints determine <span class="math inline">\(\omega\)</span> up to scale — five perpendicular pairs of vanishing points, or equivalently, multiple views of a scene with known right angles.</p>
+<p>Once <span class="math inline">\(\omega\)</span> is estimated, we recover <span class="math inline">\(K\)</span> via <a href="https://en.wikipedia.org/wiki/Cholesky_decomposition">Cholesky factorization</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Recovering <span class="math inline">\(K\)</span> from <span class="math inline">\(\omega\)</span> via Cholesky Factorization
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We have <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>. Since <span class="math inline">\(K\)</span> is upper triangular with positive diagonal entries, <span class="math inline">\(K^{-1}\)</span> is also upper triangular with positive diagonal entries, and <span class="math inline">\(K^{-\top}\)</span> is lower triangular. Their product <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> is therefore a symmetric positive definite matrix — a product of a lower triangular matrix and its transpose.</p>
+<p>This is exactly the form that Cholesky factorization produces. Given a symmetric positive definite matrix <span class="math inline">\(\omega\)</span>, Cholesky factorization finds a unique lower triangular matrix <span class="math inline">\(L\)</span> with positive diagonal entries such that:</p>
+<p><span class="math display">\[\omega = LL^\top\]</span></p>
+<p>Comparing with <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>, we identify <span class="math inline">\(L = K^{-\top}\)</span>, so:</p>
+<p><span class="math display">\[K^{-\top} = L \qquad \Longrightarrow \qquad K = L^{-\top}\]</span></p>
+<p>Since <span class="math inline">\(\omega\)</span> is determined only up to a nonzero scale, normalize so that <span class="math inline">\(K_{33} = 1\)</span> after computing <span class="math inline">\(L^{-\top}\)</span>.</p>
+<p>The route is:</p>
+<p><span class="math display">\[\omega \xrightarrow{\text{Cholesky}} L = K^{-\top}
+\xrightarrow{\text{invert and transpose}} K\]</span></p>
+</div>
+</div>
+<p><span class="math display">\[\boxed{\text{perpendicular vanishing point pairs} \longrightarrow
+A\boldsymbol{\omega} = \mathbf{0} \longrightarrow \omega
+\xrightarrow{\text{Cholesky}} K}\]</span></p>
+</section>
+</section>
+<section id="two-routes-to-k" class="level2">
+<h2 class="anchored" data-anchor-id="two-routes-to-k">Two Routes to <span class="math inline">\(K\)</span></h2>
+<p>We now have two ways to recover the intrinsic matrix. They start from different information and use different intermediate objects, but both end at <span class="math inline">\(K\)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>DLT (Part 3)</th>
+<th>IAC (Part 5)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Input</strong></td>
+<td>Known 3D-to-2D point correspondences</td>
+<td>Vanishing points of perpendicular world directions</td>
+</tr>
+<tr class="even">
+<td><strong>Unknown</strong></td>
+<td><span class="math inline">\(P \in \mathbb{R}^{3 \times 4}\)</span></td>
+<td><span class="math inline">\(\omega \in \mathbb{R}^{3 \times 3}\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Degrees of freedom</strong></td>
+<td>11</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td><strong>Linear system</strong></td>
+<td><span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span></td>
+<td><span class="math inline">\(A\boldsymbol{\omega} = \mathbf{0}\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Solution</strong></td>
+<td>Last right singular vector of <span class="math inline">\(A\)</span>, reshaped to <span class="math inline">\(3 \times 4\)</span></td>
+<td>Last right singular vector of <span class="math inline">\(A\)</span>, reshaped to <span class="math inline">\(3 \times 3\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Factorization</strong></td>
+<td><span class="math inline">\(M = KR\)</span> via RQ decomposition</td>
+<td><span class="math inline">\(\omega = LL^\top\)</span> via Cholesky</td>
+</tr>
+<tr class="odd">
+<td><strong>Output</strong></td>
+<td><span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span></td>
+<td><span class="math inline">\(K\)</span> only</td>
+</tr>
+</tbody>
+</table>
+<p>These are not two implementations of the same procedure. They ask fundamentally different questions.</p>
+<p>DLT asks: where did known 3D points project? It needs a calibration object — something with known 3D geometry. It estimates the full camera matrix <span class="math inline">\(P\)</span> and then separates its parts.</p>
+<p>The IAC route asks: what happened to known Euclidean relationships between world directions? It needs right angles — a rectangular room, a building facade, any scene with perpendicular edges. It bypasses translation and rotation entirely and goes straight to <span class="math inline">\(K\)</span>.</p>
+<p>DLT gives you everything: <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span>. The IAC route gives you only <span class="math inline">\(K\)</span> — but it does so from a single image of an ordinary scene, with no calibration object and no knowledge of 3D point coordinates.</p>
+</section>
+<section id="what-the-absolute-conic-bought-us" class="level2">
+<h2 class="anchored" data-anchor-id="what-the-absolute-conic-bought-us">What the Absolute Conic Bought Us</h2>
+<p>We started this post by asking why we needed <span class="math inline">\(\mathbb{P}^3\)</span> at all. Here is the answer.</p>
+<p>In Part 3, the camera matrix was a <span class="math inline">\(3 \times 4\)</span> matrix acting on <span class="math inline">\(\mathbb{R}^4\)</span>. It worked for computation — estimate <span class="math inline">\(P\)</span>, decompose into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span>, done. In Part 4, we understood vanishing points and <span class="math inline">\(\ell_\infty\)</span> in the image plane. But the 3D world itself had no equivalent language. We needed <span class="math inline">\(\mathbb{P}^3\)</span>.</p>
+<p><span class="math inline">\(\mathbb{P}^3\)</span> gives directions a precise home. The plane at infinity <span class="math inline">\(\pi_\infty \subset \mathbb{P}^3\)</span> collects all direction classes <span class="math inline">\([(\mathbf{d}, 0)^\top]\)</span> — one for each direction in <span class="math inline">\(\mathbb{R}^3\)</span>. Parallel lines meet on <span class="math inline">\(\pi_\infty\)</span>. Parallel planes intersect in a line on <span class="math inline">\(\pi_\infty\)</span>. The camera maps <span class="math inline">\(\pi_\infty\)</span> to the image plane, turning direction classes into vanishing points.</p>
+<p>And on <span class="math inline">\(\pi_\infty\)</span> lives the absolute conic <span class="math inline">\(\Omega_\infty\)</span> — a conic whose matrix is <span class="math inline">\(I_3\)</span>, encoding the Euclidean inner product. Invisible, with no real points, but present. The camera projects it to <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> — a real matrix, independent of pose, that encodes <span class="math inline">\(K\)</span>. Perpendicular world directions give vanishing points satisfying <span class="math inline">\(\mathbf{v}_1^\top\omega\mathbf{v}_2 = 0\)</span>, a linear system for <span class="math inline">\(\omega\)</span>, and Cholesky gives <span class="math inline">\(K\)</span>.</p>
+<p><span class="math display">\[\boxed{\text{Euclidean geometry in 3D} \longrightarrow \Omega_\infty
+\longrightarrow \omega \longrightarrow K}\]</span></p>
+<p>That is what <span class="math inline">\(\mathbb{P}^3\)</span> bought us. Not abstraction for its own sake. A language precise enough to say where directions live, what the camera does to them, and how Euclidean geometry survives the journey from the world to the image.</p>
+
+
 </section>
 
 </main> <!-- /main -->
