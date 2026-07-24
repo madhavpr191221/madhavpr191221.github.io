@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Madhav Prashanth Ramachandran">
+<meta name="dcterms.date" content="2026-07-24">
+<meta name="description" content="Estimating a camera’s intrinsic parameters from images of a known planar pattern.">
 
-<title>3D Computer Vision – Madhav Prashanth</title>
+<title>3D Computer Vision from First Principles — Part 6 – Madhav Prashanth</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,26 +29,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../assets/favicon.ico" rel="icon">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/favicon.ico" rel="icon">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,35 +74,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -143,7 +115,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Madhav Prashanth</span>
     </a>
   </div>
@@ -154,29 +126,29 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../world-models/index.html"> 
+    <a class="nav-link" href="../../world-models/index.html"> 
 <span class="menu-text">World Models</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../transformers/index.html"> 
+    <a class="nav-link" href="../../transformers/index.html"> 
 <span class="menu-text">Transformers &amp; Perception</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../survival-analysis/index.html"> 
+    <a class="nav-link" href="../../survival-analysis/index.html"> 
 <span class="menu-text">Survival Analysis</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../3d-vision/index.html" aria-current="page"> 
+    <a class="nav-link" href="../../3d-vision/index.html"> 
 <span class="menu-text">3D Vision</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -200,22 +172,57 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#camera-calibration" id="toc-camera-calibration" class="nav-link" data-scroll-target="#camera-calibration">Camera Calibration</a>
+  <ul class="collapse">
+  <li><a href="#what-is-the-problem" id="toc-what-is-the-problem" class="nav-link" data-scroll-target="#what-is-the-problem">What is the problem?</a></li>
+  <li><a href="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography" id="toc-wait-have-we-not-already-recovered-camera-parameters-from-a-homography" class="nav-link" data-scroll-target="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography">Wait, have we not already recovered camera parameters from a homography?</a></li>
+  <li><a href="#why-is-one-homography-not-enough" id="toc-why-is-one-homography-not-enough" class="nav-link" data-scroll-target="#why-is-one-homography-not-enough">Why is one homography not enough?</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">3D Computer Vision</h1>
-</div>
+<h1 class="title">3D Computer Vision from First Principles — Part 6</h1>
+<p class="subtitle lead">Camera Calibration</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">3d-computer-vision</div>
+    <div class="quarto-category">projective-geometry</div>
+    <div class="quarto-category">linear-algebra</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Estimating a camera’s intrinsic parameters from images of a known planar pattern.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Madhav Prashanth Ramachandran </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 24, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -225,184 +232,396 @@ window.Quarto = {
 </header>
 
 
-<p>Classical and neural 3D computer vision — learned from scratch, derived from geometry. Cameras, epipolar geometry, structure from motion, point clouds, and neural scene representations.</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In <a href="https://madhavpr191221.github.io/3d-vision/projective_three_space/">Part 5</a>, we introduced the image of the absolute conic,</p>
+<p><span class="math display">\[
+\omega = K^{-\top}K^{-1},
+\]</span></p>
+<p>and saw that once <span class="math inline">\(\omega\)</span> is known, the intrinsic matrix <span class="math inline">\(K\)</span> can be recovered, for example through a Cholesky factorization.</p>
+<p>But one question remained - How do we estimate <span class="math inline">\(\omega\)</span> from actual images?</p>
+<p>This is the <strong>camera calibration problem</strong>.</p>
+<p>The basic idea is simple. We photograph a flat pattern whose geometry is already known, observe how the camera distorts that pattern, and use those measurements to infer the unknown entries of <span class="math inline">\(K\)</span>.</p>
+<p>Because the pattern is planar, each image of it is related to the physical plane by a homography. The rest of the post is about how those homographies encode the Euclidean constraints needed to recover the camera intrinsics.</p>
+</section>
+<section id="camera-calibration" class="level2">
+<h2 class="anchored" data-anchor-id="camera-calibration">Camera Calibration</h2>
+<section id="what-is-the-problem" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-problem">What is the problem?</h3>
+<p>A pinhole camera maps a world point to an image point through</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}
+=
+K
+\begin{bmatrix}
+R &amp; \mathbf t
+\end{bmatrix}
+\widetilde{\mathbf X},
+\]</span></p>
+<p>followed by the perspective division</p>
+<p><span class="math display">\[
+\mathbf x
+=
+\phi\left(\widetilde{\mathbf x}\right).
+\]</span></p>
+<p>The intrinsic matrix</p>
+<p><span class="math display">\[
+K
+=
+\begin{pmatrix}
+f_x &amp; s &amp; p_x \\
+0 &amp; f_y &amp; p_y \\
+0 &amp; 0 &amp; 1
+\end{pmatrix}
+\]</span></p>
+<p>contains the internal parameters of the camera:</p>
+<ul>
+<li>the horizontal and vertical focal lengths <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span>,</li>
+<li>the skew <span class="math inline">\(s\)</span>,</li>
+<li>the principal point <span class="math inline">\((p_x,p_y)\)</span>.</li>
+</ul>
+<p>The rotation matrix <span class="math inline">\(R\)</span> and the translation vector <span class="math inline">\(\mathbf t\)</span> describe the pose of the camera relative to the scene. These may change from one image to another. The intrinsic matrix <span class="math inline">\(K\)</span>, however, remains fixed as long as the internal camera settings remain unchanged.</p>
+<p>The camera calibration problem is therefore:</p>
+<blockquote class="blockquote">
+<p>Given image measurements of points whose geometry is known, estimate the intrinsic matrix <span class="math inline">\(K\)</span>.</p>
+</blockquote>
+<p>For now, we focus only on the ideal pinhole camera. Lens distortion will be introduced later.</p>
+<p>Suppose the known points lie on a plane. We choose the world coordinate system so that this plane is</p>
+<p><span class="math display">\[
+Z=0.
+\]</span></p>
+<p>A point on the plane therefore has coordinates</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}
+=
+\begin{pmatrix}
+X\\
+Y\\
+0\\
+1
+\end{pmatrix}.
+\]</span></p>
+<p>Write the rotation matrix as</p>
+<p><span class="math display">\[
+R
+=
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf r_3
+\end{bmatrix}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}
+=
+K
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf r_3 &amp; \mathbf t
+\end{bmatrix}
+\begin{pmatrix}
+X\\
+Y\\
+0\\
+1
+\end{pmatrix}.
+\]</span></p>
+<p>Because the third world coordinate is zero, the term involving <span class="math inline">\(\mathbf r_3\)</span> disappears:</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}
+=
+K
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}
+\begin{pmatrix}
+X\\
+Y\\
+1
+\end{pmatrix}.
+\]</span></p>
+<p>Define</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}_{\pi}
+=
+\begin{pmatrix}
+X\\
+Y\\
+1
+\end{pmatrix}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}
+=
+H\widetilde{\mathbf X}_{\pi},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+H
+=
+K
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}.
+\]</span></p>
+<p>After applying the map <span class="math inline">\(\phi\)</span>, we obtain the Euclidean image point:</p>
+<p><span class="math display">\[
+\mathbf x
+=
+\phi\left(H\widetilde{\mathbf X}_{\pi}\right).
+\]</span></p>
+<p>Thus every image of the known plane gives us a homography.</p>
+<p>The calibration problem has now changed form:</p>
+<blockquote class="blockquote">
+<p>Estimate one or more homographies from image correspondences, and use them to recover the intrinsic matrix <span class="math inline">\(K\)</span>.</p>
+</blockquote>
+</section>
+<section id="wait-have-we-not-already-recovered-camera-parameters-from-a-homography" class="level3">
+<h3 class="anchored" data-anchor-id="wait-have-we-not-already-recovered-camera-parameters-from-a-homography">Wait, have we not already recovered camera parameters from a homography?</h3>
+<p>Earlier, when studying the full camera matrix, we estimated</p>
+<p><span class="math display">\[
+\widehat P
+=
+\begin{bmatrix}
+\widehat M &amp; \widehat{\mathbf p}_4
+\end{bmatrix},
+\]</span></p>
+<p>where the left <span class="math inline">\(3\times 3\)</span> block satisfies</p>
+<p><span class="math display">\[
+M=KR.
+\]</span></p>
+<p>This factorization has a useful structure:</p>
+<ul>
+<li><span class="math inline">\(K\)</span> is upper triangular,</li>
+<li><span class="math inline">\(R\)</span> is orthogonal.</li>
+</ul>
+<p>This allows us to recover <span class="math inline">\(K\)</span> and <span class="math inline">\(R\)</span> from the full camera matrix using an RQ-type factorization, followed by the appropriate scale and sign corrections.</p>
+<p>A planar homography is also a <span class="math inline">\(3\times 3\)</span> matrix, but its structure is different:</p>
+<p><span class="math display">\[
+H
+=
+K
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}.
+\]</span></p>
+<p>The matrix</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}
+\]</span></p>
+<p>is not a rotation matrix. Its first two columns are rotation columns, but its third column is the translation vector.</p>
+<p>In general,</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}^{\top}
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}
+\neq I.
+\]</span></p>
+<p>Therefore, we cannot simply decompose <span class="math inline">\(H\)</span> into an upper-triangular matrix and an orthogonal matrix and interpret the factors as <span class="math inline">\(K\)</span> and <span class="math inline">\(R\)</span>.</p>
+<p>The useful information inside <span class="math inline">\(H\)</span> comes from the fact that <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are columns of a rotation matrix. Hence,</p>
+<p><span class="math display">\[
+\mathbf r_1^{\top}\mathbf r_2=0,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\|\mathbf r_1\|_2
+=
+\|\mathbf r_2\|_2
+=
+1.
+\]</span></p>
+<p>These Euclidean constraints allow the homography to tell us something about <span class="math inline">\(K\)</span>.</p>
+</section>
+<section id="why-is-one-homography-not-enough" class="level3">
+<h3 class="anchored" data-anchor-id="why-is-one-homography-not-enough">Why is one homography not enough?</h3>
+<p>Suppose a homography has been estimated from point correspondences:</p>
+<p><span class="math display">\[
+\widehat H
+=
+\begin{bmatrix}
+\widehat{\mathbf h}_1 &amp;
+\widehat{\mathbf h}_2 &amp;
+\widehat{\mathbf h}_3
+\end{bmatrix}.
+\]</span></p>
+<p>The point correspondences determine the homography only up to a common nonzero multiplier.</p>
+<p>If <span class="math inline">\(\widehat H\)</span> produces the correct image points, then so does</p>
+<p><span class="math display">\[
+c\widehat H,
+\qquad c\neq 0,
+\]</span></p>
+<p>because</p>
+<p><span class="math display">\[
+\phi\left(c\widehat H\widetilde{\mathbf X}_{\pi}\right)
+=
+\phi\left(\widehat H\widetilde{\mathbf X}_{\pi}\right).
+\]</span></p>
+<p>Therefore, the estimated matrix is related to</p>
+<p><span class="math display">\[
+H
+=
+K
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}
+\]</span></p>
+<p>by some unknown nonzero scalar <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+\widehat H
+=
+cK
+\begin{bmatrix}
+\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
+\end{bmatrix}.
+\]</span></p>
+<p>Looking at the first two columns,</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1
+=
+cK\mathbf r_1,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_2
+=
+cK\mathbf r_2.
+\]</span></p>
+<p>Multiplying by <span class="math inline">\(K^{-1}\)</span> gives</p>
+<p><span class="math display">\[
+K^{-1}\widehat{\mathbf h}_1
+=
+c\mathbf r_1,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+K^{-1}\widehat{\mathbf h}_2
+=
+c\mathbf r_2.
+\]</span></p>
+<p>The vectors on the left are therefore equally scaled versions of two orthonormal rotation columns.</p>
+<p>Because <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are orthogonal,</p>
+<p><span class="math display">\[
+\left(K^{-1}\widehat{\mathbf h}_1\right)^{\top}
+\left(K^{-1}\widehat{\mathbf h}_2\right)
+=
+0.
+\]</span></p>
+<p>Expanding,</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+K^{-\top}K^{-1}
+\widehat{\mathbf h}_2
+=
+0.
+\]</span></p>
+<p>Using</p>
+<p><span class="math display">\[
+\omega
+=
+K^{-\top}K^{-1},
+\]</span></p>
+<p>we obtain</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+\omega
+\widehat{\mathbf h}_2
+=
+0.
+\]</span></p>
+<p>This is exactly why we developed the absolute conic and its image: they turn the Euclidean structure hidden inside the camera into algebraic constraints on the unknown intrinsics.</p>
+<p>This is the first constraint supplied by the homography.</p>
+<p>Next, since <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are both unit vectors,</p>
+<p><span class="math display">\[
+\|c\mathbf r_1\|_2^2
+=
+\|c\mathbf r_2\|_2^2.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\left\|K^{-1}\widehat{\mathbf h}_1\right\|_2^2
+=
+\left\|K^{-1}\widehat{\mathbf h}_2\right\|_2^2.
+\]</span></p>
+<p>Expanding again,</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+K^{-\top}K^{-1}
+\widehat{\mathbf h}_1
+=
+\widehat{\mathbf h}_2^{\top}
+K^{-\top}K^{-1}
+\widehat{\mathbf h}_2.
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+\omega
+\widehat{\mathbf h}_1
+-
+\widehat{\mathbf h}_2^{\top}
+\omega
+\widehat{\mathbf h}_2
+=
+0.
+\]</span></p>
+<p>This is the second constraint.</p>
+<p>Thus one homography gives two equations involving <span class="math inline">\(\omega\)</span>:</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+\omega
+\widehat{\mathbf h}_2
+=
+0,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_1^{\top}
+\omega
+\widehat{\mathbf h}_1
+-
+\widehat{\mathbf h}_2^{\top}
+\omega
+\widehat{\mathbf h}_2
+=
+0.
+\]</span></p>
+<p>Now recall that <span class="math inline">\(\omega\)</span> is symmetric:</p>
+<p><span class="math display">\[
+\omega
+=
+\begin{pmatrix}
+\omega_{11} &amp; \omega_{12} &amp; \omega_{13}\\
+\omega_{12} &amp; \omega_{22} &amp; \omega_{23}\\
+\omega_{13} &amp; \omega_{23} &amp; \omega_{33}
+\end{pmatrix}.
+\]</span></p>
+<p>It has six entries. However, the equations used to estimate it are homogeneous, so <span class="math inline">\(\omega\)</span> can initially be recovered only up to a common nonzero scale. It therefore has five independent degrees of freedom.</p>
+<p>One homography provides only two constraints.</p>
+<p>Therefore, a single planar image does not contain enough information to recover a completely general intrinsic matrix.</p>
+<p>A second image of the same plane, viewed from a different pose, produces another homography and two more constraints. A third sufficiently different view produces two more.</p>
+<p>The intrinsic matrix <span class="math inline">\(K\)</span> remains the same across all views, while the rotation and translation change:</p>
+<p><span class="math display">\[
+H_i
+=
+K
+\begin{bmatrix}
+\mathbf r_{1i} &amp;
+\mathbf r_{2i} &amp;
+\mathbf t_i
+\end{bmatrix}.
+\]</span></p>
+<p>Each new homography contributes two equations involving the same matrix <span class="math inline">\(\omega\)</span>.</p>
+<p>This is the central idea of planar camera calibration.</p>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="M2QtdmlzaW9uJTJDcHJvamVjdGl2ZS1nZW9tZXRyeSUyQ2xpbmVhci1hbGdlYnJh" data-listing-date-sort="1783362600000" data-listing-file-modified-sort="1784006504971" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="25" data-listing-word-count-sort="4879">
-<div class="thumbnail"><a href="../3d-vision/homogeneous-coordinates/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="homogeneous-coordinates\images\me_in_2d_vs_3d.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/homogeneous-coordinates/index.html" class="no-external">3D computer vision from first principles — Part 1</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/homogeneous-coordinates/index.html" class="no-external">Homogeneous coordinates and the projective plane derived via Gaussian elimination</a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/homogeneous-coordinates/index.html" class="no-external">
-<p>Homogeneous coordinates and the projective plane derived from Gaussian elimination — no prior projective geometry assumed.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/homogeneous-coordinates/index.html" class="no-external">
-<div class="listing-date">
-Jul 7, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="M2QtdmlzaW9uJTJDcHJvamVjdGl2ZS1nZW9tZXRyeSUyQ2xpbmVhci1hbGdlYnJh" data-listing-date-sort="1783881000000" data-listing-file-modified-sort="1784553483781" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="40" data-listing-word-count-sort="7866">
-<div class="thumbnail"><a href="../3d-vision/conics/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="conics\images\point_line_duality.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/conics/index.html" class="no-external">3D Computer Vision from First Principles — Part 2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/conics/index.html" class="no-external">Projective Duality and Conics in <span class="math inline">\(\mathbb{P}^2\)</span></a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/conics/index.html" class="no-external">
-<p>Projective duality derived from the symmetry of the incidence condition, and an introduction to conics in the projective plane.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/conics/index.html" class="no-external">
-<div class="listing-date">
-Jul 13, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="M2QtdmlzaW9uJTJDbGluZWFyLWFsZ2VicmE=" data-listing-date-sort="1784053800000" data-listing-file-modified-sort="1784422949391" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="52" data-listing-word-count-sort="10396">
-<div class="thumbnail"><a href="../3d-vision/camera_matrix/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="camera_matrix\images\pinhole_real_vs_cv_camera.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/camera_matrix/index.html" class="no-external">3D Computer Vision from First Principles — Part 3</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/camera_matrix/index.html" class="no-external">The Camera Matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span></a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/camera_matrix/index.html" class="no-external">
-<p>Deriving the camera matrix from similar triangles to <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, stage by stage from first principles.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/camera_matrix/index.html" class="no-external">
-<div class="listing-date">
-Jul 15, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="M2QtdmlzaW9uJTJDcHJvamVjdGl2ZS1nZW9tZXRyeSUyQ2xpbmVhci1hbGdlYnJh" data-listing-date-sort="1784485800000" data-listing-file-modified-sort="1784554991681" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="55" data-listing-word-count-sort="10977">
-<div class="thumbnail"><a href="../3d-vision/homography/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="homography\images\homography_motivation.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/homography/index.html" class="no-external">3D Computer Vision from First Principles — Part 4</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/homography/index.html" class="no-external">Homographies</a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/homography/index.html" class="no-external">
-<p>Homographies derived from the camera matrix restricted to a plane — what they preserve, how to estimate them, and why they are everywhere in computer vision.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/homography/index.html" class="no-external">
-<div class="listing-date">
-Jul 20, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="M2QtdmlzaW9uJTJDcHJvamVjdGl2ZS1nZW9tZXRyeSUyQ2xpbmVhci1hbGdlYnJh" data-listing-date-sort="1784572200000" data-listing-file-modified-sort="1784875061899" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="44" data-listing-word-count-sort="8776">
-<div class="thumbnail"><a href="../3d-vision/projective_three_space/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="projective_three_space\images\projective_completion_of_lines_and_planes.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/projective_three_space/index.html" class="no-external">3D Computer Vision from First Principles — Part 5</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/projective_three_space/index.html" class="no-external">Projective Three-Space <span class="math inline">\(\mathbb{P}^3\)</span></a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/projective_three_space/index.html" class="no-external">
-<p>Points, lines, planes, and incidence in projective three-space — derived from linear algebra, no prior projective geometry assumed.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/projective_three_space/index.html" class="no-external">
-<div class="listing-date">
-Jul 21, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="M2QtY29tcHV0ZXItdmlzaW9uJTJDcHJvamVjdGl2ZS1nZW9tZXRyeSUyQ2xpbmVhci1hbGdlYnJh" data-listing-date-sort="1784831400000" data-listing-file-modified-sort="1784894762150" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="899">
-<div class="thumbnail"><a href="../3d-vision/camera_calibration/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../3d-vision/camera_calibration/index.html" class="no-external">3D Computer Vision from First Principles — Part 6</a>
-</h3>
-<div class="listing-subtitle">
-<a href="../3d-vision/camera_calibration/index.html" class="no-external">Camera Calibration</a>
-</div>
-<div class="delink listing-description"><a href="../3d-vision/camera_calibration/index.html" class="no-external">
-<p>Estimating a camera’s intrinsic parameters from images of a known planar pattern.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../3d-vision/camera_calibration/index.html" class="no-external">
-<div class="listing-date">
-Jul 24, 2026
-</div>
-<div class="listing-author">
-Madhav Prashanth Ramachandran
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
