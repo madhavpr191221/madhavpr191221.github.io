@@ -252,6 +252,11 @@ window.Quarto = {
   </ul></li>
   <li><a href="#two-routes-to-k" id="toc-two-routes-to-k" class="nav-link" data-scroll-target="#two-routes-to-k">Two Routes to <span class="math inline">\(K\)</span></a></li>
   <li><a href="#what-the-absolute-conic-bought-us" id="toc-what-the-absolute-conic-bought-us" class="nav-link" data-scroll-target="#what-the-absolute-conic-bought-us">What the Absolute Conic Bought Us</a></li>
+  <li><a href="#conclusion-and-next-steps" id="toc-conclusion-and-next-steps" class="nav-link" data-scroll-target="#conclusion-and-next-steps">Conclusion and Next Steps</a>
+  <ul class="collapse">
+  <li><a href="#looking-back-at-the-part-4-teaser" id="toc-looking-back-at-the-part-4-teaser" class="nav-link" data-scroll-target="#looking-back-at-the-part-4-teaser">Looking Back at the Part 4 Teaser</a></li>
+  <li><a href="#whats-next-zhangs-method" id="toc-whats-next-zhangs-method" class="nav-link" data-scroll-target="#whats-next-zhangs-method">What’s Next: Zhang’s Method</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -1125,8 +1130,41 @@ A\boldsymbol{\omega} = \mathbf{0} \longrightarrow \omega
 <p><span class="math display">\[\boxed{\text{Euclidean geometry in 3D} \longrightarrow \Omega_\infty
 \longrightarrow \omega \longrightarrow K}\]</span></p>
 <p>That is what <span class="math inline">\(\mathbb{P}^3\)</span> bought us. Not abstraction for its own sake. A language precise enough to say where directions live, what the camera does to them, and how Euclidean geometry survives the journey from the world to the image.</p>
+</section>
+<section id="conclusion-and-next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-and-next-steps">Conclusion and Next Steps</h2>
+<section id="looking-back-at-the-part-4-teaser" class="level3">
+<h3 class="anchored" data-anchor-id="looking-back-at-the-part-4-teaser">Looking Back at the Part 4 Teaser</h3>
+<p>At the end of Part 4, I included an image labeled “a preview of <span class="math inline">\(\mathbb{P}^3\)</span>” without being able to explain it properly. Now we can.</p>
+<p>The image showed a 3D box representing <span class="math inline">\(\mathbb{P}^3\)</span>, with an ordinary plane <span class="math inline">\(\pi\)</span> inside it, a special plane <span class="math inline">\(\pi_\infty\)</span> at the bottom, a camera centre <span class="math inline">\(O\)</span>, and an image plane <span class="math inline">\(\mathbb{P}^2\)</span> below. Points <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span> on <span class="math inline">\(\pi\)</span> had corresponding direction classes <span class="math inline">\(A_\infty\)</span>, <span class="math inline">\(B_\infty\)</span>, <span class="math inline">\(C_\infty\)</span> on <span class="math inline">\(\pi_\infty\)</span>, and images <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span> on <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/p3_teaser.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Everything we built in this post, in one picture. The world lives in <span class="math inline">\(\mathbb{P}^3\)</span> — ordinary points like <span class="math inline">\(X\)</span> have <span class="math inline">\(W \neq 0\)</span>, while direction classes <span class="math inline">\(A_\infty\)</span>, <span class="math inline">\(B_\infty\)</span>, <span class="math inline">\(C_\infty\)</span> live on <span class="math inline">\(\pi_\infty\)</span> where <span class="math inline">\(W = 0\)</span>. The camera centre <span class="math inline">\(O\)</span> projects world points through rays onto the image plane <span class="math inline">\(\mathbb{P}^2\)</span>, giving image points <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>. The plane <span class="math inline">\(\pi\)</span> is an ordinary affine plane in the world with points <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span> on it — when <span class="math inline">\(\pi\)</span> is the world plane <span class="math inline">\(Z = 0\)</span>, the camera restricted to <span class="math inline">\(\pi\)</span> is a homography, exactly as in Part 4. The direction classes on <span class="math inline">\(\pi_\infty\)</span> are what the camera turns into vanishing points. And living invisibly on <span class="math inline">\(\pi_\infty\)</span>, not shown because it has no real points, is the absolute conic <span class="math inline">\(\Omega_\infty\)</span> — the object that encodes Euclidean geometry and whose image under <span class="math inline">\(P\)</span> is <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>.</figcaption>
+</figure>
+</div>
+<p>We can now read every element of that image:</p>
+<ul>
+<li><span class="math inline">\(X \in \mathbb{P}^3\)</span> is an ordinary world point, <span class="math inline">\(W \neq 0\)</span></li>
+<li><span class="math inline">\(\pi\)</span> is an affine plane in the world, one linear equation <span class="math inline">\(\tilde{\mathbf{X}}^\top\mathbf{v}_\perp = 0\)</span></li>
+<li><span class="math inline">\(\pi_\infty\)</span> is the plane <span class="math inline">\(W = 0\)</span>, holding all direction classes</li>
+<li><span class="math inline">\(A_\infty, B_\infty, C_\infty\)</span> are the direction classes of the lines <span class="math inline">\(OA\)</span>, <span class="math inline">\(OB\)</span>, <span class="math inline">\(OC\)</span> — where those lines go as they extend to infinity</li>
+<li><span class="math inline">\(O\)</span> is the camera centre, through which all rays pass</li>
+<li><span class="math inline">\(a, b, c\)</span> are the images of <span class="math inline">\(A, B, C\)</span> under <span class="math inline">\(P : \mathbb{P}^3 \to
+\mathbb{P}^2\)</span></li>
+<li>The absolute conic <span class="math inline">\(\Omega_\infty\)</span> lives on <span class="math inline">\(\pi_\infty\)</span> but is not shown — it has no real points and cannot be drawn</li>
+</ul>
+<p>The one thing missing from that image is <span class="math inline">\(\Omega_\infty\)</span>. That is deliberate. It is invisible. It is always there, on <span class="math inline">\(\pi_\infty\)</span>, encoding the Euclidean geometry of the world. The camera maps it to <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> in the image plane. And <span class="math inline">\(\omega\)</span> gives us <span class="math inline">\(K\)</span>.</p>
+</section>
+<section id="whats-next-zhangs-method" class="level3">
+<h3 class="anchored" data-anchor-id="whats-next-zhangs-method">What’s Next: Zhang’s Method</h3>
+<p>In Part 6, we will derive <strong>Zhang’s method</strong> — the algorithm behind OpenCV’s <code>calibrateCamera</code>. Instead of vanishing points, Zhang’s method uses multiple photographs of a known planar pattern (a checkerboard) taken from different orientations. Each photograph gives one homography <span class="math inline">\(H^{(i)} = K[\mathbf{r}_1^{(i)}\ \mathbf{r}_2^{(i)}\ \mathbf{t}^{(i)}]\)</span>, and the columns of each homography impose constraints on <span class="math inline">\(\omega\)</span> through the orthogonality of the rotation columns. Collect enough homographies and you have enough constraints to recover <span class="math inline">\(\omega\)</span>, and hence <span class="math inline">\(K\)</span>.</p>
+<p>The machinery is the same as what we built here. The inputs are different. The destination is the same:</p>
+<p><span class="math display">\[\boxed{\text{multiple views of a known plane} \longrightarrow
+\{H^{(i)}\} \longrightarrow \omega \longrightarrow K}\]</span></p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
