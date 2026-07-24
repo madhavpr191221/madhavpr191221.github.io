@@ -497,7 +497,7 @@ t\mathbf{q} \\ 1 \end{pmatrix}\right] : t \in \mathbb{R}\right\} \sqcup
 \mathbb{R}^{3 \times 4}\]</span></p>
 <p>Since the three lifted vectors are linearly independent, <span class="math inline">\(\text{rank}(A_\text{pts}) = 3\)</span>, and by rank-nullity:</p>
 <p><span class="math display">\[\dim\mathcal{N}(A_\text{pts}) = 4 - 3 = 1\]</span></p>
-<p>Choose a nonzero <span class="math inline">\(\mathbf{v}_\perp \in \mathcal{N}(A_\text{pts})\)</span>. The variable name $_is intentional.<br>
+<p>Choose a nonzero <span class="math inline">\(\mathbf{v}_\perp \in \mathcal{N}(A_\text{pts})\)</span>. The subscript <span class="math inline">\(\perp\)</span> is intentional.<br>
 Then <span class="math inline">\(\mathbf{v}_\perp\)</span> is orthogonal to all three spanning vectors of <span class="math inline">\(V\)</span>, so <span class="math inline">\(\mathbf{v}_\perp \in V^\perp\)</span>. Since <span class="math inline">\(\dim V = 3\)</span>, we have <span class="math inline">\(\dim
 V^\perp = 1\)</span>, confirming <span class="math inline">\(V^\perp = \text{span}\{\mathbf{v}_\perp\}\)</span>.</p>
 <p>For any <span class="math inline">\(\tilde{\mathbf{x}} \in V\)</span>:</p>
@@ -1176,7 +1176,7 @@ A\boldsymbol{\omega} = \mathbf{0} \longrightarrow \omega
 <tr class="odd">
 <td><strong>Solution</strong></td>
 <td>Last right singular vector of <span class="math inline">\(A\)</span>, reshaped to <span class="math inline">\(3 \times 4\)</span></td>
-<td>Last right singular vector of <span class="math inline">\(A\)</span>, unpacked into the <span class="math inline">\(3 \times 3\)</span> matrix $</td>
+<td>Last right singular vector of <span class="math inline">\(A\)</span>, unpacked into the <span class="math inline">\(3 \times 3\)</span> matrix <span class="math inline">\(\omega\)</span></td>
 </tr>
 <tr class="even">
 <td><strong>Factorization</strong></td>
@@ -1193,7 +1193,7 @@ A\boldsymbol{\omega} = \mathbf{0} \longrightarrow \omega
 <p>These are not two implementations of the same procedure. They ask fundamentally different questions.</p>
 <p>DLT asks: where did known 3D points project? It needs a calibration object — something with known 3D geometry. It estimates the full camera matrix <span class="math inline">\(P\)</span> and then separates its parts.</p>
 <p>The IAC route asks: what happened to known Euclidean relationships between world directions? It needs right angles — a rectangular room, a building facade, any scene with perpendicular edges. It bypasses translation and rotation entirely and goes straight to <span class="math inline">\(K\)</span>.</p>
-<p>DLT gives you everything: <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span>. The IAC route gives you only <span class="math inline">\(K\)</span> — but it does so from a single image of an ordinary scene, with no calibration object and no knowledge of 3D point coordinates.</p>
+<p>DLT gives you everything: <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span>. The IAC route gives you only <span class="math inline">\(K\)</span> from <span class="math inline">\(\omega\)</span>.</p>
 </section>
 <section id="what-the-absolute-conic-bought-us" class="level2">
 <h2 class="anchored" data-anchor-id="what-the-absolute-conic-bought-us">What the Absolute Conic Bought Us</h2>
