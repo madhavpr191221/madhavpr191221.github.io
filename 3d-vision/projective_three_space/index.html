@@ -256,7 +256,7 @@ window.Quarto = {
   <li><a href="#conclusion-and-next-steps" id="toc-conclusion-and-next-steps" class="nav-link" data-scroll-target="#conclusion-and-next-steps">Conclusion and Next Steps</a>
   <ul class="collapse">
   <li><a href="#looking-back-at-the-part-4-teaser" id="toc-looking-back-at-the-part-4-teaser" class="nav-link" data-scroll-target="#looking-back-at-the-part-4-teaser">Looking Back at the Part 4 Teaser</a></li>
-  <li><a href="#whats-next-zhangs-method" id="toc-whats-next-zhangs-method" class="nav-link" data-scroll-target="#whats-next-zhangs-method">What’s Next: Zhang’s Method</a></li>
+  <li><a href="#whats-next-camera-calibration" id="toc-whats-next-camera-calibration" class="nav-link" data-scroll-target="#whats-next-camera-calibration">What’s Next: Camera Calibration</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1230,12 +1230,43 @@ A\boldsymbol{\omega} = \mathbf{0} \longrightarrow \omega
 </ul>
 <p>The one thing missing from that image is <span class="math inline">\(\Omega_\infty\)</span>. That is deliberate. It is invisible. It is always there, on <span class="math inline">\(\pi_\infty\)</span>, encoding the Euclidean geometry of the world. The camera maps it to <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> in the image plane. And <span class="math inline">\(\omega\)</span> gives us <span class="math inline">\(K\)</span>.</p>
 </section>
-<section id="whats-next-zhangs-method" class="level3">
-<h3 class="anchored" data-anchor-id="whats-next-zhangs-method">What’s Next: Zhang’s Method</h3>
-<p>In Part 6, we will derive <strong>Zhang’s method</strong> — the algorithm behind OpenCV’s <code>calibrateCamera</code>. Instead of vanishing points, Zhang’s method uses multiple photographs of a known planar pattern (a checkerboard) taken from different orientations. Each photograph gives one homography <span class="math inline">\(H^{(i)} = K[\mathbf{r}_1^{(i)}\ \mathbf{r}_2^{(i)}\ \mathbf{t}^{(i)}]\)</span>, and the columns of each homography impose constraints on <span class="math inline">\(\omega\)</span> through the orthogonality of the rotation columns. Collect enough homographies and you have enough constraints to recover <span class="math inline">\(\omega\)</span>, and hence <span class="math inline">\(K\)</span>.</p>
-<p>The machinery is the same as what we built here. The inputs are different. The destination is the same:</p>
-<p><span class="math display">\[\boxed{\text{multiple views of a known plane} \longrightarrow
-\{H^{(i)}\} \longrightarrow \omega \longrightarrow K}\]</span></p>
+<section id="whats-next-camera-calibration" class="level3">
+<h3 class="anchored" data-anchor-id="whats-next-camera-calibration">What’s Next: Camera Calibration</h3>
+<p>Camera calibration is the process of estimating the intrinsic matrix <span class="math inline">\(K\)</span>.</p>
+<p>In Part 6, we will turn the geometry developed here into a practical calibration method. The image of the absolute conic satisfies</p>
+<p><span class="math display">\[
+\omega = K^{-\top}K^{-1},
+\]</span></p>
+<p>but <span class="math inline">\(\omega\)</span> is not directly visible in a photograph. We therefore need real geometric constraints that allow us to estimate it.</p>
+<p>Using several images of a planar checkerboard, each view gives a homography</p>
+<p><span class="math display">\[
+H_i.
+\]</span></p>
+<p>The columns of each homography inherit the orthogonality and equal-length constraints of the camera rotation matrix. These become linear equations in <span class="math inline">\(\omega\)</span>.</p>
+<p>By stacking enough views, we can estimate <span class="math inline">\(\omega\)</span>, recover the intrinsic matrix <span class="math inline">\(K\)</span>, and then recover the pose of the checkerboard in each image.</p>
+<p>So the next part will follow the chain</p>
+<p><span class="math display">\[
+\boxed{
+\text{checkerboard images}
+\longrightarrow
+H_i
+\longrightarrow
+\omega
+\longrightarrow
+K
+\longrightarrow
+R_i,\mathbf t_i
+}
+\]</span></p>
+<p>This is the geometric core of Zhang’s camera calibration method.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/camera_calibration_teaser.png" class="img-fluid figure-img"></p>
+<figcaption>A teaser for the next step in the series: camera calibration. A planar checkerboard, a camera, and the image of the absolute conic hint at how pixel coordinates can be turned into geometric measurements.</figcaption>
+</figure>
+</div>
+<p>Once the camera is calibrated, we can turn pixels into camera rays, estimate pose, triangulate points, recover depth, rectify stereo images, and begin reconstructing the 3-D geometry of a scene.</p>
+<p>Stay tuned.</p>
 
 
 </section>
