@@ -474,6 +474,7 @@ t\mathbf{q} \\ 1 \end{pmatrix}\right] : t \in \mathbb{R}\right\} \sqcup
 </section>
 <section id="planes-in-mathbbp3" class="level2">
 <h2 class="anchored" data-anchor-id="planes-in-mathbbp3">Planes in <span class="math inline">\(\mathbb{P}^3\)</span></h2>
+<p>Our discussion of planes in <span class="math inline">\(\mathbb{P}^3\)</span> will almost mirror lines and hence, I won’t spend a lot of time deriving everything from scratch.</p>
 <p>Take three non-collinear ordinary points <span class="math inline">\(\mathbf{p}, \mathbf{q},
 \mathbf{r} \in \mathbb{R}^3\)</span> and lift them. Define:</p>
 <p><span class="math display">\[V = \text{span}\{\tilde{\mathbf{P}}, \tilde{\mathbf{Q}},
@@ -496,7 +497,8 @@ t\mathbf{q} \\ 1 \end{pmatrix}\right] : t \in \mathbb{R}\right\} \sqcup
 \mathbb{R}^{3 \times 4}\]</span></p>
 <p>Since the three lifted vectors are linearly independent, <span class="math inline">\(\text{rank}(A_\text{pts}) = 3\)</span>, and by rank-nullity:</p>
 <p><span class="math display">\[\dim\mathcal{N}(A_\text{pts}) = 4 - 3 = 1\]</span></p>
-<p>Choose a nonzero <span class="math inline">\(\mathbf{v}_\perp \in \mathcal{N}(A_\text{pts})\)</span>. Then <span class="math inline">\(\mathbf{v}_\perp\)</span> is orthogonal to all three spanning vectors of <span class="math inline">\(V\)</span>, so <span class="math inline">\(\mathbf{v}_\perp \in V^\perp\)</span>. Since <span class="math inline">\(\dim V = 3\)</span>, we have <span class="math inline">\(\dim
+<p>Choose a nonzero <span class="math inline">\(\mathbf{v}_\perp \in \mathcal{N}(A_\text{pts})\)</span>. The variable name $_is intentional.<br>
+Then <span class="math inline">\(\mathbf{v}_\perp\)</span> is orthogonal to all three spanning vectors of <span class="math inline">\(V\)</span>, so <span class="math inline">\(\mathbf{v}_\perp \in V^\perp\)</span>. Since <span class="math inline">\(\dim V = 3\)</span>, we have <span class="math inline">\(\dim
 V^\perp = 1\)</span>, confirming <span class="math inline">\(V^\perp = \text{span}\{\mathbf{v}_\perp\}\)</span>.</p>
 <p>For any <span class="math inline">\(\tilde{\mathbf{x}} \in V\)</span>:</p>
 <p><span class="math display">\[\tilde{\mathbf{x}}^\top\mathbf{v}_\perp = (\alpha\tilde{\mathbf{P}} +
