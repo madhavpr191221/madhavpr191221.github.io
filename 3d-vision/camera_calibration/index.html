@@ -184,6 +184,18 @@ window.Quarto = {
   <li><a href="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography" id="toc-wait-have-we-not-already-recovered-camera-parameters-from-a-homography" class="nav-link" data-scroll-target="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography">Wait, have we not already recovered camera parameters from a homography?</a></li>
   <li><a href="#why-is-one-homography-not-enough" id="toc-why-is-one-homography-not-enough" class="nav-link" data-scroll-target="#why-is-one-homography-not-enough">Why is one homography not enough?</a></li>
   </ul></li>
+  <li><a href="#combining-several-homographies" id="toc-combining-several-homographies" class="nav-link" data-scroll-target="#combining-several-homographies">Combining several homographies</a>
+  <ul class="collapse">
+  <li><a href="#turning-the-constraints-into-linear-equations" id="toc-turning-the-constraints-into-linear-equations" class="nav-link" data-scroll-target="#turning-the-constraints-into-linear-equations">Turning the constraints into linear equations</a></li>
+  </ul></li>
+  <li><a href="#solving-for-the-image-of-the-absolute-conic" id="toc-solving-for-the-image-of-the-absolute-conic" class="nav-link" data-scroll-target="#solving-for-the-image-of-the-absolute-conic">Solving for the image of the absolute conic</a>
+  <ul class="collapse">
+  <li><a href="#why-use-the-singular-value-decomposition" id="toc-why-use-the-singular-value-decomposition" class="nav-link" data-scroll-target="#why-use-the-singular-value-decomposition">Why use the singular value decomposition?</a></li>
+  </ul></li>
+  <li><a href="#recovering-omega" id="toc-recovering-omega" class="nav-link" data-scroll-target="#recovering-omega">Recovering <span class="math inline">\(\omega\)</span></a></li>
+  <li><a href="#recovering-the-intrinsic-matrix" id="toc-recovering-the-intrinsic-matrix" class="nav-link" data-scroll-target="#recovering-the-intrinsic-matrix">Recovering the intrinsic matrix</a></li>
+  <li><a href="#recovering-the-pose-of-each-view" id="toc-recovering-the-pose-of-each-view" class="nav-link" data-scroll-target="#recovering-the-pose-of-each-view">Recovering the pose of each view</a></li>
+  <li><a href="#linear-calibration-is-only-an-initialization" id="toc-linear-calibration-is-only-an-initialization" class="nav-link" data-scroll-target="#linear-calibration-is-only-an-initialization">Linear calibration is only an initialization</a></li>
   </ul>
 </nav>
     </div>
@@ -616,9 +628,647 @@ K
 \]</span></p>
 <p>Each new homography contributes two equations involving the same matrix <span class="math inline">\(\omega\)</span>.</p>
 <p>This is the central idea of planar camera calibration.</p>
-
-
 </section>
+</section>
+<section id="combining-several-homographies" class="level2">
+<h2 class="anchored" data-anchor-id="combining-several-homographies">Combining several homographies</h2>
+<p>Suppose we have <span class="math inline">\(m\)</span> different views of the same plane.</p>
+<p>For view <span class="math inline">\(i\)</span>, we estimate a homography</p>
+<p><span class="math display">\[
+\widehat H_i
+=
+\begin{bmatrix}
+\widehat{\mathbf h}_{1i} &amp;
+\widehat{\mathbf h}_{2i} &amp;
+\widehat{\mathbf h}_{3i}
+\end{bmatrix}.
+\]</span></p>
+<p>Each view gives the two constraints</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_{1i}^{\top}
+\omega
+\widehat{\mathbf h}_{2i}
+=
+0,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\widehat{\mathbf h}_{1i}^{\top}
+\omega
+\widehat{\mathbf h}_{1i}
+-
+\widehat{\mathbf h}_{2i}^{\top}
+\omega
+\widehat{\mathbf h}_{2i}
+=
+0.
+\]</span></p>
+<p>The rotation and translation are different for every view, but the matrix <span class="math inline">\(\omega\)</span> is the same because the intrinsic matrix <span class="math inline">\(K\)</span> remains unchanged.</p>
+<p>The next step is to write these constraints as a linear system in the unknown entries of <span class="math inline">\(\omega\)</span>.</p>
+<section id="turning-the-constraints-into-linear-equations" class="level3">
+<h3 class="anchored" data-anchor-id="turning-the-constraints-into-linear-equations">Turning the constraints into linear equations</h3>
+<p>Write</p>
+<p><span class="math display">\[
+\omega
+=
+\begin{pmatrix}
+\omega_{11} &amp; \omega_{12} &amp; \omega_{13}\\
+\omega_{12} &amp; \omega_{22} &amp; \omega_{23}\\
+\omega_{13} &amp; \omega_{23} &amp; \omega_{33}
+\end{pmatrix}.
+\]</span></p>
+<p>Collect its six independent entries into the vector</p>
+<p><span class="math display">\[
+\mathbf b
+=
+\begin{pmatrix}
+\omega_{11}\\
+\omega_{12}\\
+\omega_{22}\\
+\omega_{13}\\
+\omega_{23}\\
+\omega_{33}
+\end{pmatrix}.
+\]</span></p>
+<p>Now take two arbitrary vectors</p>
+<p><span class="math display">\[
+\mathbf a
+=
+\begin{pmatrix}
+a_1\\
+a_2\\
+a_3
+\end{pmatrix},
+\qquad
+\mathbf c
+=
+\begin{pmatrix}
+c_1\\
+c_2\\
+c_3
+\end{pmatrix}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\mathbf a^{\top}\omega\mathbf c
+\]</span></p>
+<p>expands as</p>
+<p><span class="math display">\[
+\mathbf a^{\top}\omega\mathbf c
+=
+a_1c_1\omega_{11}
++
+(a_1c_2+a_2c_1)\omega_{12}
++
+a_2c_2\omega_{22}
++
+(a_1c_3+a_3c_1)\omega_{13}
++
+(a_2c_3+a_3c_2)\omega_{23}
++
+a_3c_3\omega_{33}.
+\]</span></p>
+<p>Although this expression is quadratic in the entries of <span class="math inline">\(\mathbf a\)</span> and <span class="math inline">\(\mathbf c\)</span>, it is linear in the unknown entries of <span class="math inline">\(\omega\)</span>.</p>
+<p>Define</p>
+<p><span class="math display">\[
+\mathbf v(\mathbf a,\mathbf c)
+=
+\begin{pmatrix}
+a_1c_1\\
+a_1c_2+a_2c_1\\
+a_2c_2\\
+a_1c_3+a_3c_1\\
+a_2c_3+a_3c_2\\
+a_3c_3
+\end{pmatrix}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\mathbf a^{\top}\omega\mathbf c
+=
+\mathbf v(\mathbf a,\mathbf c)^{\top}\mathbf b.
+\]</span></p>
+<p>Applying this to the orthogonality constraint from view <span class="math inline">\(i\)</span> gives</p>
+<p><span class="math display">\[
+\mathbf v
+\left(
+\widehat{\mathbf h}_{1i},
+\widehat{\mathbf h}_{2i}
+\right)^{\top}
+\mathbf b
+=
+0.
+\]</span></p>
+<p>Applying it to the equal-length constraint gives</p>
+<p><span class="math display">\[
+\left[
+\mathbf v
+\left(
+\widehat{\mathbf h}_{1i},
+\widehat{\mathbf h}_{1i}
+\right)
+-
+\mathbf v
+\left(
+\widehat{\mathbf h}_{2i},
+\widehat{\mathbf h}_{2i}
+\right)
+\right]^{\top}
+\mathbf b
+=
+0.
+\]</span></p>
+<p>Thus every view contributes two rows to a linear system.</p>
+<p>For <span class="math inline">\(m\)</span> views, we stack all the constraints:</p>
+<p><span class="math display">\[
+V\mathbf b
+=
+\mathbf 0,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+V
+\in
+\mathbb R^{2m\times 6}.
+\]</span></p>
+<p>Explicitly,</p>
+<p><span class="math display">\[
+V
+=
+\begin{pmatrix}
+\mathbf v(\widehat{\mathbf h}_{11},\widehat{\mathbf h}_{21})^{\top}\\
+\left[
+\mathbf v(\widehat{\mathbf h}_{11},\widehat{\mathbf h}_{11})
+-
+\mathbf v(\widehat{\mathbf h}_{21},\widehat{\mathbf h}_{21})
+\right]^{\top}\\
+\vdots\\
+\mathbf v(\widehat{\mathbf h}_{1m},\widehat{\mathbf h}_{2m})^{\top}\\
+\left[
+\mathbf v(\widehat{\mathbf h}_{1m},\widehat{\mathbf h}_{1m})
+-
+\mathbf v(\widehat{\mathbf h}_{2m},\widehat{\mathbf h}_{2m})
+\right]^{\top}
+\end{pmatrix}.
+\]</span></p>
+<p>The nonlinear-looking geometric constraints have now become a homogeneous linear system.</p>
+</section>
+</section>
+<section id="solving-for-the-image-of-the-absolute-conic" class="level2">
+<h2 class="anchored" data-anchor-id="solving-for-the-image-of-the-absolute-conic">Solving for the image of the absolute conic</h2>
+<p>In the ideal noiseless case, there exists a nonzero vector <span class="math inline">\(\mathbf b\)</span> satisfying</p>
+<p><span class="math display">\[
+V\mathbf b
+=
+\mathbf 0.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf b\in\mathbb R^6\)</span>, a unique solution up to scale requires</p>
+<p><span class="math display">\[
+\dim\operatorname{Null}(V)=1.
+\]</span></p>
+<p>By the rank-nullity theorem,</p>
+<p><span class="math display">\[
+\dim\operatorname{Null}(V)
+=
+6-\operatorname{rank}(V).
+\]</span></p>
+<p>Therefore, we want</p>
+<p><span class="math display">\[
+\operatorname{rank}(V)=5.
+\]</span></p>
+<p>In that case,</p>
+<p><span class="math display">\[
+\operatorname{Null}(V)
+=
+\operatorname{span}\{\mathbf b\},
+\]</span></p>
+<p>so every nonzero solution is a scalar multiple of the desired vector.</p>
+<p>Each view contributes two rows. Therefore, at least three views are required in the general case:</p>
+<p><span class="math display">\[
+m\geq 3.
+\]</span></p>
+<p>With three views,</p>
+<p><span class="math display">\[
+V\in\mathbb R^{6\times 6},
+\]</span></p>
+<p>but the matrix should have rank <span class="math inline">\(5\)</span>, not rank <span class="math inline">\(6\)</span>, because a nonzero null-space vector must exist.</p>
+<section id="why-use-the-singular-value-decomposition" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-the-singular-value-decomposition">Why use the singular value decomposition?</h3>
+<p>In exact arithmetic, we could compute the null space of <span class="math inline">\(V\)</span> directly.</p>
+<p>In real data, however, the estimated homographies contain noise. As a result, the constraints are not satisfied exactly, and <span class="math inline">\(V\)</span> will usually have full numerical rank:</p>
+<p><span class="math display">\[
+\operatorname{rank}(V)=6.
+\]</span></p>
+<p>Then the only exact solution to</p>
+<p><span class="math display">\[
+V\mathbf b=\mathbf 0
+\]</span></p>
+<p>is</p>
+<p><span class="math display">\[
+\mathbf b=\mathbf 0,
+\]</span></p>
+<p>which is useless.</p>
+<p>Instead, we search for the unit vector that violates the constraints as little as possible:</p>
+<p><span class="math display">\[
+\min_{\|\mathbf b\|_2=1}
+\|V\mathbf b\|_2^2.
+\]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+V
+=
+U\Sigma W^{\top}
+\]</span></p>
+<p>be the singular value decomposition of <span class="math inline">\(V\)</span>.</p>
+<p>Write the right singular vectors as</p>
+<p><span class="math display">\[
+W
+=
+\begin{bmatrix}
+\mathbf w_1 &amp;
+\mathbf w_2 &amp;
+\cdots &amp;
+\mathbf w_6
+\end{bmatrix},
+\]</span></p>
+<p>with singular values ordered as</p>
+<p><span class="math display">\[
+\sigma_1
+\geq
+\sigma_2
+\geq
+\cdots
+\geq
+\sigma_6
+\geq
+0.
+\]</span></p>
+<p>The minimizer is the right singular vector corresponding to the smallest singular value:</p>
+<p><span class="math display">\[
+\widehat{\mathbf b}
+=
+\mathbf w_6.
+\]</span></p>
+<p>To see why, write any unit vector as</p>
+<p><span class="math display">\[
+\mathbf b
+=
+\sum_{j=1}^{6}
+\alpha_j\mathbf w_j,
+\qquad
+\sum_{j=1}^{6}\alpha_j^2=1.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\|V\mathbf b\|_2^2
+=
+\sum_{j=1}^{6}
+\sigma_j^2\alpha_j^2.
+\]</span></p>
+<p>This is minimized by placing all the weight on the smallest singular value:</p>
+<p><span class="math display">\[
+\alpha_6=1,
+\qquad
+\alpha_1=\cdots=\alpha_5=0.
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\widehat{\mathbf b}
+=
+\mathbf w_6.
+\]</span></p>
+<p>In the noiseless case,</p>
+<p><span class="math display">\[
+\sigma_6=0,
+\]</span></p>
+<p>and <span class="math inline">\(\mathbf w_6\)</span> spans the exact null space.</p>
+<p>In the noisy case,</p>
+<p><span class="math display">\[
+\sigma_6&gt;0,
+\]</span></p>
+<p>but <span class="math inline">\(\mathbf w_6\)</span> gives the best approximate null-space direction.</p>
+</section>
+</section>
+<section id="recovering-omega" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-omega">Recovering <span class="math inline">\(\omega\)</span></h2>
+<p>Once <span class="math inline">\(\widehat{\mathbf b}\)</span> has been found, reshape it into the symmetric matrix</p>
+<p><span class="math display">\[
+\widehat\omega
+=
+\begin{pmatrix}
+\widehat b_1 &amp; \widehat b_2 &amp; \widehat b_4\\
+\widehat b_2 &amp; \widehat b_3 &amp; \widehat b_5\\
+\widehat b_4 &amp; \widehat b_5 &amp; \widehat b_6
+\end{pmatrix}.
+\]</span></p>
+<p>Because the system</p>
+<p><span class="math display">\[
+V\mathbf b=\mathbf 0
+\]</span></p>
+<p>is homogeneous, <span class="math inline">\(\widehat{\mathbf b}\)</span> is recovered only up to a nonzero scale.</p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\widehat\omega
+=
+\gamma\omega
+\]</span></p>
+<p>for some nonzero scalar <span class="math inline">\(\gamma\)</span>.</p>
+<p>This scale ambiguity will disappear when we normalize the recovered intrinsic matrix.</p>
+</section>
+<section id="recovering-the-intrinsic-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-the-intrinsic-matrix">Recovering the intrinsic matrix</h2>
+<p>We know that</p>
+<p><span class="math display">\[
+\omega
+=
+K^{-\top}K^{-1}.
+\]</span></p>
+<p>Taking inverses gives</p>
+<p><span class="math display">\[
+\omega^{-1}
+=
+KK^{\top}.
+\]</span></p>
+<p>Because <span class="math inline">\(K\)</span> is upper triangular, <span class="math inline">\(K^{\top}\)</span> is lower triangular.</p>
+<p>Suppose we compute the Cholesky factorization</p>
+<p><span class="math display">\[
+\omega^{-1}
+=
+LL^{\top},
+\]</span></p>
+<p>where <span class="math inline">\(L\)</span> is lower triangular.</p>
+<p>Comparing the two factorizations gives</p>
+<p><span class="math display">\[
+L
+=
+K^{\top},
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+K
+=
+L^{\top}.
+\]</span></p>
+<p>Because <span class="math inline">\(\widehat\omega\)</span> is known only up to scale, the resulting matrix is also a scaled version of <span class="math inline">\(K\)</span>.</p>
+<p>We remove that scale by enforcing the usual convention</p>
+<p><span class="math display">\[
+K_{33}=1.
+\]</span></p>
+<p>Thus, if the factorization gives a matrix <span class="math inline">\(\widetilde K\)</span>, we normalize it as</p>
+<p><span class="math display">\[
+K
+=
+\frac{\widetilde K}{\widetilde K_{33}}.
+\]</span></p>
+<p>We also choose the signs so that the focal lengths are positive:</p>
+<p><span class="math display">\[
+f_x&gt;0,
+\qquad
+f_y&gt;0.
+\]</span></p>
+<p>At this point, the intrinsic matrix has been recovered.</p>
+</section>
+<section id="recovering-the-pose-of-each-view" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-the-pose-of-each-view">Recovering the pose of each view</h2>
+<p>Once <span class="math inline">\(K\)</span> is known, we return to each homography separately.</p>
+<p>For view <span class="math inline">\(i\)</span>,</p>
+<p><span class="math display">\[
+\widehat H_i
+=
+\begin{bmatrix}
+\widehat{\mathbf h}_{1i} &amp;
+\widehat{\mathbf h}_{2i} &amp;
+\widehat{\mathbf h}_{3i}
+\end{bmatrix},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+K^{-1}\widehat{\mathbf h}_{1i}
+=
+c_i\mathbf r_{1i}.
+\]</span></p>
+<p>The unknown multiplier can now be computed because <span class="math inline">\(K\)</span> is known.</p>
+<p>Define</p>
+<p><span class="math display">\[
+\lambda_i
+=
+\frac{1}
+{
+\left\|
+K^{-1}\widehat{\mathbf h}_{1i}
+\right\|_2
+}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\mathbf r_{1i}
+=
+\lambda_i
+K^{-1}\widehat{\mathbf h}_{1i},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\mathbf r_{2i}
+=
+\lambda_i
+K^{-1}\widehat{\mathbf h}_{2i}.
+\]</span></p>
+<p>The translation vector is</p>
+<p><span class="math display">\[
+\mathbf t_i
+=
+\lambda_i
+K^{-1}\widehat{\mathbf h}_{3i}.
+\]</span></p>
+<p>The third rotation column is obtained from</p>
+<p><span class="math display">\[
+\mathbf r_{3i}
+=
+\mathbf r_{1i}\times\mathbf r_{2i}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+R_i
+=
+\begin{bmatrix}
+\mathbf r_{1i} &amp;
+\mathbf r_{2i} &amp;
+\mathbf r_{3i}
+\end{bmatrix}.
+\]</span></p>
+<p>In exact arithmetic,</p>
+<p><span class="math display">\[
+R_i^{\top}R_i=I
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\det(R_i)=1.
+\]</span></p>
+<p>With noisy data, however, the recovered matrix will generally be only approximately orthogonal.</p>
+<p>We can project it onto the nearest rotation matrix.</p>
+<p>Let</p>
+<p><span class="math display">\[
+R_i^{\mathrm{approx}}
+=
+U_i\Sigma_iV_i^{\top}
+\]</span></p>
+<p>be its singular value decomposition.</p>
+<p>Then the nearest orthogonal matrix is</p>
+<p><span class="math display">\[
+R_i
+=
+U_iV_i^{\top}.
+\]</span></p>
+<p>If</p>
+<p><span class="math display">\[
+\det(U_iV_i^{\top})=-1,
+\]</span></p>
+<p>we change the sign of one singular vector before forming the product, so that</p>
+<p><span class="math display">\[
+\det(R_i)=1.
+\]</span></p>
+</section>
+<section id="linear-calibration-is-only-an-initialization" class="level2">
+<h2 class="anchored" data-anchor-id="linear-calibration-is-only-an-initialization">Linear calibration is only an initialization</h2>
+<p>The procedure so far gives us estimates of</p>
+<p><span class="math display">\[
+K,
+\qquad
+R_i,
+\qquad
+\mathbf t_i.
+\]</span></p>
+<p>These estimates were obtained through a sequence of linear steps:</p>
+<p><span class="math display">\[
+\text{point correspondences}
+\longrightarrow
+\widehat H_i
+\longrightarrow
+V
+\longrightarrow
+\widehat\omega
+\longrightarrow
+K.
+\]</span></p>
+<p>But the quantity we ultimately care about is not the algebraic error</p>
+<p><span class="math display">\[
+\|V\mathbf b\|_2.
+\]</span></p>
+<p>We care about how accurately the estimated camera predicts the observed image points.</p>
+<p>For planar point <span class="math inline">\(j\)</span> in view <span class="math inline">\(i\)</span>, let</p>
+<p><span class="math display">\[
+\widetilde{\mathbf X}_j
+=
+\begin{pmatrix}
+X_j\\
+Y_j\\
+1
+\end{pmatrix}.
+\]</span></p>
+<p>The predicted image point is</p>
+<p><span class="math display">\[
+\widehat{\mathbf x}_{ij}
+=
+\phi
+\left(
+K
+\begin{bmatrix}
+\mathbf r_{1i} &amp;
+\mathbf r_{2i} &amp;
+\mathbf t_i
+\end{bmatrix}
+\widetilde{\mathbf X}_j
+\right).
+\]</span></p>
+<p>If the observed image point is <span class="math inline">\(\mathbf x_{ij}\)</span>, the reprojection residual is</p>
+<p><span class="math display">\[
+\mathbf e_{ij}
+=
+\mathbf x_{ij}
+-
+\widehat{\mathbf x}_{ij}.
+\]</span></p>
+<p>The final estimates are obtained by minimizing the total reprojection error:</p>
+<p><span class="math display">\[
+\min_{K,\{R_i,\mathbf t_i\}_{i=1}^{m}}
+\sum_{i=1}^{m}
+\sum_{j=1}^{n_i}
+\left\|
+\mathbf x_{ij}
+-
+\phi
+\left(
+K
+\begin{bmatrix}
+\mathbf r_{1i} &amp;
+\mathbf r_{2i} &amp;
+\mathbf t_i
+\end{bmatrix}
+\widetilde{\mathbf X}_j
+\right)
+\right\|_2^2.
+\]</span></p>
+<p>This is a nonlinear least-squares problem.</p>
+<p>The linear calibration method provides the starting point, and an iterative method such as Gauss–Newton or Levenberg–Marquardt refines all the parameters jointly.</p>
+<p>The important difference from refining a single camera matrix is that the intrinsic matrix is shared across every view:</p>
+<p><span class="math display">\[
+K_1=K_2=\cdots=K_m=K,
+\]</span></p>
+<p>while every image has its own rotation and translation:</p>
+<p><span class="math display">\[
+R_i,
+\qquad
+\mathbf t_i.
+\]</span></p>
+<p>Thus the optimization adjusts one common intrinsic matrix together with several image-specific poses.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A note on rotations and Lie groups
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A rotation matrix cannot be updated by changing its nine entries independently, because it must continue to satisfy</p>
+<p><span class="math display">\[
+R^{\top}R=I,
+\qquad
+\det(R)=1.
+\]</span></p>
+<p>The set of all <span class="math inline">\(3\times3\)</span> rotation matrices is called the <strong>special orthogonal group</strong></p>
+<p><span class="math display">\[
+SO(3).
+\]</span></p>
+<p>This is an example of a <strong>Lie group</strong>: a space that is simultaneously a smooth geometric object and a group.</p>
+<p>This structure allows us to describe a small change in rotation using only three parameters and then convert that change back into a valid rotation matrix.</p>
+<p>We will return to Lie groups later. For now, the important point is simply that rotations must be updated in a way that preserves their geometric structure.</p>
+</div>
+</div>
+<p>The complete calibration pipeline is therefore</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+\text{planar point correspondences}
+&amp;\longrightarrow
+\widehat H_1,\ldots,\widehat H_m\\
+&amp;\longrightarrow
+V\mathbf b=\mathbf 0\\
+&amp;\longrightarrow
+\widehat\omega\\
+&amp;\longrightarrow
+K\\
+&amp;\longrightarrow
+R_i,\mathbf t_i\\
+&amp;\longrightarrow
+\text{nonlinear reprojection-error refinement}.
+\end{aligned}
+}
+\]</span></p>
+<p>The remarkable part is that a flat plane, observed from several different poses, contains enough Euclidean information to reveal the internal geometry of the camera.</p>
+
+
 </section>
 
 </main> <!-- /main -->
