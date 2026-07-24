@@ -1022,6 +1022,12 @@ K^{-\top}K^{-1}}\]</span></p>
 </ul>
 <p>What remains is <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>, which depends only on <span class="math inline">\(K\)</span>, the intrinsic matrix. Not on its orientation, where it’s pointing or where it’s placed.</p>
 <p>And now the orthogonality condition from earlier finally makes sense. Perpendicular world directions <span class="math inline">\(\mathbf{d}_1 \perp \mathbf{d}_2\)</span> imply <span class="math inline">\(\mathbf{v}_1^\top\omega\mathbf{v}_2 = 0\)</span> for their vanishing points. Not an algebraic coincidence — <span class="math inline">\(\omega\)</span> carries the Euclidean inner product from the world into the image. The absolute conic is the vehicle. The camera is what drives it there.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/iac.png" class="img-fluid figure-img"></p>
+<figcaption>From perpendicular world directions to the image of the absolute conic. Three mutually perpendicular direction families in a rectangular scene project to three vanishing points in the image. The absolute conic <span class="math inline">\(\Omega_\infty\)</span>, a complex conic on the plane at infinity, is projected by the camera to the image of the absolute conic <span class="math inline">\(\omega\)</span>, where <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>.</figcaption>
+</figure>
+</div>
 <p>Note that the IAC has no real image points — for any nonzero real <span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\((K^{-1}\mathbf{x})^\top(K^{-1}\mathbf{x}) &gt; 0\)</span>, so <span class="math inline">\(\mathbf{x}^\top\omega\mathbf{x} = 0\)</span> has no real solutions. The IAC is not a visible ellipse. Its value comes entirely from its matrix <span class="math inline">\(\omega\)</span>.</p>
 <p>So how do we estimate <span class="math inline">\(\omega\)</span>? And once we have it, how do we recover <span class="math inline">\(K\)</span>?</p>
 </section>
