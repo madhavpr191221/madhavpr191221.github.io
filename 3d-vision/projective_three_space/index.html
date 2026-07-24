@@ -194,7 +194,8 @@ window.Quarto = {
   </ul></li>
   <li><a href="#lines-in-mathbbp3" id="toc-lines-in-mathbbp3" class="nav-link" data-scroll-target="#lines-in-mathbbp3">Lines in <span class="math inline">\(\mathbb{P}^3\)</span></a>
   <ul class="collapse">
-  <li><a href="#what-does-this-line-contain" id="toc-what-does-this-line-contain" class="nav-link" data-scroll-target="#what-does-this-line-contain">What Does This Line Contain?</a></li>
+  <li><a href="#why-dim-u-2" id="toc-why-dim-u-2" class="nav-link" data-scroll-target="#why-dim-u-2">Why <span class="math inline">\(\dim U = 2\)</span>?</a></li>
+  <li><a href="#the-projective-line" id="toc-the-projective-line" class="nav-link" data-scroll-target="#the-projective-line">The Projective Line</a></li>
   </ul></li>
   <li><a href="#planes-in-mathbbp3" id="toc-planes-in-mathbbp3" class="nav-link" data-scroll-target="#planes-in-mathbbp3">Planes in <span class="math inline">\(\mathbb{P}^3\)</span></a>
   <ul class="collapse">
@@ -412,28 +413,63 @@ u_4 = 0\}}_{\cong\ \mathbb{P}^2}}\]</span></p>
 <p><span class="math display">\[\tilde{\mathbf{P}} = \begin{pmatrix} \mathbf{p} \\ 1 \end{pmatrix},
 \qquad \tilde{\mathbf{Q}} = \begin{pmatrix} \mathbf{q} \\ 1
 \end{pmatrix}\]</span></p>
-<p>The ordinary affine line through them is <span class="math inline">\(\mathbf{x}(t) = (1-t)\mathbf{p}
-+ t\mathbf{q}\)</span>. Its lifted points are:</p>
-<p><span class="math display">\[\tilde{\mathbf{X}}(t) = (1-t)\tilde{\mathbf{P}} + t\tilde{\mathbf{Q}}\]</span></p>
-<p>Every lifted point on the ordinary line belongs to:</p>
+<p>The ordinary affine line through them is:</p>
+<p><span class="math display">\[\mathbf{x}(t) = (1-t)\mathbf{p} + t\mathbf{q}, \qquad t \in \mathbb{R}\]</span></p>
+<p>Lift a general point on this line:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}}(t) = \begin{pmatrix} (1-t)\mathbf{p} + t\mathbf{q}
+\\ 1 \end{pmatrix} = (1-t)\begin{pmatrix} \mathbf{p} \\ 1 \end{pmatrix}
++ t\begin{pmatrix} \mathbf{q} \\ 1 \end{pmatrix} = (1-t)\tilde{\mathbf{P}}
++ t\tilde{\mathbf{Q}}\]</span></p>
+<p>So every lifted point on the ordinary line belongs to:</p>
 <p><span class="math display">\[U = \text{span}\{\tilde{\mathbf{P}}, \tilde{\mathbf{Q}}\} \subset
 \mathbb{R}^4\]</span></p>
-<p><strong>Why <span class="math inline">\(\dim U = 2\)</span>?</strong> Suppose <span class="math inline">\(\tilde{\mathbf{Q}} = \lambda\tilde{\mathbf{P}}\)</span> for some <span class="math inline">\(\lambda\)</span>. Comparing fourth coordinates: <span class="math inline">\(1 = \lambda\)</span>. Then <span class="math inline">\(\mathbf{q} = \mathbf{p}\)</span>, contradicting distinctness. So <span class="math inline">\(\tilde{\mathbf{P}}\)</span> and <span class="math inline">\(\tilde{\mathbf{Q}}\)</span> are linearly independent and <span class="math inline">\(\dim U = 2\)</span>.</p>
-<p>The <strong>projective line</strong> through the two points is:</p>
-<p><span class="math display">\[\boxed{\mathbb{P}(U) = \left\{\left[\alpha\tilde{\mathbf{P}} +
-\beta\tilde{\mathbf{Q}}\right] : (\alpha, \beta) \neq (0,0)\right\}}\]</span></p>
-<section id="what-does-this-line-contain" class="level3">
-<h3 class="anchored" data-anchor-id="what-does-this-line-contain">What Does This Line Contain?</h3>
-<p>An arbitrary element <span class="math inline">\([\tilde{\mathbf{Y}}] \in \mathbb{P}(U)\)</span> has representative <span class="math inline">\(\tilde{\mathbf{Y}} = \alpha\tilde{\mathbf{P}} +
-\beta\tilde{\mathbf{Q}} = \begin{pmatrix}\alpha\mathbf{p} + \beta\mathbf{q}
-\\ \alpha + \beta\end{pmatrix}\)</span>.</p>
-<p><strong>When <span class="math inline">\(\alpha + \beta \neq 0\)</span>:</strong> divide by <span class="math inline">\(\alpha + \beta\)</span>, set <span class="math inline">\(t =
-\beta/(\alpha+\beta)\)</span>, and recover the ordinary point <span class="math inline">\((1-t)\mathbf{p} +
-t\mathbf{q}\)</span>. As <span class="math inline">\(t\)</span> varies over <span class="math inline">\(\mathbb{R}\)</span>, these are all points on the affine line through <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{q}\)</span>.</p>
-<p><strong>When <span class="math inline">\(\alpha + \beta = 0\)</span>:</strong> then <span class="math inline">\(\beta = -\alpha\)</span>, <span class="math inline">\(\alpha \neq 0\)</span>, and <span class="math inline">\(\tilde{\mathbf{Y}} = \alpha(\tilde{\mathbf{P}} - \tilde{\mathbf{Q}})
-= \alpha\begin{pmatrix}\mathbf{p}-\mathbf{q} \\ 0\end{pmatrix}\)</span>. This gives exactly one direction class — the unoriented direction of the line.</p>
+<section id="why-dim-u-2" class="level3">
+<h3 class="anchored" data-anchor-id="why-dim-u-2">Why <span class="math inline">\(\dim U = 2\)</span>?</h3>
+<p>We need <span class="math inline">\(\tilde{\mathbf{P}}\)</span> and <span class="math inline">\(\tilde{\mathbf{Q}}\)</span> to be linearly independent. Suppose not — suppose <span class="math inline">\(\tilde{\mathbf{Q}} = \lambda
+\tilde{\mathbf{P}}\)</span> for some scalar <span class="math inline">\(\lambda\)</span>. Then:</p>
+<p><span class="math display">\[\begin{pmatrix} \mathbf{q} \\ 1 \end{pmatrix} = \lambda\begin{pmatrix}
+\mathbf{p} \\ 1 \end{pmatrix} \qquad \Longrightarrow \qquad \lambda = 1
+\qquad \Longrightarrow \qquad \mathbf{q} = \mathbf{p}\]</span></p>
+<p>But <span class="math inline">\(\mathbf{p} \neq \mathbf{q}\)</span> by assumption. Contradiction. So <span class="math inline">\(\tilde{\mathbf{P}}\)</span> and <span class="math inline">\(\tilde{\mathbf{Q}}\)</span> are linearly independent and <span class="math inline">\(\dim U = 2\)</span>.</p>
+</section>
+<section id="the-projective-line" class="level3">
+<h3 class="anchored" data-anchor-id="the-projective-line">The Projective Line</h3>
+<p>Define:</p>
+<p><span class="math display">\[\boxed{\mathbb{P}(U) = \{[\tilde{\mathbf{x}}] \in \mathbb{P}^3 :
+\tilde{\mathbf{x}} \in U \setminus \{\mathbf{0}\}\}}\]</span></p>
+<p>This is the <strong>line in <span class="math inline">\(\mathbb{P}^3\)</span></strong> through <span class="math inline">\([\tilde{\mathbf{P}}]\)</span> and <span class="math inline">\([\tilde{\mathbf{Q}}]\)</span>, written:</p>
+<p><span class="math display">\[\mathbb{P}(U) = \ell\{[\tilde{\mathbf{P}}], [\tilde{\mathbf{Q}}]\}\]</span></p>
+<p>We now identify exactly what <span class="math inline">\(\mathbb{P}(U)\)</span> contains. Take any <span class="math inline">\([\tilde{\mathbf{y}}] \in \mathbb{P}(U)\)</span>. By definition, there exists a nonzero representative <span class="math inline">\(\tilde{\mathbf{y}} \in U\)</span>, so:</p>
+<p><span class="math display">\[\tilde{\mathbf{y}} = \alpha\tilde{\mathbf{P}} + \beta\tilde{\mathbf{Q}}
+= \begin{pmatrix} \alpha\mathbf{p} + \beta\mathbf{q} \\ \alpha + \beta
+\end{pmatrix}, \qquad (\alpha, \beta) \neq (0,0)\]</span></p>
+<p><strong>Case 1: <span class="math inline">\(\alpha + \beta \neq 0\)</span>.</strong> The fourth coordinate is nonzero. Divide by <span class="math inline">\(\alpha + \beta\)</span> and set <span class="math inline">\(t = \beta/(\alpha+\beta)\)</span>:</p>
+<p><span class="math display">\[[\tilde{\mathbf{y}}] = \left[\begin{pmatrix} (1-t)\mathbf{p} +
+t\mathbf{q} \\ 1 \end{pmatrix}\right]\]</span></p>
+<p>This is the ordinary point <span class="math inline">\((1-t)\mathbf{p} + t\mathbf{q} \in
+\mathbb{R}^3\)</span>. As <span class="math inline">\(t\)</span> varies over <span class="math inline">\(\mathbb{R}\)</span>, we get all points on the affine line through <span class="math inline">\(\mathbf{p}\)</span> and <span class="math inline">\(\mathbf{q}\)</span>.</p>
+<p><strong>Case 2: <span class="math inline">\(\alpha + \beta = 0\)</span>.</strong> Then <span class="math inline">\(\beta = -\alpha\)</span> and <span class="math inline">\(\alpha \neq 0\)</span>. So:</p>
+<p><span class="math display">\[\tilde{\mathbf{y}} = \alpha\tilde{\mathbf{P}} - \alpha\tilde{\mathbf{Q}}
+= \alpha\begin{pmatrix} \mathbf{p} - \mathbf{q} \\ 0 \end{pmatrix}\]</span></p>
+<p>Nonzero scaling does not matter, so:</p>
+<p><span class="math display">\[[\tilde{\mathbf{y}}] = \left[\begin{pmatrix} \mathbf{p} - \mathbf{q}
+\\ 0 \end{pmatrix}\right]\]</span></p>
+<p>This is exactly one direction class — the unoriented direction of the affine line. This class records the direction of the ordinary line and nothing else.</p>
+<p><strong>Proving the reverse inclusion.</strong> We have shown <span class="math inline">\(\mathbb{P}(U) \subseteq \text{RHS}\)</span>. For the other direction: take any <span class="math inline">\(t \in \mathbb{R}\)</span> and consider:</p>
+<p><span class="math display">\[\begin{pmatrix} (1-t)\mathbf{p} + t\mathbf{q} \\ 1 \end{pmatrix} =
+(1-t)\tilde{\mathbf{P}} + t\tilde{\mathbf{Q}} \in \text{span}\{\tilde{\mathbf{P}},
+\tilde{\mathbf{Q}}\} = U\]</span></p>
+<p>And:</p>
+<p><span class="math display">\[\begin{pmatrix} \mathbf{p} - \mathbf{q} \\ 0 \end{pmatrix} =
+\tilde{\mathbf{P}} - \tilde{\mathbf{Q}} \in U\]</span></p>
+<p>Both sides are contained in each other. Therefore:</p>
+<p><span class="math display">\[\boxed{\mathbb{P}(U) = \left\{\left[\begin{pmatrix} (1-t)\mathbf{p} +
+t\mathbf{q} \\ 1 \end{pmatrix}\right] : t \in \mathbb{R}\right\} \sqcup
+\left\{\left[\begin{pmatrix} \mathbf{p} - \mathbf{q} \\ 0
+\end{pmatrix}\right]\right\}}\]</span></p>
 <p><span class="math display">\[\boxed{\text{a line in }\mathbb{P}^3 = \text{an ordinary affine line}
 + \text{one direction class}}\]</span></p>
+<p>The <span class="math inline">\(W \neq 0\)</span> part of <span class="math inline">\(\mathbb{P}(U)\)</span> is the familiar ordinary line in <span class="math inline">\(\mathbb{R}^3\)</span>. The <span class="math inline">\(W = 0\)</span> part contributes one additional direction class, determined by the direction <span class="math inline">\(\mathbf{p} - \mathbf{q}\)</span> of the ordinary line.</p>
 </section>
 </section>
 <section id="planes-in-mathbbp3" class="level2">
