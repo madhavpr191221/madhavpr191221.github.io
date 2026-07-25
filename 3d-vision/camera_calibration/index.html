@@ -208,6 +208,8 @@ window.Quarto = {
   <li><a href="#barrel-and-pincushion-distortion" id="toc-barrel-and-pincushion-distortion" class="nav-link" data-scroll-target="#barrel-and-pincushion-distortion">Barrel and pincushion distortion</a></li>
   </ul></li>
   <li><a href="#back-to-camera-calibration" id="toc-back-to-camera-calibration" class="nav-link" data-scroll-target="#back-to-camera-calibration">Back to camera calibration</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#what-comes-next" id="toc-what-comes-next" class="nav-link" data-scroll-target="#what-comes-next">What comes next?</a></li>
   </ul>
 </nav>
     </div>
@@ -1884,6 +1886,68 @@ R_i,\mathbf t_i\\
 }
 \]</span></p>
 <p>The linear stage provides a geometrically meaningful initialization. The nonlinear stage then refines the intrinsic parameters, the pose of every view and the lens-distortion coefficients together.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>We began with the image of the absolute conic,</p>
+<p><span class="math display">\[
+\omega
+=
+K^{-\top}K^{-1},
+\]</span></p>
+<p>and asked how it could be estimated from actual images.</p>
+<p>A planar calibration target gave us the missing link. Each image of the plane produced a homography, and the first two columns of that homography inherited the orthogonality and equal-length constraints of the first two rotation columns.</p>
+<p>Expressed through <span class="math inline">\(\omega\)</span>, these became linear equations in the unknown entries of the intrinsic matrix.</p>
+<p>By combining constraints from several views, we formed the homogeneous system</p>
+<p><span class="math display">\[
+V\mathbf b
+=
+\mathbf 0,
+\]</span></p>
+<p>solved it using the SVD, reconstructed <span class="math inline">\(\omega\)</span>, and recovered <span class="math inline">\(K\)</span> through a Cholesky factorization.</p>
+<p>Once <span class="math inline">\(K\)</span> was known, each homography could be decomposed to estimate the pose of the calibration plane relative to the camera.</p>
+<p>Because image measurements are noisy, the recovered rotation matrices were only approximately valid rotations. We therefore replaced each one with the nearest matrix in <span class="math inline">\(SO(3)\)</span>.</p>
+<p>Finally, we introduced radial lens distortion and used the linear estimates as the initialization for a nonlinear reprojection-error minimization that jointly refines the camera intrinsics, the pose of every view, and the distortion coefficients.</p>
+<p>The complete calibration pipeline is therefore</p>
+<p><span class="math display">\[
+\text{checkerboard images}
+\longrightarrow
+\text{corner correspondences}
+\longrightarrow
+\text{homographies}
+\longrightarrow
+\omega
+\longrightarrow
+K
+\longrightarrow
+\{R_i,\mathbf t_i\}
+\longrightarrow
+\text{nonlinear refinement}.
+\]</span></p>
+<p>What began as the abstract matrix</p>
+<p><span class="math display">\[
+\omega
+=
+K^{-\top}K^{-1}
+\]</span></p>
+<p>has now become something measurable.</p>
+<p>A collection of photographs of a flat checkerboard is enough to recover the internal geometry of the camera.</p>
+</section>
+<section id="what-comes-next" class="level2">
+<h2 class="anchored" data-anchor-id="what-comes-next">What comes next?</h2>
+<p>Calibration tells us how a single camera maps points in the three-dimensional world to points in an image.</p>
+<p>The next question is what happens when the same scene is observed by two cameras, or by the same camera from two different positions.</p>
+<p>A point in the first image cannot correspond to an arbitrary point in the second image. The camera geometry restricts its possible match to a line.</p>
+<p>This is the beginning of <strong>epipolar geometry</strong>.</p>
+<p>In the next part, we will derive the epipolar constraint from the two camera matrices and arrive at the fundamental relation</p>
+<p><span class="math display">\[
+\widetilde{\mathbf x}_2^\top
+F
+\widetilde{\mathbf x}_1
+=
+0.
+\]</span></p>
+<p>We will then ask what the matrix <span class="math inline">\(F\)</span> contains, how it is related to the calibrated-camera matrix <span class="math inline">\(E\)</span>, and how two images begin to reveal the three-dimensional structure of a scene.</p>
 
 
 </section>
