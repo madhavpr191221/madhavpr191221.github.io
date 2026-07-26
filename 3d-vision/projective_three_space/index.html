@@ -232,6 +232,7 @@ window.Quarto = {
   <li><a href="#degenerate-quadrics" id="toc-degenerate-quadrics" class="nav-link" data-scroll-target="#degenerate-quadrics">Degenerate Quadrics</a></li>
   <li><a href="#the-tangent-plane" id="toc-the-tangent-plane" class="nav-link" data-scroll-target="#the-tangent-plane">The Tangent Plane</a></li>
   <li><a href="#the-dual-quadric" id="toc-the-dual-quadric" class="nav-link" data-scroll-target="#the-dual-quadric">The Dual Quadric</a></li>
+  <li><a href="#how-a-camera-projects-a-quadric" id="toc-how-a-camera-projects-a-quadric" class="nav-link" data-scroll-target="#how-a-camera-projects-a-quadric">How a Camera Projects a Quadric</a></li>
   </ul></li>
   <li><a href="#plane-sections-of-quadrics" id="toc-plane-sections-of-quadrics" class="nav-link" data-scroll-target="#plane-sections-of-quadrics">Plane Sections of Quadrics</a>
   <ul class="collapse">
@@ -919,6 +920,46 @@ Q^{-1}\boldsymbol{\pi} = 0\)</span>, so <span class="math inline">\([\tilde{\mat
 [\boldsymbol{\pi}_0] &amp;\xmapsto{Q^{-1}} [\tilde{\mathbf{X}}_0] \qquad
 \text{(tangent plane to point)} \end{aligned}}\]</span></p>
 <p>The dual quadric is the <span class="math inline">\(\mathbb{P}^3\)</span> analogue of the dual conic from Part 2. Everything carries over — the derivation, the formula, the geometric meaning. One dimension up, same structure.</p>
+</section>
+<section id="how-a-camera-projects-a-quadric" class="level3">
+<h3 class="anchored" data-anchor-id="how-a-camera-projects-a-quadric">How a Camera Projects a Quadric</h3>
+<p>Here is a problem I had not thought about before working through this post. Suppose an industrial inspection robot is observing a large pressure vessel inside a factory. The vessel is approximately ellipsoidal, so it can be modeled as a quadric <span class="math inline">\(Q\)</span>. The robot knows the 3D model of the vessel and has a calibrated camera. It wants to predict where the vessel’s visible boundary should appear in the image — to align the model, track the vessel, or detect if the shape looks wrong.</p>
+<p>The visible boundary is the <strong>silhouette</strong> — the curve separating vessel pixels from background pixels. The vessel occupies an entire region of the image; the silhouette is its boundary. For a quadric, this boundary is a conic <span class="math inline">\(C\)</span> in the image. A homogeneous image point <span class="math inline">\(\tilde{\mathbf{x}}\)</span> lies on the silhouette when:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}}^\top C\tilde{\mathbf{x}} = 0\]</span></p>
+<p>Given <span class="math inline">\(Q\)</span> and <span class="math inline">\(P\)</span>, what is <span class="math inline">\(C\)</span>?</p>
+<p>The forward route does not work cleanly. The projection <span class="math inline">\(\tilde{\mathbf{x}} = P\tilde{\mathbf{X}}\)</span> maps points on <span class="math inline">\(Q\)</span> to points on <span class="math inline">\(C\)</span>, but <span class="math inline">\(P\)</span> is <span class="math inline">\(3 \times 4\)</span> and not invertible, so finding <span class="math inline">\(C\)</span> directly from <span class="math inline">\(Q\)</span> is awkward. The clean route goes through the dual.</p>
+<p>Instead of describing the silhouette through its points, describe it through its tangent lines. A line <span class="math inline">\(\boldsymbol{\ell}\)</span> is tangent to the silhouette when:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top C^*\boldsymbol{\ell} = 0\]</span></p>
+<p>where <span class="math inline">\(C^* = C^{-1}\)</span> is the dual image conic (or equivalently <span class="math inline">\(\text{adj}(C)\)</span>, since <span class="math inline">\(\text{adj}(C) = \det(C)C^{-1}\)</span> represents the same dual conic up to scale).</p>
+<p><strong>Image lines back-project to planes.</strong></p>
+<p>The reason for moving to tangent lines is geometric. Every point on an image line defines a viewing ray through the camera centre. All these rays together sweep out a plane in 3D. So an image line back-projects to a plane through the camera centre.</p>
+<p>More precisely: a point <span class="math inline">\(\tilde{\mathbf{x}} = P\tilde{\mathbf{X}}\)</span> lies on <span class="math inline">\(\boldsymbol{\ell}\)</span> when <span class="math inline">\(\boldsymbol{\ell}^\top\tilde{\mathbf{x}} =
+0\)</span>. Substituting:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top P\tilde{\mathbf{X}} = 0 \qquad
+\Longrightarrow \qquad (P^\top\boldsymbol{\ell})^\top\tilde{\mathbf{X}}
+= 0\]</span></p>
+<p>This is the plane equation <span class="math inline">\(\boldsymbol{\pi}^\top\tilde{\mathbf{X}} = 0\)</span> with:</p>
+<p><span class="math display">\[\boxed{\boldsymbol{\pi} = P^\top\boldsymbol{\ell}}\]</span></p>
+<p>The image line <span class="math inline">\(\boldsymbol{\ell}\)</span> back-projects to the plane <span class="math inline">\(P^\top\boldsymbol{\ell}\)</span> in <span class="math inline">\(\mathbb{P}^3\)</span>.</p>
+<p><strong>Tangent lines to the silhouette back-project to tangent planes to the quadric.</strong></p>
+<p>If <span class="math inline">\(\boldsymbol{\ell}\)</span> is tangent to the silhouette, it just grazes the image of the vessel at one point. The back-projected plane <span class="math inline">\(P^\top\boldsymbol{\ell}\)</span> therefore just grazes the vessel itself — it is tangent to <span class="math inline">\(Q\)</span>:</p>
+<p><span class="math display">\[\boxed{\text{line tangent to silhouette} \iff \text{plane }
+P^\top\boldsymbol{\ell} \text{ tangent to } Q}\]</span></p>
+<p><strong>When is a plane tangent to <span class="math inline">\(Q\)</span>?</strong></p>
+<p>From the dual quadric section, a plane <span class="math inline">\(\boldsymbol{\pi}\)</span> is tangent to <span class="math inline">\(Q\)</span> when it lies on the dual quadric <span class="math inline">\(Q^* = Q^{-1}\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\pi}^\top Q^{-1}\boldsymbol{\pi} = 0\]</span></p>
+<p><strong>Putting it together.</strong></p>
+<p>Substitute <span class="math inline">\(\boldsymbol{\pi} = P^\top\boldsymbol{\ell}\)</span> into the tangency condition:</p>
+<p><span class="math display">\[(P^\top\boldsymbol{\ell})^\top Q^{-1}(P^\top\boldsymbol{\ell}) = 0\]</span></p>
+<p>Since <span class="math inline">\((P^\top\boldsymbol{\ell})^\top = \boldsymbol{\ell}^\top P\)</span>:</p>
+<p><span class="math display">\[\boldsymbol{\ell}^\top P Q^{-1} P^\top\boldsymbol{\ell} = 0\]</span></p>
+<p>But the tangent lines to the silhouette satisfy <span class="math inline">\(\boldsymbol{\ell}^\top C^*\boldsymbol{\ell} = 0\)</span>. Comparing:</p>
+<p><span class="math display">\[\boxed{C^* \sim PQ^*P^\top}\]</span></p>
+<p>where <span class="math inline">\(Q^* = Q^{-1}\)</span> is the dual quadric. Checking dimensions: <span class="math inline">\(P \in
+\mathbb{R}^{3\times4}\)</span>, <span class="math inline">\(Q^{-1} \in \mathbb{R}^{4\times4}\)</span>, <span class="math inline">\(P^\top \in
+\mathbb{R}^{4\times3}\)</span>, so <span class="math inline">\(PQ^{-1}P^\top \in \mathbb{R}^{3\times3}\)</span> — the right size for an image conic matrix.</p>
+<p>The dual image conic — the set of tangent lines to the silhouette — is the image of the dual quadric under <span class="math inline">\(P\)</span>.</p>
+<p>I had not encountered this application before. But the formula <span class="math inline">\(C^* \sim PQ^*P^\top\)</span> is not new — we stated it at the end of Part 2 without proof, and now we have the machinery to derive it. The dual conic from Part 2 and the dual quadric from this post are the same idea in different dimensions, connected by the camera matrix <span class="math inline">\(P\)</span>.</p>
 </section>
 </section>
 <section id="plane-sections-of-quadrics" class="level2">

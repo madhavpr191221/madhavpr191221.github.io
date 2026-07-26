@@ -180,36 +180,35 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#camera-calibration" id="toc-camera-calibration" class="nav-link" data-scroll-target="#camera-calibration">Camera Calibration</a>
   <ul class="collapse">
-  <li><a href="#what-is-the-problem" id="toc-what-is-the-problem" class="nav-link" data-scroll-target="#what-is-the-problem">What is the problem?</a></li>
+  <li><a href="#what-is-the-problem" id="toc-what-is-the-problem" class="nav-link" data-scroll-target="#what-is-the-problem">What Is the Problem?</a></li>
+  <li><a href="#restricting-to-a-planar-scene" id="toc-restricting-to-a-planar-scene" class="nav-link" data-scroll-target="#restricting-to-a-planar-scene">Restricting to a Planar Scene</a></li>
   </ul></li>
-  <li><a href="#the-planar-calibration-target" id="toc-the-planar-calibration-target" class="nav-link" data-scroll-target="#the-planar-calibration-target">The planar calibration target</a>
+  <li><a href="#the-planar-calibration-target" id="toc-the-planar-calibration-target" class="nav-link" data-scroll-target="#the-planar-calibration-target">The Planar Calibration Target</a>
   <ul class="collapse">
-  <li><a href="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography" id="toc-wait-have-we-not-already-recovered-camera-parameters-from-a-homography" class="nav-link" data-scroll-target="#wait-have-we-not-already-recovered-camera-parameters-from-a-homography">Wait, have we not already recovered camera parameters from a homography?</a></li>
-  <li><a href="#why-is-one-homography-not-enough" id="toc-why-is-one-homography-not-enough" class="nav-link" data-scroll-target="#why-is-one-homography-not-enough">Why is one homography not enough?</a></li>
+  <li><a href="#but-wait-can-we-not-already-recover-k-from-a-homography" id="toc-but-wait-can-we-not-already-recover-k-from-a-homography" class="nav-link" data-scroll-target="#but-wait-can-we-not-already-recover-k-from-a-homography">But Wait — Can We Not Already Recover <span class="math inline">\(K\)</span> from a Homography?</a></li>
+  <li><a href="#why-is-one-homography-not-enough" id="toc-why-is-one-homography-not-enough" class="nav-link" data-scroll-target="#why-is-one-homography-not-enough">Why Is One Homography Not Enough?</a></li>
   </ul></li>
-  <li><a href="#combining-several-homographies" id="toc-combining-several-homographies" class="nav-link" data-scroll-target="#combining-several-homographies">Combining several homographies</a>
+  <li><a href="#combining-several-homographies" id="toc-combining-several-homographies" class="nav-link" data-scroll-target="#combining-several-homographies">Combining Several Homographies</a>
   <ul class="collapse">
-  <li><a href="#turning-the-constraints-into-linear-equations" id="toc-turning-the-constraints-into-linear-equations" class="nav-link" data-scroll-target="#turning-the-constraints-into-linear-equations">Turning the constraints into linear equations</a></li>
+  <li><a href="#turning-the-constraints-into-linear-equations" id="toc-turning-the-constraints-into-linear-equations" class="nav-link" data-scroll-target="#turning-the-constraints-into-linear-equations">Turning the Constraints into Linear Equations</a></li>
   </ul></li>
-  <li><a href="#solving-for-the-image-of-the-absolute-conic" id="toc-solving-for-the-image-of-the-absolute-conic" class="nav-link" data-scroll-target="#solving-for-the-image-of-the-absolute-conic">Solving for the image of the absolute conic</a>
+  <li><a href="#solving-for-the-image-of-the-absolute-conic" id="toc-solving-for-the-image-of-the-absolute-conic" class="nav-link" data-scroll-target="#solving-for-the-image-of-the-absolute-conic">Solving for the Image of the Absolute Conic</a></li>
+  <li><a href="#recovering-omega-and-k" id="toc-recovering-omega-and-k" class="nav-link" data-scroll-target="#recovering-omega-and-k">Recovering <span class="math inline">\(\omega\)</span> and <span class="math inline">\(K\)</span></a></li>
+  <li><a href="#recovering-the-pose-of-each-view" id="toc-recovering-the-pose-of-each-view" class="nav-link" data-scroll-target="#recovering-the-pose-of-each-view">Recovering the Pose of Each View</a>
   <ul class="collapse">
-  <li><a href="#why-use-the-singular-value-decomposition" id="toc-why-use-the-singular-value-decomposition" class="nav-link" data-scroll-target="#why-use-the-singular-value-decomposition">Why use the singular value decomposition?</a></li>
+  <li><a href="#projecting-onto-the-nearest-rotation-matrix" id="toc-projecting-onto-the-nearest-rotation-matrix" class="nav-link" data-scroll-target="#projecting-onto-the-nearest-rotation-matrix">Projecting onto the Nearest Rotation Matrix</a></li>
   </ul></li>
-  <li><a href="#recovering-omega" id="toc-recovering-omega" class="nav-link" data-scroll-target="#recovering-omega">Recovering <span class="math inline">\(\omega\)</span></a></li>
-  <li><a href="#recovering-the-intrinsic-matrix" id="toc-recovering-the-intrinsic-matrix" class="nav-link" data-scroll-target="#recovering-the-intrinsic-matrix">Recovering the intrinsic matrix</a>
+  <li><a href="#are-we-done-not-quite." id="toc-are-we-done-not-quite." class="nav-link" data-scroll-target="#are-we-done-not-quite.">Are We Done? Not Quite.</a></li>
+  <li><a href="#why-does-camera-calibration-matter" id="toc-why-does-camera-calibration-matter" class="nav-link" data-scroll-target="#why-does-camera-calibration-matter">Why Does Camera Calibration Matter?</a></li>
+  <li><a href="#lens-distortion" id="toc-lens-distortion" class="nav-link" data-scroll-target="#lens-distortion">Lens Distortion</a>
   <ul class="collapse">
-  <li><a href="#projecting-onto-the-nearest-rotation-matrix" id="toc-projecting-onto-the-nearest-rotation-matrix" class="nav-link" data-scroll-target="#projecting-onto-the-nearest-rotation-matrix">Projecting onto the nearest rotation matrix</a></li>
+  <li><a href="#radial-distortion" id="toc-radial-distortion" class="nav-link" data-scroll-target="#radial-distortion">Radial Distortion</a></li>
+  <li><a href="#why-are-the-odd-powers-missing-from-lr" id="toc-why-are-the-odd-powers-missing-from-lr" class="nav-link" data-scroll-target="#why-are-the-odd-powers-missing-from-lr">Why Are the Odd Powers Missing from <span class="math inline">\(L(r)\)</span>?</a></li>
+  <li><a href="#barrel-and-pincushion-distortion" id="toc-barrel-and-pincushion-distortion" class="nav-link" data-scroll-target="#barrel-and-pincushion-distortion">Barrel and Pincushion Distortion</a></li>
   </ul></li>
-  <li><a href="#linear-calibration-is-only-an-initialization" id="toc-linear-calibration-is-only-an-initialization" class="nav-link" data-scroll-target="#linear-calibration-is-only-an-initialization">Linear calibration is only an initialization</a></li>
-  <li><a href="#lens-distortion" id="toc-lens-distortion" class="nav-link" data-scroll-target="#lens-distortion">Lens distortion</a>
-  <ul class="collapse">
-  <li><a href="#radial-distortion" id="toc-radial-distortion" class="nav-link" data-scroll-target="#radial-distortion">Radial distortion</a></li>
-  <li><a href="#why-are-the-odd-powers-missing-from-lr" id="toc-why-are-the-odd-powers-missing-from-lr" class="nav-link" data-scroll-target="#why-are-the-odd-powers-missing-from-lr">Why are the odd powers missing from <span class="math inline">\(L(r)\)</span>?</a></li>
-  <li><a href="#barrel-and-pincushion-distortion" id="toc-barrel-and-pincushion-distortion" class="nav-link" data-scroll-target="#barrel-and-pincushion-distortion">Barrel and pincushion distortion</a></li>
-  </ul></li>
-  <li><a href="#back-to-camera-calibration" id="toc-back-to-camera-calibration" class="nav-link" data-scroll-target="#back-to-camera-calibration">Back to camera calibration</a></li>
+  <li><a href="#putting-it-all-together" id="toc-putting-it-all-together" class="nav-link" data-scroll-target="#putting-it-all-together">Putting It All Together</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#what-comes-next" id="toc-what-comes-next" class="nav-link" data-scroll-target="#what-comes-next">What comes next?</a></li>
+  <li><a href="#what-comes-next" id="toc-what-comes-next" class="nav-link" data-scroll-target="#what-comes-next">What Comes Next?</a></li>
   </ul>
 </nav>
     </div>
@@ -260,1694 +259,389 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="https://madhavpr191221.github.io/3d-vision/projective_three_space/">Part 5</a>, we introduced the image of the absolute conic,</p>
-<p><span class="math display">\[
-\omega = K^{-\top}K^{-1},
-\]</span></p>
-<p>and saw that once <span class="math inline">\(\omega\)</span> is known, the intrinsic matrix <span class="math inline">\(K\)</span> can be recovered, for example through a Cholesky factorization.</p>
-<p>But one question remained - How do we estimate <span class="math inline">\(\omega\)</span> from actual images?</p>
-<p>This is the <strong>camera calibration problem</strong>.</p>
-<p>The basic idea is simple. We photograph a flat pattern whose geometry is already known, observe how the camera distorts that pattern, and use those measurements to infer the unknown entries of <span class="math inline">\(K\)</span>.</p>
-<p>Because the pattern is planar, each image of it is related to the physical plane by a homography. The rest of the post is about how those homographies encode the Euclidean constraints needed to recover the camera intrinsics.</p>
+<p>I have worked on computer vision applications for eight years. In that time, I heard the phrase “camera calibration” a few times but I never worried about it. I moved on — because most of what I actually worked on was solvable by deep learning models for image recognition and needed no knowledge about camera intrinsics.</p>
+<p>I started this 3D computer vision series about three weeks ago. And now, six posts in, I think I understand what camera calibration actually is — and why it connects directly to everything we built in <a href="https://madhavpr191221.github.io/3d-vision/projective_three_space/">Part 5</a>.</p>
+<p>Part 5 showed that if you know <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>, you know <span class="math inline">\(K\)</span> — the intrinsic matrix of the camera. But it left one question open: how do you actually estimate <span class="math inline">\(\omega\)</span> from images?</p>
+<p>That is what this post answers. Photograph a flat pattern whose geometry is known, observe how the camera distorts it, and use those observations to infer <span class="math inline">\(K\)</span>. Because the pattern is planar, each image is related to the physical plane by a homography, and each homography carries Euclidean constraints on <span class="math inline">\(\omega\)</span>. Collect enough of them and <span class="math inline">\(K\)</span> falls out.</p>
 </section>
 <section id="camera-calibration" class="level2">
 <h2 class="anchored" data-anchor-id="camera-calibration">Camera Calibration</h2>
 <section id="what-is-the-problem" class="level3">
-<h3 class="anchored" data-anchor-id="what-is-the-problem">What is the problem?</h3>
-<p>A pinhole camera maps a world point to an image point through</p>
-<p><span class="math display">\[
-\widetilde{\mathbf x}
-=
-K
-\begin{bmatrix}
-R &amp; \mathbf t
-\end{bmatrix}
-\widetilde{\mathbf X},
-\]</span></p>
-<p>followed by the perspective division</p>
-<p><span class="math display">\[
-\mathbf x
-=
-\phi\left(\widetilde{\mathbf x}\right).
-\]</span></p>
-<p>The intrinsic matrix</p>
-<p><span class="math display">\[
-K
-=
-\begin{pmatrix}
-f_x &amp; s &amp; p_x \\
-0 &amp; f_y &amp; p_y \\
-0 &amp; 0 &amp; 1
-\end{pmatrix}
-\]</span></p>
-<p>contains the internal parameters of the camera:</p>
-<ul>
-<li>the horizontal and vertical focal lengths <span class="math inline">\(f_x\)</span> and <span class="math inline">\(f_y\)</span>,</li>
-<li>the skew <span class="math inline">\(s\)</span>,</li>
-<li>the principal point <span class="math inline">\((p_x,p_y)\)</span>.</li>
-</ul>
-<p>The rotation matrix <span class="math inline">\(R\)</span> and the translation vector <span class="math inline">\(\mathbf t\)</span> describe the pose of the camera relative to the scene. These may change from one image to another. The intrinsic matrix <span class="math inline">\(K\)</span>, however, remains fixed as long as the internal camera settings remain unchanged.</p>
-<p>The camera calibration problem is therefore:</p>
+<h3 class="anchored" data-anchor-id="what-is-the-problem">What Is the Problem?</h3>
+<p>We have a physical camera. It has an intrinsic matrix:</p>
+<p><span class="math display">\[K = \begin{pmatrix} f_x &amp; s &amp; p_x \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1
+\end{pmatrix}\]</span></p>
+<p>containing the focal lengths <span class="math inline">\(f_x, f_y\)</span>, the principal point <span class="math inline">\((p_x,
+p_y)\)</span>, and the skew <span class="math inline">\(s\)</span>. The full camera pipeline is:</p>
+<p><span class="math display">\[\mathbf{x} = \phi\left(K\begin{bmatrix}R &amp; \mathbf{t}\end{bmatrix}
+\tilde{\mathbf{X}}\right)\]</span></p>
+<p>The rotation <span class="math inline">\(R\)</span> and translation <span class="math inline">\(\mathbf{t}\)</span> describe where the camera is and which way it is pointing — these change every time you move the camera. The intrinsic matrix <span class="math inline">\(K\)</span> stays fixed as long as the internal camera settings do not change.</p>
+<p>The calibration problem is:</p>
 <blockquote class="blockquote">
 <p>Given image measurements of points whose geometry is known, estimate the intrinsic matrix <span class="math inline">\(K\)</span>.</p>
 </blockquote>
-<p>For now, we focus only on the ideal pinhole camera. Lens distortion will be introduced later.</p>
-<p>Suppose the known points lie on a plane. We choose the world coordinate system so that this plane is</p>
-<p><span class="math display">\[
-Z=0.
-\]</span></p>
-<p>A point on the plane therefore has coordinates</p>
-<p><span class="math display">\[
-\widetilde{\mathbf X}
-=
-\begin{pmatrix}
-X\\
-Y\\
-0\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>Write the rotation matrix as</p>
-<p><span class="math display">\[
-R
-=
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf r_3
-\end{bmatrix}.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\widetilde{\mathbf x}
-=
-K
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf r_3 &amp; \mathbf t
-\end{bmatrix}
-\begin{pmatrix}
-X\\
-Y\\
-0\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>Because the third world coordinate is zero, the term involving <span class="math inline">\(\mathbf r_3\)</span> disappears:</p>
-<p><span class="math display">\[
-\widetilde{\mathbf x}
-=
-K
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}
-\begin{pmatrix}
-X\\
-Y\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>Define</p>
-<p><span class="math display">\[
-\widetilde{\mathbf X}_{\pi}
-=
-\begin{pmatrix}
-X\\
-Y\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\widetilde{\mathbf x}
-=
-H\widetilde{\mathbf X}_{\pi},
-\]</span></p>
-<p>where</p>
-<p><span class="math display">\[
-H
-=
-K
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}.
-\]</span></p>
-<p>After applying the map <span class="math inline">\(\phi\)</span>, we obtain the Euclidean image point:</p>
-<p><span class="math display">\[
-\mathbf x
-=
-\phi\left(H\widetilde{\mathbf X}_{\pi}\right).
-\]</span></p>
-<p>Thus every image of the known plane gives us a homography.</p>
-<p>The calibration problem has now changed form:</p>
+<p>For now, we focus on the ideal pinhole camera. Lens distortion comes later.</p>
+</section>
+<section id="restricting-to-a-planar-scene" class="level3">
+<h3 class="anchored" data-anchor-id="restricting-to-a-planar-scene">Restricting to a Planar Scene</h3>
+<p>Suppose the known points lie on a plane. We choose world coordinates so that this plane is <span class="math inline">\(Z = 0\)</span>. A point on the plane has coordinates:</p>
+<p><span class="math display">\[\tilde{\mathbf{X}} = \begin{pmatrix} X \\ Y \\ 0 \\ 1 \end{pmatrix}\]</span></p>
+<p>Writing <span class="math inline">\(R = [\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{r}_3]\)</span> and substituting:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}} = K\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp;
+\mathbf{r}_3 &amp; \mathbf{t}\end{bmatrix}\begin{pmatrix} X \\ Y \\ 0 \\
+1 \end{pmatrix}\]</span></p>
+<p>The third world coordinate is zero, so <span class="math inline">\(\mathbf{r}_3\)</span> multiplies zero and disappears — exactly as in Part 4. What remains is:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}} = K\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp;
+\mathbf{t}\end{bmatrix}\begin{pmatrix} X \\ Y \\ 1 \end{pmatrix} =
+H\tilde{\mathbf{X}}_\pi\]</span></p>
+<p>where <span class="math inline">\(\tilde{\mathbf{X}}_\pi = (X, Y, 1)^\top\)</span> and:</p>
+<p><span class="math display">\[\boxed{H = K\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp;
+\mathbf{t}\end{bmatrix}}\]</span></p>
+<p>This is the homography from Part 4. Every image of a known plane gives us one homography. The calibration problem has now changed form:</p>
 <blockquote class="blockquote">
-<p>Estimate one or more homographies from image correspondences, and use them to recover the intrinsic matrix <span class="math inline">\(K\)</span>.</p>
+<p>Estimate one or more homographies from image correspondences, and use them to recover <span class="math inline">\(K\)</span>.</p>
 </blockquote>
 </section>
 </section>
 <section id="the-planar-calibration-target" class="level2">
-<h2 class="anchored" data-anchor-id="the-planar-calibration-target">The planar calibration target</h2>
+<h2 class="anchored" data-anchor-id="the-planar-calibration-target">The Planar Calibration Target</h2>
 <p>To estimate a homography, we need several known points on the plane and their corresponding image locations.</p>
-<p>A common choice is a flat checkerboard pattern made of alternating dark and light squares. The useful features are not the squares themselves, but the <strong>inner corners</strong> where four neighbouring squares meet.</p>
-<p>Suppose each square has side length <span class="math inline">\(d\)</span>. We may choose one inner corner as the origin and assign plane coordinates</p>
-<p><span class="math display">\[
-\mathbf X_{ij}
-=
-\begin{pmatrix}
-id\\
-jd
-\end{pmatrix},
-\]</span></p>
-<p>where <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> index the corner horizontally and vertically.</p>
-<p>In homogeneous coordinates,</p>
-<p><span class="math display">\[
-\widetilde{\mathbf X}_{ij}
-=
-\begin{pmatrix}
-id\\
-jd\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>The camera observes each of these corners at some image location</p>
-<p><span class="math display">\[
-\mathbf x_{ij}
-=
-\begin{pmatrix}
-u_{ij}\\
-v_{ij}
-\end{pmatrix}.
-\]</span></p>
-<p>Thus one image provides a collection of correspondences</p>
-<p><span class="math display">\[
-\widetilde{\mathbf X}_{ij}
-\longleftrightarrow
-\mathbf x_{ij}.
-\]</span></p>
-<p>These correspondences are used to estimate the homography between the physical plane and the image.</p>
-<p>The choice of origin on the pattern is arbitrary. The only requirement is that the relative geometry of the points is known.</p>
-<p>For estimating the intrinsic matrix, we may even choose</p>
-<p><span class="math display">\[
-d=1.
-\]</span></p>
-<p>The actual physical square size is needed only if we want quantities such as the translation vector to be recovered in physical units.</p>
-<p>The checkerboard therefore serves a simple purpose:</p>
-<p><span class="math display">\[
-\text{known planar corner coordinates}
-+
-\text{measured image coordinates}
-\longrightarrow
-\widehat H.
-\]</span></p>
-<p>By photographing the same planar pattern from several different poses, we obtain</p>
-<p><span class="math display">\[
-\widehat H_1,
-\widehat H_2,
-\ldots,
-\widehat H_m.
-\]</span></p>
-<p>These homographies are then used to recover the common intrinsic matrix of the camera.</p>
-<section id="wait-have-we-not-already-recovered-camera-parameters-from-a-homography" class="level3">
-<h3 class="anchored" data-anchor-id="wait-have-we-not-already-recovered-camera-parameters-from-a-homography">Wait, have we not already recovered camera parameters from a homography?</h3>
-<p>Earlier, when studying the full camera matrix, we estimated</p>
-<p><span class="math display">\[
-\widehat P
-=
-\begin{bmatrix}
-\widehat M &amp; \widehat{\mathbf p}_4
-\end{bmatrix},
-\]</span></p>
-<p>where the left <span class="math inline">\(3\times 3\)</span> block satisfies</p>
-<p><span class="math display">\[
-M=KR.
-\]</span></p>
-<p>This factorization has a useful structure:</p>
-<ul>
-<li><span class="math inline">\(K\)</span> is upper triangular,</li>
-<li><span class="math inline">\(R\)</span> is orthogonal.</li>
-</ul>
-<p>This allows us to recover <span class="math inline">\(K\)</span> and <span class="math inline">\(R\)</span> from the full camera matrix using an RQ-type factorization, followed by the appropriate scale and sign corrections.</p>
-<p>A planar homography is also a <span class="math inline">\(3\times 3\)</span> matrix, but its structure is different:</p>
-<p><span class="math display">\[
-H
-=
-K
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}.
-\]</span></p>
-<p>The matrix</p>
-<p><span class="math display">\[
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}
-\]</span></p>
-<p>is not a rotation matrix. Its first two columns are rotation columns, but its third column is the translation vector.</p>
-<p>In general,</p>
-<p><span class="math display">\[
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}^{\top}
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}
-\neq I.
-\]</span></p>
-<p>Therefore, we cannot simply decompose <span class="math inline">\(H\)</span> into an upper-triangular matrix and an orthogonal matrix and interpret the factors as <span class="math inline">\(K\)</span> and <span class="math inline">\(R\)</span>.</p>
-<p>The useful information inside <span class="math inline">\(H\)</span> comes from the fact that <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are columns of a rotation matrix. Hence,</p>
-<p><span class="math display">\[
-\mathbf r_1^{\top}\mathbf r_2=0,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\|\mathbf r_1\|_2
-=
-\|\mathbf r_2\|_2
-=
-1.
-\]</span></p>
-<p>These Euclidean constraints allow the homography to tell us something about <span class="math inline">\(K\)</span>.</p>
+<p>A common choice is a flat checkerboard pattern — alternating dark and light squares. The useful features are not the squares themselves but the <strong>inner corners</strong> where four neighbouring squares meet. These are easy to detect automatically with subpixel accuracy, which is why the checkerboard has become the standard calibration target in practice.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/checkerboard.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption>A planar checkerboard calibration target. Each inner corner has a known world coordinate <span class="math inline">\(\tilde{\mathbf{X}}_{ij} = (id, jd, 1)^\top\)</span> on the plane <span class="math inline">\(Z = 0\)</span>. The camera observes each corner at a pixel location <span class="math inline">\(\mathbf{x}_{ij} = (u_{ij}, v_{ij})^\top\)</span>. These correspondences determine the homography <span class="math inline">\(H = K[\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{t}]\)</span> for this view.</figcaption>
+</figure>
+</div>
+<p>Suppose each square has side length <span class="math inline">\(d\)</span>. Choose one inner corner as the origin and assign plane coordinates:</p>
+<p><span class="math display">\[\mathbf{X}_{ij} = \begin{pmatrix} id \\ jd \end{pmatrix}, \qquad
+\tilde{\mathbf{X}}_{ij} = \begin{pmatrix} id \\ jd \\ 1 \end{pmatrix}\]</span></p>
+<p>The camera observes each corner at image location <span class="math inline">\(\mathbf{x}_{ij} =
+(u_{ij}, v_{ij})^\top\)</span>. One image therefore gives a collection of correspondences:</p>
+<p><span class="math display">\[\tilde{\mathbf{X}}_{ij} \longleftrightarrow \mathbf{x}_{ij}\]</span></p>
+<p>These are used to estimate the homography <span class="math inline">\(\hat{H}\)</span> via DLT, exactly as in Part 4. For estimating <span class="math inline">\(K\)</span>, the actual physical square size does not matter — we can set <span class="math inline">\(d = 1\)</span>. The physical size is only needed if we want the translation vector in real-world units.</p>
+<p>By photographing the same pattern from <span class="math inline">\(m\)</span> different poses, we get:</p>
+<p><span class="math display">\[\hat{H}_1, \hat{H}_2, \ldots, \hat{H}_m\]</span></p>
+<p>Each homography comes from a different camera position and orientation. But all of them share the same intrinsic matrix <span class="math inline">\(K\)</span> — the camera did not change, only its pose did. This is the key idea.</p>
+<section id="but-wait-can-we-not-already-recover-k-from-a-homography" class="level3">
+<h3 class="anchored" data-anchor-id="but-wait-can-we-not-already-recover-k-from-a-homography">But Wait — Can We Not Already Recover <span class="math inline">\(K\)</span> from a Homography?</h3>
+<p>In Part 3, we estimated the full <span class="math inline">\(3 \times 4\)</span> camera matrix <span class="math inline">\(\hat{P} =
+[\hat{M}\ \hat{\mathbf{p}}_4]\)</span> where <span class="math inline">\(M = KR\)</span>. Since <span class="math inline">\(K\)</span> is upper triangular and <span class="math inline">\(R\)</span> is orthogonal, we could decompose <span class="math inline">\(M\)</span> via RQ factorization to recover <span class="math inline">\(K\)</span> and <span class="math inline">\(R\)</span> separately.</p>
+<p>Why not do the same for a planar homography?</p>
+<p>Because the structure is different. The homography is:</p>
+<p><span class="math display">\[H = K\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}
+\end{bmatrix}\]</span></p>
+<p>The matrix <span class="math inline">\([\mathbf{r}_1\ \mathbf{r}_2\ \mathbf{t}]\)</span> is not a rotation matrix — its third column is the translation vector, not a rotation column. In general:</p>
+<p><span class="math display">\[\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}\end{bmatrix}^\top
+\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}\end{bmatrix}
+\neq I\]</span></p>
+<p>So we cannot simply RQ-decompose <span class="math inline">\(H\)</span> and read off <span class="math inline">\(K\)</span>.</p>
+<p>What we can use is the fact that <span class="math inline">\(\mathbf{r}_1\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span> are columns of a rotation matrix, so they satisfy:</p>
+<p><span class="math display">\[\mathbf{r}_1^\top\mathbf{r}_2 = 0 \qquad \text{(orthogonality)}\]</span></p>
+<p><span class="math display">\[\|\mathbf{r}_1\|_2 = \|\mathbf{r}_2\|_2 = 1 \qquad \text{(unit norm)}\]</span></p>
+<p>These two Euclidean constraints — one from orthogonality, one from equal norm — are what each homography contributes toward recovering <span class="math inline">\(K\)</span>. And as we will see next, they are not enough on their own.</p>
 </section>
 <section id="why-is-one-homography-not-enough" class="level3">
-<h3 class="anchored" data-anchor-id="why-is-one-homography-not-enough">Why is one homography not enough?</h3>
-<p>Suppose a homography has been estimated from point correspondences:</p>
-<p><span class="math display">\[
-\widehat H
-=
-\begin{bmatrix}
-\widehat{\mathbf h}_1 &amp;
-\widehat{\mathbf h}_2 &amp;
-\widehat{\mathbf h}_3
-\end{bmatrix}.
-\]</span></p>
-<p>The point correspondences determine the homography only up to a common nonzero multiplier.</p>
-<p>If <span class="math inline">\(\widehat H\)</span> produces the correct image points, then so does</p>
-<p><span class="math display">\[
-c\widehat H,
-\qquad c\neq 0,
-\]</span></p>
-<p>because</p>
-<p><span class="math display">\[
-\phi\left(c\widehat H\widetilde{\mathbf X}_{\pi}\right)
-=
-\phi\left(\widehat H\widetilde{\mathbf X}_{\pi}\right).
-\]</span></p>
-<p>Therefore, the estimated matrix is related to</p>
-<p><span class="math display">\[
-H
-=
-K
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}
-\]</span></p>
-<p>by some unknown nonzero scalar <span class="math inline">\(c\)</span>:</p>
-<p><span class="math display">\[
-\widehat H
-=
-cK
-\begin{bmatrix}
-\mathbf r_1 &amp; \mathbf r_2 &amp; \mathbf t
-\end{bmatrix}.
-\]</span></p>
-<p>Looking at the first two columns,</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1
-=
-cK\mathbf r_1,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_2
-=
-cK\mathbf r_2.
-\]</span></p>
-<p>Multiplying by <span class="math inline">\(K^{-1}\)</span> gives</p>
-<p><span class="math display">\[
-K^{-1}\widehat{\mathbf h}_1
-=
-c\mathbf r_1,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-K^{-1}\widehat{\mathbf h}_2
-=
-c\mathbf r_2.
-\]</span></p>
-<p>The vectors on the left are therefore equally scaled versions of two orthonormal rotation columns.</p>
-<p>Because <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are orthogonal,</p>
-<p><span class="math display">\[
-\left(K^{-1}\widehat{\mathbf h}_1\right)^{\top}
-\left(K^{-1}\widehat{\mathbf h}_2\right)
-=
-0.
-\]</span></p>
-<p>Expanding,</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-K^{-\top}K^{-1}
-\widehat{\mathbf h}_2
-=
-0.
-\]</span></p>
-<p>Using</p>
-<p><span class="math display">\[
-\omega
-=
-K^{-\top}K^{-1},
-\]</span></p>
-<p>we obtain</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-\omega
-\widehat{\mathbf h}_2
-=
-0.
-\]</span></p>
-<p>This is exactly why we developed the absolute conic and its image: they turn the Euclidean structure hidden inside the camera into algebraic constraints on the unknown intrinsics.</p>
-<p>This is the first constraint supplied by the homography.</p>
-<p>Next, since <span class="math inline">\(\mathbf r_1\)</span> and <span class="math inline">\(\mathbf r_2\)</span> are both unit vectors,</p>
-<p><span class="math display">\[
-\|c\mathbf r_1\|_2^2
-=
-\|c\mathbf r_2\|_2^2.
-\]</span></p>
-<p>Therefore,</p>
-<p><span class="math display">\[
-\left\|K^{-1}\widehat{\mathbf h}_1\right\|_2^2
-=
-\left\|K^{-1}\widehat{\mathbf h}_2\right\|_2^2.
-\]</span></p>
-<p>Expanding again,</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-K^{-\top}K^{-1}
-\widehat{\mathbf h}_1
-=
-\widehat{\mathbf h}_2^{\top}
-K^{-\top}K^{-1}
-\widehat{\mathbf h}_2.
-\]</span></p>
-<p>Hence,</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-\omega
-\widehat{\mathbf h}_1
--
-\widehat{\mathbf h}_2^{\top}
-\omega
-\widehat{\mathbf h}_2
-=
-0.
-\]</span></p>
-<p>This is the second constraint.</p>
-<p>Thus one homography gives two equations involving <span class="math inline">\(\omega\)</span>:</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-\omega
-\widehat{\mathbf h}_2
-=
-0,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_1^{\top}
-\omega
-\widehat{\mathbf h}_1
--
-\widehat{\mathbf h}_2^{\top}
-\omega
-\widehat{\mathbf h}_2
-=
-0.
-\]</span></p>
-<p>Now recall that <span class="math inline">\(\omega\)</span> is symmetric:</p>
-<p><span class="math display">\[
-\omega
-=
-\begin{pmatrix}
-\omega_{11} &amp; \omega_{12} &amp; \omega_{13}\\
-\omega_{12} &amp; \omega_{22} &amp; \omega_{23}\\
-\omega_{13} &amp; \omega_{23} &amp; \omega_{33}
-\end{pmatrix}.
-\]</span></p>
-<p>It has six entries. However, the equations used to estimate it are homogeneous, so <span class="math inline">\(\omega\)</span> can initially be recovered only up to a common nonzero scale. It therefore has five independent degrees of freedom.</p>
-<p>One homography provides only two constraints.</p>
-<p>Therefore, a single planar image does not contain enough information to recover a completely general intrinsic matrix.</p>
-<p>A second image of the same plane, viewed from a different pose, produces another homography and two more constraints. A third sufficiently different view produces two more.</p>
-<p>The intrinsic matrix <span class="math inline">\(K\)</span> remains the same across all views, while the rotation and translation change:</p>
-<p><span class="math display">\[
-H_i
-=
-K
-\begin{bmatrix}
-\mathbf r_{1i} &amp;
-\mathbf r_{2i} &amp;
-\mathbf t_i
-\end{bmatrix}.
-\]</span></p>
-<p>Each new homography contributes two equations involving the same matrix <span class="math inline">\(\omega\)</span>.</p>
-<p>This is the central idea of planar camera calibration.</p>
+<h3 class="anchored" data-anchor-id="why-is-one-homography-not-enough">Why Is One Homography Not Enough?</h3>
+<p>The homography is estimated from point correspondences, and as we know from Part 4, it is only determined up to a nonzero scale. If <span class="math inline">\(\hat{H}\)</span> produces the correct image points, so does <span class="math inline">\(c\hat{H}\)</span> for any <span class="math inline">\(c \neq 0\)</span>:</p>
+<p><span class="math display">\[\phi(c\hat{H}\tilde{\mathbf{X}}_\pi) = \phi(\hat{H}\tilde{\mathbf{X}}_\pi)\]</span></p>
+<p>So the estimated homography satisfies:</p>
+<p><span class="math display">\[\hat{H} = cK\begin{bmatrix}\mathbf{r}_1 &amp; \mathbf{r}_2 &amp; \mathbf{t}
+\end{bmatrix}\]</span></p>
+<p>for some unknown scalar <span class="math inline">\(c\)</span>. Looking at the first two columns:</p>
+<p><span class="math display">\[\hat{\mathbf{h}}_1 = cK\mathbf{r}_1, \qquad \hat{\mathbf{h}}_2 =
+cK\mathbf{r}_2\]</span></p>
+<p>Multiplying by <span class="math inline">\(K^{-1}\)</span>:</p>
+<p><span class="math display">\[K^{-1}\hat{\mathbf{h}}_1 = c\mathbf{r}_1, \qquad K^{-1}\hat{\mathbf{h}}_2
+= c\mathbf{r}_2\]</span></p>
+<p>Now use the two Euclidean constraints on <span class="math inline">\(\mathbf{r}_1\)</span> and <span class="math inline">\(\mathbf{r}_2\)</span>.</p>
+<p><strong>Constraint 1: orthogonality.</strong> Since <span class="math inline">\(\mathbf{r}_1^\top\mathbf{r}_2
+= 0\)</span>:</p>
+<p><span class="math display">\[(K^{-1}\hat{\mathbf{h}}_1)^\top(K^{-1}\hat{\mathbf{h}}_2) =
+c^2\mathbf{r}_1^\top\mathbf{r}_2 = 0\]</span></p>
+<p><span class="math display">\[\boxed{\hat{\mathbf{h}}_1^\top K^{-\top}K^{-1}\hat{\mathbf{h}}_2 = 0
+\qquad \Longrightarrow \qquad \hat{\mathbf{h}}_1^\top\omega\hat{\mathbf{h}}_2
+= 0}\]</span></p>
+<p><strong>Constraint 2: equal norm.</strong> Since <span class="math inline">\(\|\mathbf{r}_1\| = \|\mathbf{r}_2\|
+= 1\)</span>, we have <span class="math inline">\(\|c\mathbf{r}_1\| = \|c\mathbf{r}_2\|\)</span>, so:</p>
+<p><span class="math display">\[\|K^{-1}\hat{\mathbf{h}}_1\|^2 = \|K^{-1}\hat{\mathbf{h}}_2\|^2\]</span></p>
+<p><span class="math display">\[\boxed{\hat{\mathbf{h}}_1^\top\omega\hat{\mathbf{h}}_1 -
+\hat{\mathbf{h}}_2^\top\omega\hat{\mathbf{h}}_2 = 0}\]</span></p>
+<p>Two constraints per homography. This is where Part 5 pays off — <span class="math inline">\(\omega\)</span> turns the Euclidean constraints buried inside the rotation matrix into linear equations on the unknown intrinsics.</p>
+<p>Now count: <span class="math inline">\(\omega\)</span> is symmetric with 6 entries, determined only up to scale, so it has <strong>5 degrees of freedom</strong>. One homography gives 2 constraints. One image is not enough.</p>
+<p>A second image from a different pose gives two more. A third gives two more. The intrinsic matrix <span class="math inline">\(K\)</span> stays the same across all views — only the pose changes:</p>
+<p><span class="math display">\[H_i = K\begin{bmatrix}\mathbf{r}_{1i} &amp; \mathbf{r}_{2i} &amp; \mathbf{t}_i
+\end{bmatrix}\]</span></p>
+<p>Each view contributes two equations on the same <span class="math inline">\(\omega\)</span>. This is the central idea of planar camera calibration — move the camera (or the pattern), collect homographies, and let the shared <span class="math inline">\(\omega\)</span> accumulate enough constraints to be determined.</p>
+<p>With a general <span class="math inline">\(K\)</span> (5 degrees of freedom), at least 3 views are needed. With additional constraints — for example, known square pixels (<span class="math inline">\(f_x =
+f_y\)</span>, <span class="math inline">\(s = 0\)</span>) — fewer views suffice.</p>
 </section>
 </section>
 <section id="combining-several-homographies" class="level2">
-<h2 class="anchored" data-anchor-id="combining-several-homographies">Combining several homographies</h2>
-<p>Suppose we have <span class="math inline">\(m\)</span> different views of the same plane.</p>
-<p>For view <span class="math inline">\(i\)</span>, we estimate a homography</p>
-<p><span class="math display">\[
-\widehat H_i
-=
-\begin{bmatrix}
-\widehat{\mathbf h}_{1i} &amp;
-\widehat{\mathbf h}_{2i} &amp;
-\widehat{\mathbf h}_{3i}
-\end{bmatrix}.
-\]</span></p>
-<p>Each view gives the two constraints</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_{1i}^{\top}
-\omega
-\widehat{\mathbf h}_{2i}
-=
-0,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\widehat{\mathbf h}_{1i}^{\top}
-\omega
-\widehat{\mathbf h}_{1i}
--
-\widehat{\mathbf h}_{2i}^{\top}
-\omega
-\widehat{\mathbf h}_{2i}
-=
-0.
-\]</span></p>
-<p>The rotation and translation are different for every view, but the matrix <span class="math inline">\(\omega\)</span> is the same because the intrinsic matrix <span class="math inline">\(K\)</span> remains unchanged.</p>
-<p>The next step is to write these constraints as a linear system in the unknown entries of <span class="math inline">\(\omega\)</span>.</p>
+<h2 class="anchored" data-anchor-id="combining-several-homographies">Combining Several Homographies</h2>
+<p>Suppose we have <span class="math inline">\(m\)</span> views of the same plane, giving estimated homographies <span class="math inline">\(\hat{H}_1, \hat{H}_2, \ldots, \hat{H}_m\)</span>. Each view <span class="math inline">\(i\)</span> contributes two constraints on <span class="math inline">\(\omega\)</span>:</p>
+<p><span class="math display">\[\hat{\mathbf{h}}_{1i}^\top\omega\hat{\mathbf{h}}_{2i} = 0\]</span></p>
+<p><span class="math display">\[\hat{\mathbf{h}}_{1i}^\top\omega\hat{\mathbf{h}}_{1i} -
+\hat{\mathbf{h}}_{2i}^\top\omega\hat{\mathbf{h}}_{2i} = 0\]</span></p>
+<p>The rotation and translation are different for every view. The matrix <span class="math inline">\(\omega\)</span> is the same — because the camera did not change.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/combining_several_homographies.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Three photographs of the same checkerboard from different poses. Each image gives one homography <span class="math inline">\(\hat{H}_i = K[\mathbf{r}_{1i}\ \mathbf{r}_{2i}\
+\mathbf{t}_i]\)</span> — different extrinsics each time, but the same intrinsic matrix <span class="math inline">\(K\)</span> hidden inside. Two constraints on <span class="math inline">\(\omega\)</span> per view; three views give enough to recover <span class="math inline">\(K\)</span> up to scale.</figcaption>
+</figure>
+</div>
+<p>The next step is to turn these constraints into a linear system in the unknown entries of <span class="math inline">\(\omega\)</span>. This is the same move we have made repeatedly in this series: geometry gives us homogeneous equations, and we stack them into a matrix system <span class="math inline">\(A\mathbf{x} = \mathbf{0}\)</span>.</p>
 <section id="turning-the-constraints-into-linear-equations" class="level3">
-<h3 class="anchored" data-anchor-id="turning-the-constraints-into-linear-equations">Turning the constraints into linear equations</h3>
-<p>Write</p>
-<p><span class="math display">\[
-\omega
-=
-\begin{pmatrix}
-\omega_{11} &amp; \omega_{12} &amp; \omega_{13}\\
-\omega_{12} &amp; \omega_{22} &amp; \omega_{23}\\
-\omega_{13} &amp; \omega_{23} &amp; \omega_{33}
-\end{pmatrix}.
-\]</span></p>
-<p>Collect its six independent entries into the vector</p>
-<p><span class="math display">\[
-\mathbf b
-=
-\begin{pmatrix}
-\omega_{11}\\
-\omega_{12}\\
-\omega_{22}\\
-\omega_{13}\\
-\omega_{23}\\
-\omega_{33}
-\end{pmatrix}.
-\]</span></p>
-<p>Now take two arbitrary vectors</p>
-<p><span class="math display">\[
-\mathbf a
-=
-\begin{pmatrix}
-a_1\\
-a_2\\
-a_3
-\end{pmatrix},
-\qquad
-\mathbf c
-=
-\begin{pmatrix}
-c_1\\
-c_2\\
-c_3
-\end{pmatrix}.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\mathbf a^{\top}\omega\mathbf c
-\]</span></p>
-<p>expands as</p>
-<p><span class="math display">\[
-\mathbf a^{\top}\omega\mathbf c
-=
-a_1c_1\omega_{11}
-+
-(a_1c_2+a_2c_1)\omega_{12}
-+
-a_2c_2\omega_{22}
-+
-(a_1c_3+a_3c_1)\omega_{13}
-+
-(a_2c_3+a_3c_2)\omega_{23}
-+
-a_3c_3\omega_{33}.
-\]</span></p>
-<p>Although this expression is quadratic in the entries of <span class="math inline">\(\mathbf a\)</span> and <span class="math inline">\(\mathbf c\)</span>, it is linear in the unknown entries of <span class="math inline">\(\omega\)</span>.</p>
-<p>Define</p>
-<p><span class="math display">\[
-\mathbf v(\mathbf a,\mathbf c)
-=
-\begin{pmatrix}
-a_1c_1\\
-a_1c_2+a_2c_1\\
-a_2c_2\\
-a_1c_3+a_3c_1\\
-a_2c_3+a_3c_2\\
-a_3c_3
-\end{pmatrix}.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\mathbf a^{\top}\omega\mathbf c
-=
-\mathbf v(\mathbf a,\mathbf c)^{\top}\mathbf b.
-\]</span></p>
-<p>Applying this to the orthogonality constraint from view <span class="math inline">\(i\)</span> gives</p>
-<p><span class="math display">\[
-\mathbf v
-\left(
-\widehat{\mathbf h}_{1i},
-\widehat{\mathbf h}_{2i}
-\right)^{\top}
-\mathbf b
-=
-0.
-\]</span></p>
-<p>Applying it to the equal-length constraint gives</p>
-<p><span class="math display">\[
-\left[
-\mathbf v
-\left(
-\widehat{\mathbf h}_{1i},
-\widehat{\mathbf h}_{1i}
-\right)
--
-\mathbf v
-\left(
-\widehat{\mathbf h}_{2i},
-\widehat{\mathbf h}_{2i}
-\right)
-\right]^{\top}
-\mathbf b
-=
-0.
-\]</span></p>
-<p>Thus every view contributes two rows to a linear system.</p>
-<p>For <span class="math inline">\(m\)</span> views, we stack all the constraints:</p>
-<p><span class="math display">\[
-V\mathbf b
-=
-\mathbf 0,
-\]</span></p>
-<p>where</p>
-<p><span class="math display">\[
-V
-\in
-\mathbb R^{2m\times 6}.
-\]</span></p>
-<p>Explicitly,</p>
-<p><span class="math display">\[
-V
-=
-\begin{pmatrix}
-\mathbf v(\widehat{\mathbf h}_{11},\widehat{\mathbf h}_{21})^{\top}\\
-\left[
-\mathbf v(\widehat{\mathbf h}_{11},\widehat{\mathbf h}_{11})
--
-\mathbf v(\widehat{\mathbf h}_{21},\widehat{\mathbf h}_{21})
-\right]^{\top}\\
-\vdots\\
-\mathbf v(\widehat{\mathbf h}_{1m},\widehat{\mathbf h}_{2m})^{\top}\\
-\left[
-\mathbf v(\widehat{\mathbf h}_{1m},\widehat{\mathbf h}_{1m})
--
-\mathbf v(\widehat{\mathbf h}_{2m},\widehat{\mathbf h}_{2m})
-\right]^{\top}
-\end{pmatrix}.
-\]</span></p>
-<p>The nonlinear-looking geometric constraints have now become a homogeneous linear system.</p>
+<h3 class="anchored" data-anchor-id="turning-the-constraints-into-linear-equations">Turning the Constraints into Linear Equations</h3>
+<p>Stack the six independent entries of <span class="math inline">\(\omega\)</span> into a vector:</p>
+<p><span class="math display">\[\mathbf{b} = (\omega_{11},\ \omega_{12},\ \omega_{22},\ \omega_{13},\
+\omega_{23},\ \omega_{33})^\top \in \mathbb{R}^6\]</span></p>
+<p>For any two vectors <span class="math inline">\(\mathbf{a}, \mathbf{c} \in \mathbb{R}^3\)</span>, the expression <span class="math inline">\(\mathbf{a}^\top\omega\mathbf{c}\)</span> expands as:</p>
+<p><span class="math display">\[\mathbf{a}^\top\omega\mathbf{c} = a_1c_1\omega_{11} + (a_1c_2 +
+a_2c_1)\omega_{12} + a_2c_2\omega_{22} + (a_1c_3 + a_3c_1)\omega_{13}
++ (a_2c_3 + a_3c_2)\omega_{23} + a_3c_3\omega_{33}\]</span></p>
+<p>This looks quadratic in <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{c}\)</span>, but it is <strong>linear in the entries of <span class="math inline">\(\omega\)</span></strong>. Define the vector:</p>
+<p><span class="math display">\[\mathbf{v}(\mathbf{a}, \mathbf{c}) = \begin{pmatrix} a_1c_1 \\
+a_1c_2 + a_2c_1 \\ a_2c_2 \\ a_1c_3 + a_3c_1 \\ a_2c_3 + a_3c_2 \\
+a_3c_3 \end{pmatrix}\]</span></p>
+<p>Then <span class="math inline">\(\mathbf{a}^\top\omega\mathbf{c} = \mathbf{v}(\mathbf{a},
+\mathbf{c})^\top\mathbf{b}\)</span>.</p>
+<p>The two constraints from view <span class="math inline">\(i\)</span> become:</p>
+<p><span class="math display">\[\mathbf{v}(\hat{\mathbf{h}}_{1i}, \hat{\mathbf{h}}_{2i})^\top\mathbf{b}
+= 0 \qquad \text{(orthogonality)}\]</span></p>
+<p><span class="math display">\[\left[\mathbf{v}(\hat{\mathbf{h}}_{1i}, \hat{\mathbf{h}}_{1i}) -
+\mathbf{v}(\hat{\mathbf{h}}_{2i}, \hat{\mathbf{h}}_{2i})\right]^\top
+\mathbf{b} = 0 \qquad \text{(equal norm)}\]</span></p>
+<p>Stack all <span class="math inline">\(m\)</span> views into a <span class="math inline">\(2m \times 6\)</span> matrix <span class="math inline">\(V\)</span> and we get:</p>
+<p><span class="math display">\[\boxed{V\mathbf{b} = \mathbf{0}}\]</span></p>
+<p>The same null space pattern as every other estimation problem in this series — line intersection in Part 1, camera matrix in Part 3, homography in Part 4. The geometric constraints were nonlinear in the original variables. After the right change of variables, they</p>
 </section>
 </section>
 <section id="solving-for-the-image-of-the-absolute-conic" class="level2">
-<h2 class="anchored" data-anchor-id="solving-for-the-image-of-the-absolute-conic">Solving for the image of the absolute conic</h2>
-<p>In the ideal noiseless case, there exists a nonzero vector <span class="math inline">\(\mathbf b\)</span> satisfying</p>
-<p><span class="math display">\[
-V\mathbf b
-=
-\mathbf 0.
-\]</span></p>
-<p>Since <span class="math inline">\(\mathbf b\in\mathbb R^6\)</span>, a unique solution up to scale requires</p>
-<p><span class="math display">\[
-\dim\operatorname{Null}(V)=1.
-\]</span></p>
-<p>By the rank-nullity theorem,</p>
-<p><span class="math display">\[
-\dim\operatorname{Null}(V)
-=
-6-\operatorname{rank}(V).
-\]</span></p>
-<p>Therefore, we want</p>
-<p><span class="math display">\[
-\operatorname{rank}(V)=5.
-\]</span></p>
-<p>In that case,</p>
-<p><span class="math display">\[
-\operatorname{Null}(V)
-=
-\operatorname{span}\{\mathbf b\},
-\]</span></p>
-<p>so every nonzero solution is a scalar multiple of the desired vector.</p>
-<p>Each view contributes two rows. Therefore, at least three views are required in the general case:</p>
-<p><span class="math display">\[
-m\geq 3.
-\]</span></p>
-<p>With three views,</p>
-<p><span class="math display">\[
-V\in\mathbb R^{6\times 6},
-\]</span></p>
-<p>but the matrix should have rank <span class="math inline">\(5\)</span>, not rank <span class="math inline">\(6\)</span>, because a nonzero null-space vector must exist.</p>
-<section id="why-use-the-singular-value-decomposition" class="level3">
-<h3 class="anchored" data-anchor-id="why-use-the-singular-value-decomposition">Why use the singular value decomposition?</h3>
-<p>In exact arithmetic, we could compute the null space of <span class="math inline">\(V\)</span> directly.</p>
-<p>In real data, however, the estimated homographies contain noise. As a result, the constraints are not satisfied exactly, and <span class="math inline">\(V\)</span> will usually have full numerical rank:</p>
-<p><span class="math display">\[
-\operatorname{rank}(V)=6.
-\]</span></p>
-<p>Then the only exact solution to</p>
-<p><span class="math display">\[
-V\mathbf b=\mathbf 0
-\]</span></p>
-<p>is</p>
-<p><span class="math display">\[
-\mathbf b=\mathbf 0,
-\]</span></p>
-<p>which is useless.</p>
-<p>Instead, we search for the unit vector that violates the constraints as little as possible:</p>
-<p><span class="math display">\[
-\min_{\|\mathbf b\|_2=1}
-\|V\mathbf b\|_2^2.
-\]</span></p>
-<p>Let</p>
-<p><span class="math display">\[
-V
-=
-U\Sigma W^{\top}
-\]</span></p>
-<p>be the singular value decomposition of <span class="math inline">\(V\)</span>.</p>
-<p>Write the right singular vectors as</p>
-<p><span class="math display">\[
-W
-=
-\begin{bmatrix}
-\mathbf w_1 &amp;
-\mathbf w_2 &amp;
-\cdots &amp;
-\mathbf w_6
-\end{bmatrix},
-\]</span></p>
-<p>with singular values ordered as</p>
-<p><span class="math display">\[
-\sigma_1
-\geq
-\sigma_2
-\geq
-\cdots
-\geq
-\sigma_6
-\geq
-0.
-\]</span></p>
-<p>The minimizer is the right singular vector corresponding to the smallest singular value:</p>
-<p><span class="math display">\[
-\widehat{\mathbf b}
-=
-\mathbf w_6.
-\]</span></p>
-<p>To see why, write any unit vector as</p>
-<p><span class="math display">\[
-\mathbf b
-=
-\sum_{j=1}^{6}
-\alpha_j\mathbf w_j,
-\qquad
-\sum_{j=1}^{6}\alpha_j^2=1.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\|V\mathbf b\|_2^2
-=
-\sum_{j=1}^{6}
-\sigma_j^2\alpha_j^2.
-\]</span></p>
-<p>This is minimized by placing all the weight on the smallest singular value:</p>
-<p><span class="math display">\[
-\alpha_6=1,
-\qquad
-\alpha_1=\cdots=\alpha_5=0.
-\]</span></p>
-<p>Hence,</p>
-<p><span class="math display">\[
-\widehat{\mathbf b}
-=
-\mathbf w_6.
-\]</span></p>
-<p>In the noiseless case,</p>
-<p><span class="math display">\[
-\sigma_6=0,
-\]</span></p>
-<p>and <span class="math inline">\(\mathbf w_6\)</span> spans the exact null space.</p>
-<p>In the noisy case,</p>
-<p><span class="math display">\[
-\sigma_6&gt;0,
-\]</span></p>
-<p>but <span class="math inline">\(\mathbf w_6\)</span> gives the best approximate null-space direction.</p>
+<h2 class="anchored" data-anchor-id="solving-for-the-image-of-the-absolute-conic">Solving for the Image of the Absolute Conic</h2>
+<p>We need <span class="math inline">\(\dim\text{Null}(V) = 1\)</span>, which requires <span class="math inline">\(\text{rank}(V) = 5\)</span>. Each view contributes two rows, so at least three views are needed in the general case (<span class="math inline">\(m \geq 3\)</span>). With three views, <span class="math inline">\(V \in \mathbb{R}^{6
+\times 6}\)</span> and should have rank 5 — not 6 — because a nonzero null vector must exist.</p>
+<p>In the noiseless case, <span class="math inline">\(\hat{\mathbf{b}}\)</span> is the null vector of <span class="math inline">\(V\)</span>. In practice, image measurements are noisy, <span class="math inline">\(V\)</span> has full numerical rank, and the exact null space is empty. We solve instead:</p>
+<p><span class="math display">\[\min_{\|\mathbf{b}\|=1} \|V\mathbf{b}\|^2\]</span></p>
+<p>As derived in Part 3, the solution is <span class="math inline">\(\hat{\mathbf{b}} = \mathbf{w}_6\)</span> — the last right singular vector of <span class="math inline">\(V\)</span>, corresponding to its smallest singular value. In the noiseless case <span class="math inline">\(\sigma_6 = 0\)</span> exactly; in the noisy case <span class="math inline">\(\sigma_6 &gt; 0\)</span> but <span class="math inline">\(\mathbf{w}_6\)</span> gives the best approximate null direction.</p>
+<p>Same null space pattern, same SVD solution. The only difference is the size of the matrix: <span class="math inline">\(2n \times 12\)</span> in Part 3 for the camera matrix, <span class="math inline">\(2m
+\times 6\)</span> here for <span class="math inline">\(\omega\)</span>.</p>
 </section>
+<section id="recovering-omega-and-k" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-omega-and-k">Recovering <span class="math inline">\(\omega\)</span> and <span class="math inline">\(K\)</span></h2>
+<p>Once <span class="math inline">\(\hat{\mathbf{b}}\)</span> is found, reshape it into the symmetric matrix:</p>
+<p><span class="math display">\[\hat{\omega} = \begin{pmatrix} \hat{b}_1 &amp; \hat{b}_2 &amp; \hat{b}_4 \\
+\hat{b}_2 &amp; \hat{b}_3 &amp; \hat{b}_5 \\ \hat{b}_4 &amp; \hat{b}_5 &amp; \hat{b}_6
+\end{pmatrix}\]</span></p>
+<p>Since <span class="math inline">\(V\mathbf{b} = \mathbf{0}\)</span> is homogeneous, <span class="math inline">\(\hat{\mathbf{b}}\)</span> is only determined up to scale, so <span class="math inline">\(\hat{\omega} = \gamma\omega\)</span> for some unknown scalar <span class="math inline">\(\gamma\)</span>. This scale ambiguity disappears when we normalize <span class="math inline">\(K\)</span> at the end.</p>
+<p>To recover <span class="math inline">\(K\)</span>, use <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span>, which gives <span class="math inline">\(\omega^{-1} = KK^\top\)</span>. Since <span class="math inline">\(K\)</span> is upper triangular, <span class="math inline">\(K^\top\)</span> is lower triangular, so <span class="math inline">\(\omega^{-1} = KK^\top\)</span> is exactly the form produced by Cholesky factorization. Compute <span class="math inline">\(\omega^{-1} = LL^\top\)</span> where <span class="math inline">\(L\)</span> is lower triangular, then <span class="math inline">\(K = L^\top\)</span>.</p>
+<p>Since <span class="math inline">\(\hat{\omega}\)</span> is only known up to scale, normalize by setting <span class="math inline">\(K_{33} = 1\)</span> and choose signs so that <span class="math inline">\(f_x &gt; 0\)</span>, <span class="math inline">\(f_y &gt; 0\)</span>.</p>
 </section>
-<section id="recovering-omega" class="level2">
-<h2 class="anchored" data-anchor-id="recovering-omega">Recovering <span class="math inline">\(\omega\)</span></h2>
-<p>Once <span class="math inline">\(\widehat{\mathbf b}\)</span> has been found, reshape it into the symmetric matrix</p>
-<p><span class="math display">\[
-\widehat\omega
-=
-\begin{pmatrix}
-\widehat b_1 &amp; \widehat b_2 &amp; \widehat b_4\\
-\widehat b_2 &amp; \widehat b_3 &amp; \widehat b_5\\
-\widehat b_4 &amp; \widehat b_5 &amp; \widehat b_6
-\end{pmatrix}.
-\]</span></p>
-<p>Because the system</p>
-<p><span class="math display">\[
-V\mathbf b=\mathbf 0
-\]</span></p>
-<p>is homogeneous, <span class="math inline">\(\widehat{\mathbf b}\)</span> is recovered only up to a nonzero scale.</p>
-<p>Therefore,</p>
-<p><span class="math display">\[
-\widehat\omega
-=
-\gamma\omega
-\]</span></p>
-<p>for some nonzero scalar <span class="math inline">\(\gamma\)</span>.</p>
-<p>This scale ambiguity will disappear when we normalize the recovered intrinsic matrix.</p>
-</section>
-<section id="recovering-the-intrinsic-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="recovering-the-intrinsic-matrix">Recovering the intrinsic matrix</h2>
-<p>We know that</p>
-<p><span class="math display">\[
-\omega
-=
-K^{-\top}K^{-1}.
-\]</span></p>
-<p>Taking inverses gives</p>
-<p><span class="math display">\[
-\omega^{-1}
-=
-KK^{\top}.
-\]</span></p>
-<p>Because <span class="math inline">\(K\)</span> is upper triangular, <span class="math inline">\(K^{\top}\)</span> is lower triangular.</p>
-<p>Suppose we compute the Cholesky factorization</p>
-<p><span class="math display">\[
-\omega^{-1}
-=
-LL^{\top},
-\]</span></p>
-<p>where <span class="math inline">\(L\)</span> is lower triangular.</p>
-<p>Comparing the two factorizations gives</p>
-<p><span class="math display">\[
-L
-=
-K^{\top},
-\]</span></p>
-<p>and therefore</p>
-<p><span class="math display">\[
-K
-=
-L^{\top}.
-\]</span></p>
-<p>Because <span class="math inline">\(\widehat\omega\)</span> is known only up to scale, the resulting matrix is also a scaled version of <span class="math inline">\(K\)</span>.</p>
-<p>We remove that scale by enforcing the usual convention</p>
-<p><span class="math display">\[
-K_{33}=1.
-\]</span></p>
-<p>Thus, if the factorization gives a matrix <span class="math inline">\(\widetilde K\)</span>, we normalize it as</p>
-<p><span class="math display">\[
-K
-=
-\frac{\widetilde K}{\widetilde K_{33}}.
-\]</span></p>
-<p>We also choose the signs so that the focal lengths are positive:</p>
-<p><span class="math display">\[
-f_x&gt;0,
-\qquad
-f_y&gt;0.
-\]</span></p>
-<p>At this point, the intrinsic matrix has been recovered. ## Recovering the pose of each view</p>
-<p>Once <span class="math inline">\(K\)</span> is known, we return to each homography separately.</p>
-<p>For view <span class="math inline">\(i\)</span>,</p>
-<p><span class="math display">\[
-\widehat H_i
-=
-\begin{bmatrix}
-\widehat{\mathbf h}_{1i} &amp;
-\widehat{\mathbf h}_{2i} &amp;
-\widehat{\mathbf h}_{3i}
-\end{bmatrix}.
-\]</span></p>
-<p>Recall that</p>
-<p><span class="math display">\[
-\widehat H_i
-=
-c_i
-K
-\begin{bmatrix}
-\mathbf r_{1i} &amp;
-\mathbf r_{2i} &amp;
-\mathbf t_i
-\end{bmatrix}
-\]</span></p>
-<p>for some nonzero multiplier <span class="math inline">\(c_i\)</span>. Therefore,</p>
-<p><span class="math display">\[
-K^{-1}\widehat{\mathbf h}_{1i}
-=
-c_i\mathbf r_{1i},
-\]</span></p>
-<p><span class="math display">\[
-K^{-1}\widehat{\mathbf h}_{2i}
-=
-c_i\mathbf r_{2i},
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-K^{-1}\widehat{\mathbf h}_{3i}
-=
-c_i\mathbf t_i.
-\]</span></p>
-<p>Since <span class="math inline">\(\mathbf r_{1i}\)</span> and <span class="math inline">\(\mathbf r_{2i}\)</span> are unit vectors, the scale can be estimated from their lengths.</p>
-<p>With noisy data, the two lengths will generally not be exactly equal, so we use their average:</p>
-<p><span class="math display">\[
-\lambda_i
-=
-\frac{2}
-{
-\left\|
-K^{-1}\widehat{\mathbf h}_{1i}
-\right\|_2
-+
-\left\|
-K^{-1}\widehat{\mathbf h}_{2i}
-\right\|_2
-}.
-\]</span></p>
-<p>We then obtain</p>
-<p><span class="math display">\[
-\mathbf r_{1i}
-=
-\lambda_i
-K^{-1}\widehat{\mathbf h}_{1i},
-\]</span></p>
-<p><span class="math display">\[
-\mathbf r_{2i}
-=
-\lambda_i
-K^{-1}\widehat{\mathbf h}_{2i},
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\mathbf t_i
-=
-\lambda_i
-K^{-1}\widehat{\mathbf h}_{3i}.
-\]</span></p>
-<p>The third rotation column is obtained from</p>
-<p><span class="math display">\[
-\mathbf r_{3i}
-=
-\mathbf r_{1i}\times\mathbf r_{2i}.
-\]</span></p>
-<p>This gives the approximate rotation matrix</p>
-<p><span class="math display">\[
-\widetilde R_i
-=
-\begin{bmatrix}
-\mathbf r_{1i} &amp;
-\mathbf r_{2i} &amp;
-\mathbf r_{3i}
-\end{bmatrix}.
-\]</span></p>
-<p>In exact arithmetic,</p>
-<p><span class="math display">\[
-\widetilde R_i^\top\widetilde R_i=I
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\det(\widetilde R_i)=1.
-\]</span></p>
-<p>With noisy image measurements, however, <span class="math inline">\(\widetilde R_i\)</span> will generally be only approximately orthogonal. We therefore replace it with the nearest valid rotation matrix.</p>
+<section id="recovering-the-pose-of-each-view" class="level2">
+<h2 class="anchored" data-anchor-id="recovering-the-pose-of-each-view">Recovering the Pose of Each View</h2>
+<p>With <span class="math inline">\(K\)</span> in hand, return to each homography separately. For view <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[\hat{H}_i = c_i K\begin{bmatrix}\mathbf{r}_{1i} &amp; \mathbf{r}_{2i} &amp;
+\mathbf{t}_i\end{bmatrix}\]</span></p>
+<p>Multiplying by <span class="math inline">\(K^{-1}\)</span>:</p>
+<p><span class="math display">\[K^{-1}\hat{\mathbf{h}}_{1i} = c_i\mathbf{r}_{1i}, \qquad
+K^{-1}\hat{\mathbf{h}}_{2i} = c_i\mathbf{r}_{2i}, \qquad
+K^{-1}\hat{\mathbf{h}}_{3i} = c_i\mathbf{t}_i\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{r}_{1i}\)</span> and <span class="math inline">\(\mathbf{r}_{2i}\)</span> are unit vectors, estimate the scale from their average recovered length:</p>
+<p><span class="math display">\[\lambda_i = \frac{2}{\|K^{-1}\hat{\mathbf{h}}_{1i}\| +
+\|K^{-1}\hat{\mathbf{h}}_{2i}\|}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\mathbf{r}_{1i} = \lambda_i K^{-1}\hat{\mathbf{h}}_{1i}, \qquad
+\mathbf{r}_{2i} = \lambda_i K^{-1}\hat{\mathbf{h}}_{2i}, \qquad
+\mathbf{t}_i = \lambda_i K^{-1}\hat{\mathbf{h}}_{3i}\]</span></p>
+<p>The third rotation column comes from the cross product:</p>
+<p><span class="math display">\[\mathbf{r}_{3i} = \mathbf{r}_{1i} \times \mathbf{r}_{2i}\]</span></p>
+<p>giving the approximate rotation matrix <span class="math inline">\(\tilde{R}_i = [\mathbf{r}_{1i}\
+\mathbf{r}_{2i}\ \mathbf{r}_{3i}]\)</span>. In exact arithmetic this would be a proper rotation. With noisy data it will only be approximately orthogonal — so we project it onto the nearest valid rotation matrix, which we discuss next.</p>
 <section id="projecting-onto-the-nearest-rotation-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="projecting-onto-the-nearest-rotation-matrix">Projecting onto the nearest rotation matrix</h3>
-<p>We seek a matrix <span class="math inline">\(Q\in SO(3)\)</span> that minimizes</p>
-<p><span class="math display">\[
-\min_{Q\in SO(3)}
-\left\|
-\widetilde R_i-Q
-\right\|_F^2,
-\]</span></p>
-<p>where</p>
-<p><span class="math display">\[
-SO(3)
-=
-\left\{
-Q\in\mathbb R^{3\times3}
-:
-Q^\top Q=I,
-\quad
-\det(Q)=1
-\right\}.
-\]</span></p>
-<p>First consider the corresponding minimization over all orthogonal matrices:</p>
-<p><span class="math display">\[
-\min_{Q\in O(3)}
-\left\|
-\widetilde R_i-Q
-\right\|_F^2,
-\]</span></p>
-<p>where</p>
-<p><span class="math display">\[
-O(3)
-=
-\left\{
-Q\in\mathbb R^{3\times3}
-:
-Q^\top Q=I
-\right\}.
-\]</span></p>
-<p>Here, <span class="math inline">\(O(3)\)</span> denotes the <strong>orthogonal group in three dimensions</strong>: the set of all <span class="math inline">\(3\times 3\)</span> orthogonal matrices. The <span class="math inline">\(3\)</span> refers to the dimension of the underlying space, <span class="math inline">\(\mathbb R^3\)</span>.</p>
-<p>Similarly, <span class="math inline">\(SO(3)\)</span> denotes the <strong>special orthogonal group in three dimensions</strong>. The word <em>special</em> means that we restrict to orthogonal matrices with determinant <span class="math inline">\(+1\)</span>.</p>
-<p>You do not need to understand the word <strong>group</strong> at this point. For now, think of simply as a technical term.</p>
-<p>Expanding the Frobenius norm,</p>
-<p><span class="math display">\[
-\begin{aligned}
-\left\|
-\widetilde R_i-Q
-\right\|_F^2
-&amp;=
-\operatorname{tr}
-\left[
-(\widetilde R_i-Q)^\top
-(\widetilde R_i-Q)
-\right]\\
-&amp;=
-\operatorname{tr}
-\left(
-\widetilde R_i^\top\widetilde R_i
-\right)
-+
-\operatorname{tr}
-\left(
-Q^\top Q
-\right)
--
-2\operatorname{tr}
-\left(
-Q^\top\widetilde R_i
-\right).
-\end{aligned}
-\]</span></p>
-<p>Since <span class="math inline">\(Q^\top Q=I\)</span>,</p>
-<p><span class="math display">\[
-\operatorname{tr}(Q^\top Q)=3.
-\]</span></p>
-<p>The first two terms do not depend on <span class="math inline">\(Q\)</span>. Therefore, minimizing the Frobenius distance is equivalent to maximizing</p>
-<p><span class="math display">\[
-\operatorname{tr}
-\left(
-Q^\top\widetilde R_i
-\right).
-\]</span></p>
-<p>Let</p>
-<p><span class="math display">\[
-\widetilde R_i
-=
-U_i\Sigma_iV_i^\top
-\]</span></p>
-<p>be the singular value decomposition of <span class="math inline">\(\widetilde R_i\)</span>, where</p>
-<p><span class="math display">\[
-\Sigma_i
-=
-\operatorname{diag}
-\left(
-\sigma_{1i},
-\sigma_{2i},
-\sigma_{3i}
-\right).
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-\begin{aligned}
-\operatorname{tr}
-\left(
-Q^\top\widetilde R_i
-\right)
-&amp;=
-\operatorname{tr}
-\left(
-Q^\top U_i\Sigma_iV_i^\top
-\right)\\
-&amp;=
-\operatorname{tr}
-\left(
-V_i^\top Q^\top U_i\Sigma_i
-\right).
-\end{aligned}
-\]</span></p>
-<p>Define</p>
-<p><span class="math display">\[
-M_i
-=
-U_i^\top QV_i.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-M_i^\top
-=
-V_i^\top Q^\top U_i,
-\]</span></p>
-<p>and hence</p>
-<p><span class="math display">\[
-\operatorname{tr}
-\left(
-Q^\top\widetilde R_i
-\right)
-=
-\operatorname{tr}
-\left(
-M_i^\top\Sigma_i
-\right).
-\]</span></p>
-<p>Since <span class="math inline">\(M_i\)</span> is orthogonal,</p>
-<p><span class="math display">\[
--1\leq (M_i)_{jj}\leq 1.
-\]</span></p>
-<p>Therefore,</p>
-<p><span class="math display">\[
-\begin{aligned}
-\operatorname{tr}
-\left(
-M_i^\top\Sigma_i
-\right)
-&amp;=
-\sigma_{1i}(M_i)_{11}
-+
-\sigma_{2i}(M_i)_{22}
-+
-\sigma_{3i}(M_i)_{33}\\
-&amp;\leq
-\sigma_{1i}
-+
-\sigma_{2i}
-+
-\sigma_{3i}.
-\end{aligned}
-\]</span></p>
-<p>The upper bound is attained when</p>
-<p><span class="math display">\[
-M_i=I.
-\]</span></p>
-<p>Thus,</p>
-<p><span class="math display">\[
-U_i^\top QV_i=I,
-\]</span></p>
-<p>which gives</p>
-<p><span class="math display">\[
-Q=U_iV_i^\top.
-\]</span></p>
-<p>If</p>
-<p><span class="math display">\[
-\det(U_iV_i^\top)=1,
-\]</span></p>
-<p>then <span class="math inline">\(Q\)</span> is already a valid rotation matrix, and we set</p>
-<p><span class="math display">\[
-R_i
-=
-U_iV_i^\top.
-\]</span></p>
-<p>If instead</p>
-<p><span class="math display">\[
-\det(U_iV_i^\top)=-1,
-\]</span></p>
-<p>then <span class="math inline">\(U_iV_i^\top\)</span> is orthogonal but is not a rotation matrix.</p>
-<p>In this case, define</p>
-<p><span class="math display">\[
-D_i
-=
-\begin{pmatrix}
-1&amp;0&amp;0\\
-0&amp;1&amp;0\\
-0&amp;0&amp;-1
-\end{pmatrix},
-\]</span></p>
-<p>and set</p>
-<p><span class="math display">\[
-R_i
-=
-U_iD_iV_i^\top.
-\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[
-R_i^\top R_i=I,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\begin{aligned}
-\det(R_i)
-&amp;=
-\det(U_iV_i^\top)\det(D_i)\\
-&amp;=
-(-1)(-1)\\
-&amp;=
-1.
-\end{aligned}
-\]</span></p>
-<p>Therefore,</p>
-<p><span class="math display">\[
-R_i\in SO(3).
-\]</span></p>
-<p>The final pose estimate for view <span class="math inline">\(i\)</span> is</p>
-<p><span class="math display">\[
-R_i,
-\qquad
-\mathbf t_i.
-\]</span></p>
+<h3 class="anchored" data-anchor-id="projecting-onto-the-nearest-rotation-matrix">Projecting onto the Nearest Rotation Matrix</h3>
+<p>With noisy data, <span class="math inline">\(\tilde{R}_i\)</span> is only approximately orthogonal. We need to find the nearest valid rotation matrix — the closest matrix in <span class="math inline">\(SO(3)\)</span>, where:</p>
+<p><span class="math display">\[SO(3) = \{Q \in \mathbb{R}^{3 \times 3} : Q^\top Q = I,\ \det(Q) = 1\}\]</span></p>
+<p><span class="math inline">\(SO(3)\)</span> is the <strong>special orthogonal group</strong> — the set of all <span class="math inline">\(3 \times
+3\)</span> rotation matrices. The word <em>special</em> means <span class="math inline">\(\det = +1\)</span>; the word <em>orthogonal</em> means <span class="math inline">\(Q^\top Q = I\)</span>. You do not need to understand the word <em>group</em> here — it is just a name for this set.</p>
+<p>We want to solve:</p>
+<p><span class="math display">\[\min_{Q \in SO(3)} \|\tilde{R}_i - Q\|_F^2\]</span></p>
+<p>Expanding the Frobenius norm:</p>
+<p><span class="math display">\[\|\tilde{R}_i - Q\|_F^2 = \text{tr}(\tilde{R}_i^\top\tilde{R}_i) +
+\text{tr}(Q^\top Q) - 2\text{tr}(Q^\top\tilde{R}_i)\]</span></p>
+<p>Since <span class="math inline">\(Q^\top Q = I\)</span>, the first two terms are constants. So minimizing the Frobenius distance is equivalent to maximizing:</p>
+<p><span class="math display">\[\text{tr}(Q^\top\tilde{R}_i)\]</span></p>
+<p>Let <span class="math inline">\(\tilde{R}_i = U_i\Sigma_i V_i^\top\)</span> be the SVD. Define <span class="math inline">\(M_i =
+U_i^\top QV_i\)</span>, which is orthogonal since <span class="math inline">\(Q\)</span>, <span class="math inline">\(U_i\)</span>, <span class="math inline">\(V_i\)</span> are all orthogonal. Then:</p>
+<p><span class="math display">\[\text{tr}(Q^\top\tilde{R}_i) = \text{tr}(V_i^\top Q^\top U_i \Sigma_i)
+= \text{tr}(M_i^\top\Sigma_i) = \sum_j \sigma_{ji}(M_i)_{jj}\]</span></p>
+<p>Since each diagonal entry of an orthogonal matrix satisfies <span class="math inline">\(|(M_i)_{jj}|
+\leq 1\)</span>, and <span class="math inline">\(\sigma_{ji} \geq 0\)</span>:</p>
+<p><span class="math display">\[\text{tr}(M_i^\top\Sigma_i) \leq \sigma_{1i} + \sigma_{2i} + \sigma_{3i}\]</span></p>
+<p>The bound is attained when <span class="math inline">\(M_i = I\)</span>, i.e.&nbsp;<span class="math inline">\(U_i^\top QV_i = I\)</span>, giving:</p>
+<p><span class="math display">\[Q = U_iV_i^\top\]</span></p>
+<p><strong>If <span class="math inline">\(\det(U_iV_i^\top) = +1\)</span>:</strong> this is already a valid rotation matrix. Set <span class="math inline">\(R_i = U_iV_i^\top\)</span>.</p>
+<p><strong>If <span class="math inline">\(\det(U_iV_i^\top) = -1\)</span>:</strong> <span class="math inline">\(U_iV_i^\top\)</span> is orthogonal but not a rotation (it is a reflection). Fix it by flipping the sign of the last singular vector. Define:</p>
+<p><span class="math display">\[D_i = \begin{pmatrix} 1 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1
+\end{pmatrix}\]</span></p>
+<p>and set <span class="math inline">\(R_i = U_i D_i V_i^\top\)</span>. Then <span class="math inline">\(R_i^\top R_i = I\)</span> and:</p>
+<p><span class="math display">\[\det(R_i) = \det(U_iV_i^\top)\det(D_i) = (-1)(-1) = +1\]</span></p>
+<p>So <span class="math inline">\(R_i \in SO(3)\)</span>.</p>
+<p>The final pose estimate for view <span class="math inline">\(i\)</span> is <span class="math inline">\(R_i\)</span>, <span class="math inline">\(\mathbf{t}_i\)</span>.</p>
 </section>
 </section>
-<section id="linear-calibration-is-only-an-initialization" class="level2">
-<h2 class="anchored" data-anchor-id="linear-calibration-is-only-an-initialization">Linear calibration is only an initialization</h2>
-<p>The procedure so far gives us estimates of</p>
-<p><span class="math display">\[
-K,
-\qquad
-R_i,
-\qquad
-\mathbf t_i.
-\]</span></p>
-<p>These estimates were obtained through a sequence of linear steps:</p>
-<p><span class="math display">\[
-\text{point correspondences}
-\longrightarrow
-\widehat H_i
-\longrightarrow
-V
-\longrightarrow
-\widehat\omega
-\longrightarrow
-K.
-\]</span></p>
-<p>But the quantity we ultimately care about is not the algebraic error</p>
-<p><span class="math display">\[
-\|V\mathbf b\|_2.
-\]</span></p>
-<p>We care about how accurately the estimated camera predicts the observed image points.</p>
-<p>For planar point <span class="math inline">\(j\)</span> in view <span class="math inline">\(i\)</span>, let</p>
-<p><span class="math display">\[
-\widetilde{\mathbf X}_j
-=
-\begin{pmatrix}
-X_j\\
-Y_j\\
-1
-\end{pmatrix}.
-\]</span></p>
-<p>The predicted image point is</p>
-<p><span class="math display">\[
-\widehat{\mathbf x}_{ij}
-=
-\phi
-\left(
-K
-\begin{bmatrix}
-\mathbf r_{1i} &amp;
-\mathbf r_{2i} &amp;
-\mathbf t_i
-\end{bmatrix}
-\widetilde{\mathbf X}_j
-\right).
-\]</span></p>
-<p>If the observed image point is <span class="math inline">\(\mathbf x_{ij}\)</span>, the reprojection residual is</p>
-<p><span class="math display">\[
-\mathbf e_{ij}
-=
-\mathbf x_{ij}
--
-\widehat{\mathbf x}_{ij}.
-\]</span></p>
-<p>The final estimates are obtained by minimizing the total reprojection error:</p>
-<p><span class="math display">\[
-\min_{K,\{R_i,\mathbf t_i\}_{i=1}^{m}}
-\sum_{i=1}^{m}
-\sum_{j=1}^{n_i}
-\left\|
-\mathbf x_{ij}
--
-\phi
-\left(
-K
-\begin{bmatrix}
-\mathbf r_{1i} &amp;
-\mathbf r_{2i} &amp;
-\mathbf t_i
-\end{bmatrix}
-\widetilde{\mathbf X}_j
-\right)
-\right\|_2^2.
-\]</span></p>
-<p>This is a nonlinear least-squares problem.</p>
-<p>The linear calibration method provides the starting point, and an iterative method such as Gauss–Newton or Levenberg–Marquardt refines all the parameters jointly.</p>
-<p>The important difference from refining a single camera matrix is that the intrinsic matrix is shared across every view:</p>
-<p><span class="math display">\[
-K_1=K_2=\cdots=K_m=K,
-\]</span></p>
-<p>while every image has its own rotation and translation:</p>
-<p><span class="math display">\[
-R_i,
-\qquad
-\mathbf t_i.
-\]</span></p>
-<p>Thus the optimization adjusts one common intrinsic matrix together with several image-specific poses.</p>
+<section id="are-we-done-not-quite." class="level2">
+<h2 class="anchored" data-anchor-id="are-we-done-not-quite.">Are We Done? Not Quite.</h2>
+<p>The procedure so far gives us estimates of <span class="math inline">\(K\)</span>, <span class="math inline">\(R_i\)</span>, <span class="math inline">\(\mathbf{t}_i\)</span> through a sequence of linear steps:</p>
+<p><span class="math display">\[\text{point correspondences} \longrightarrow \hat{H}_i \longrightarrow
+V\mathbf{b} = \mathbf{0} \longrightarrow \hat{\omega} \longrightarrow K\]</span></p>
+<p>But we have been here before. In Part 3, DLT gave us a camera matrix that minimised the algebraic error <span class="math inline">\(\|A\mathbf{p}\|^2\)</span> — not the geometric reprojection error. The same issue applies here.</p>
+<p>What we actually care about is how accurately the estimated camera predicts the observed image points. The reprojection residual for point <span class="math inline">\(j\)</span> in view <span class="math inline">\(i\)</span> is:</p>
+<p><span class="math display">\[\mathbf{e}_{ij} = \mathbf{x}_{ij} - \hat{\mathbf{x}}_{ij}, \qquad
+\hat{\mathbf{x}}_{ij} = \phi\left(K\begin{bmatrix}\mathbf{r}_{1i} &amp;
+\mathbf{r}_{2i} &amp; \mathbf{t}_i\end{bmatrix}\tilde{\mathbf{X}}_j\right)\]</span></p>
+<p>The final estimates come from minimising the total reprojection error:</p>
+<p><span class="math display">\[\min_{K,\{R_i,\mathbf{t}_i\}} \sum_{i=1}^m \sum_{j=1}^{n_i}
+\left\|\mathbf{x}_{ij} - \phi\left(K\begin{bmatrix}\mathbf{r}_{1i} &amp;
+\mathbf{r}_{2i} &amp; \mathbf{t}_i\end{bmatrix}\tilde{\mathbf{X}}_j\right)
+\right\|^2\]</span></p>
+<p>This is nonlinear — Gauss-Newton or Levenberg-Marquardt handles it, initialised from the linear estimates above. The key difference from Part 3 is that here <span class="math inline">\(K\)</span> is shared across all views while each view has its own <span class="math inline">\(R_i\)</span>, <span class="math inline">\(\mathbf{t}_i\)</span>. The optimisation adjusts one common intrinsic matrix together with <span class="math inline">\(m\)</span> image-specific poses simultaneously.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>A note on rotations and Lie groups
+<span class="screen-reader-only">Note</span>A Note on Rotations
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A rotation matrix cannot be updated by changing its nine entries independently, because it must continue to satisfy</p>
-<p><span class="math display">\[
-R^{\top}R=I,
-\qquad
-\det(R)=1.
-\]</span></p>
-<p>The set of all <span class="math inline">\(3\times3\)</span> rotation matrices is called the <strong>special orthogonal group</strong></p>
-<p><span class="math display">\[
-SO(3).
-\]</span></p>
-<p>This is an example of a <strong>Lie group</strong>: a space that is simultaneously a smooth geometric object and a group.</p>
-<p>This structure allows us to describe a small change in rotation using only three parameters and then convert that change back into a valid rotation matrix.</p>
-<p>We will return to Lie groups later. For now, the important point is simply that rotations must be updated in a way that preserves their geometric structure.</p>
+<p>A rotation matrix cannot be updated by changing its nine entries independently — it must continue to satisfy <span class="math inline">\(R^\top R = I\)</span> and <span class="math inline">\(\det(R) = 1\)</span>. The set of all <span class="math inline">\(3 \times 3\)</span> rotation matrices is <span class="math inline">\(SO(3)\)</span>, which is an example of a <strong>Lie group</strong> — a smooth geometric space with group structure. This allows us to describe a small change in rotation using only three parameters and convert it back to a valid rotation matrix. We will return to Lie groups later. For now, the point is simply that rotations must be updated carefully to preserve their geometric structure.</p>
 </div>
 </div>
-<p>The complete calibration pipeline is therefore</p>
-<p><span class="math display">\[
-\boxed{
-\begin{aligned}
-\text{planar point correspondences}
-&amp;\longrightarrow
-\widehat H_1,\ldots,\widehat H_m\\
-&amp;\longrightarrow
-V\mathbf b=\mathbf 0\\
-&amp;\longrightarrow
-\widehat\omega\\
-&amp;\longrightarrow
-K\\
-&amp;\longrightarrow
-R_i,\mathbf t_i\\
-&amp;\longrightarrow
-\text{nonlinear reprojection-error refinement}.
-\end{aligned}
-}
-\]</span></p>
-<p>The remarkable part is that a flat plane, observed from several different poses, contains enough Euclidean information to reveal the internal geometry of the camera.</p>
+<p>The complete pipeline is:</p>
+<p><span class="math display">\[\boxed{\begin{aligned} \text{planar correspondences} &amp;\longrightarrow
+\hat{H}_1, \ldots, \hat{H}_m \longrightarrow V\mathbf{b} = \mathbf{0}
+\longrightarrow \hat{\omega} \longrightarrow K \\ &amp;\longrightarrow R_i,
+\mathbf{t}_i \longrightarrow \text{nonlinear reprojection refinement}
+\end{aligned}}\]</span></p>
+<p>A flat plane, photographed from several different poses, contains enough Euclidean information to reveal the internal geometry of the camera. That surprised me a little, for sure.</p>
+<p>This procedure — homographies from a planar pattern, constraints on <span class="math inline">\(\omega\)</span>, Cholesky to recover <span class="math inline">\(K\)</span>, nonlinear refinement — is known as <strong>Zhang’s calibration method</strong>, after Zhengyou Zhang who published it in 1999. It is the algorithm behind OpenCV’s <code>calibrateCamera</code>.</p>
+</section>
+<section id="why-does-camera-calibration-matter" class="level2">
+<h2 class="anchored" data-anchor-id="why-does-camera-calibration-matter">Why Does Camera Calibration Matter?</h2>
+<p>An uncalibrated camera is not yet a reliable measurement instrument. It can produce images, but the relationship between three-dimensional camera coordinates and image pixels is not fully known.</p>
+<p>Without the intrinsic matrix, we do not know how focal length, pixel scaling, and the principal point determine the projection of a scene onto the image. Without a distortion model, the measured pixel locations may also deviate systematically from the ideal pinhole-camera model.</p>
+<p>Calibration estimates these quantities and turns the camera into a known geometric sensor.</p>
+<p>Once <span class="math inline">\(K\)</span> and the distortion parameters are known:</p>
+<ul>
+<li><strong>3D reconstruction</strong> becomes possible when images from multiple viewpoints, their relative camera poses, and point correspondences are available</li>
+<li><strong>Augmented reality</strong> can render virtual objects with perspective consistent with the real camera</li>
+<li><strong>Stereo vision</strong> can use epipolar geometry, triangulation, and disparity to estimate depth. Stereo vision will be the topic of the upcoming posts of the series.</li>
+<li><strong>Visual odometry and SLAM</strong> can use the correct camera projection model when estimating camera motion and scene structure</li>
+<li><strong>Metrology and medical imaging</strong> can relate image measurements to physical geometry when the required scale and scene constraints are available</li>
+</ul>
+<p>Next, we deal with a complication the ideal pinhole model ignores entirely: real lenses distort the image.</p>
 </section>
 <section id="lens-distortion" class="level2">
-<h2 class="anchored" data-anchor-id="lens-distortion">Lens distortion</h2>
-<p>The camera matrix</p>
-<p><span class="math display">\[
-P=K[R\mid\mathbf t]
-\]</span></p>
-<p>describes an ideal pinhole camera.</p>
-<p>For a world point <span class="math inline">\(\mathbf X_w\)</span>, the camera model predicts an ideal pixel location</p>
-<p><span class="math display">\[
-\mathbf x
-=
-\begin{pmatrix}
-x\\
-y
-\end{pmatrix}.
-\]</span></p>
-<p>A real lens may record the same point at a slightly different pixel location</p>
-<p><span class="math display">\[
-\mathbf x_d
-=
-\begin{pmatrix}
-x_d\\
-y_d
-\end{pmatrix}.
-\]</span></p>
-<p>Lens distortion models the difference between the ideal pinhole prediction <span class="math inline">\(\mathbf x\)</span> and the observed distorted position <span class="math inline">\(\mathbf x_d\)</span>.</p>
+<h2 class="anchored" data-anchor-id="lens-distortion">Lens Distortion</h2>
+<p>The camera matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span> describes an ideal pinhole camera — a mathematical abstraction. Real lenses are not ideal. They bend light in ways that the pinhole model does not capture, and the result is that straight lines in the world can appear curved in the image.</p>
+<p>For a world point <span class="math inline">\(\mathbf{X}_w\)</span>, the pinhole model predicts an ideal pixel <span class="math inline">\(\mathbf{x} = (x, y)^\top\)</span>. A real lens records it at a slightly different location <span class="math inline">\(\mathbf{x}_d = (x_d, y_d)^\top\)</span>. Lens distortion models the map from <span class="math inline">\(\mathbf{x}\)</span> to <span class="math inline">\(\mathbf{x}_d\)</span>.</p>
 <section id="radial-distortion" class="level3">
-<h3 class="anchored" data-anchor-id="radial-distortion">Radial distortion</h3>
-<p>The optical axis intersects the image at the principal point</p>
-<p><span class="math display">\[
-\mathbf p
-=
-\begin{pmatrix}
-p_x\\
-p_y
-\end{pmatrix}.
-\]</span></p>
-<p>The vector from the principal point to the ideal pixel is</p>
-<p><span class="math display">\[
-\mathbf x-\mathbf p
-=
-\begin{pmatrix}
-x-p_x\\
-y-p_y
-\end{pmatrix}.
-\]</span></p>
-<p>Its distance from the principal point is</p>
-<p><span class="math display">\[
-r
-=
-\|\mathbf x-\mathbf p\|_2
-=
-\sqrt{(x-p_x)^2+(y-p_y)^2}.
-\]</span></p>
-<p>Radial distortion assumes that the ideal point, the distorted point and the principal point remain on the same line. The lens changes only the distance of the point from the principal point.</p>
-<p>We therefore write</p>
-<p><span class="math display">\[
-\mathbf x_d-\mathbf p
-=
-L(r)(\mathbf x-\mathbf p),
-\]</span></p>
-<p>where <span class="math inline">\(L(r)\)</span> is a radial scale factor.</p>
-<p>Equivalently,</p>
-<p><span class="math display">\[
-\boxed{
-\mathbf x_d
-=
-\mathbf p+L(r)(\mathbf x-\mathbf p).
-}
-\]</span></p>
-<p>A commonly used polynomial model is</p>
-<p><span class="math display">\[
-L(r)
-=
-1+k_1r^2+k_2r^4+k_3r^6.
-\]</span></p>
-<p>Hence,</p>
-<p><span class="math display">\[
-x_d
-=
-p_x+
-(x-p_x)
-\left(
-1+k_1r^2+k_2r^4+k_3r^6
-\right),
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-y_d
-=
-p_y+
-(y-p_y)
-\left(
-1+k_1r^2+k_2r^4+k_3r^6
-\right).
-\]</span></p>
-<p>The distorted radial distance is</p>
-<p><span class="math display">\[
-r_d=L(r)r.
-\]</span></p>
-<p>Therefore:</p>
+<h3 class="anchored" data-anchor-id="radial-distortion">Radial Distortion</h3>
+<p>The most important type is radial distortion. The optical axis intersects the image at the principal point <span class="math inline">\(\mathbf{p} = (p_x,
+p_y)^\top\)</span>. Let <span class="math inline">\(r = \|\mathbf{x} - \mathbf{p}\|\)</span> be the distance of the ideal pixel from the principal point.</p>
+<p>Radial distortion assumes that the ideal point, the distorted point, and the principal point all lie on the same ray from <span class="math inline">\(\mathbf{p}\)</span>. The lens only changes how far along that ray the point lands:</p>
+<p><span class="math display">\[\boxed{\mathbf{x}_d = \mathbf{p} + L(r)(\mathbf{x} - \mathbf{p})}\]</span></p>
+<p>where <span class="math inline">\(L(r)\)</span> is a radial scale factor. A standard polynomial model is:</p>
+<p><span class="math display">\[L(r) = 1 + k_1r^2 + k_2r^4 + k_3r^6\]</span></p>
+<p>So:</p>
+<p><span class="math display">\[x_d = p_x + (x - p_x)(1 + k_1r^2 + k_2r^4 + k_3r^6)\]</span> <span class="math display">\[y_d = p_y + (y - p_y)(1 + k_1r^2 + k_2r^4 + k_3r^6)\]</span></p>
+<p>Near the principal point <span class="math inline">\(r \approx 0\)</span>, <span class="math inline">\(L(r) \approx 1\)</span> and the distortion is negligible. It grows toward the image boundaries — which is why wide-angle lenses look fine in the center and distorted at the edges.</p>
 <ul>
-<li>if <span class="math inline">\(L(r)=1\)</span>, the point does not move;</li>
-<li>if <span class="math inline">\(L(r)&lt;1\)</span>, the point moves towards the principal point;</li>
-<li>if <span class="math inline">\(L(r)&gt;1\)</span>, the point moves away from the principal point.</li>
+<li><span class="math inline">\(L(r) = 1\)</span>: point does not move</li>
+<li><span class="math inline">\(L(r) &lt; 1\)</span>: point moves toward the principal point</li>
+<li><span class="math inline">\(L(r) &gt; 1\)</span>: point moves away from the principal point</li>
 </ul>
-<p>Since <span class="math inline">\(r\)</span> is small near the principal point,</p>
-<p><span class="math display">\[
-L(r)\approx 1
-\]</span></p>
-<p>there. The distortion generally becomes more visible towards the image boundaries.</p>
 </section>
 <section id="why-are-the-odd-powers-missing-from-lr" class="level3">
-<h3 class="anchored" data-anchor-id="why-are-the-odd-powers-missing-from-lr">Why are the odd powers missing from <span class="math inline">\(L(r)\)</span>?</h3>
-<p>Consider any line passing through the principal point. Let <span class="math inline">\(t\)</span> be a signed coordinate along this line, with <span class="math inline">\(t=0\)</span> at the principal point.</p>
-<p>Let <span class="math inline">\(g(t)\)</span> be the distorted signed coordinate. Radial symmetry requires opposite points to remain opposite:</p>
-<p><span class="math display">\[
-g(-t)=-g(t).
-\]</span></p>
-<p>Thus <span class="math inline">\(g\)</span> is an odd function. Assuming it is smooth, its Taylor expansion contains only odd powers:</p>
-<p><span class="math display">\[
-g(t)
-=
-a_1t+a_3t^3+a_5t^5+a_7t^7+\cdots.
-\]</span></p>
-<p>Taking the first-order scale to be one,</p>
-<p><span class="math display">\[
-g(t)
-=
-t+k_1t^3+k_2t^5+k_3t^7+\cdots.
-\]</span></p>
-<p>Factoring out <span class="math inline">\(t\)</span> gives</p>
-<p><span class="math display">\[
-g(t)
-=
-t
-\left(
-1+k_1t^2+k_2t^4+k_3t^6+\cdots
-\right).
-\]</span></p>
-<p>The expression inside the parentheses is the radial scale factor. Replacing the signed coordinate by the radial distance gives</p>
-<p><span class="math display">\[
-L(r)
-=
-1+k_1r^2+k_2r^4+k_3r^6+\cdots.
-\]</span></p>
-<p>Thus, the full radial mapping contains odd powers,</p>
-<p><span class="math display">\[
-r_d
-=
-r+k_1r^3+k_2r^5+k_3r^7+\cdots,
-\]</span></p>
-<p>while the multiplicative scale factor contains even powers because one factor of <span class="math inline">\(r\)</span> has been factored out:</p>
-<p><span class="math display">\[
-L(r)
-=
-\frac{r_d}{r}
-=
-1+k_1r^2+k_2r^4+k_3r^6+\cdots.
-\]</span></p>
+<h3 class="anchored" data-anchor-id="why-are-the-odd-powers-missing-from-lr">Why Are the Odd Powers Missing from <span class="math inline">\(L(r)\)</span>?</h3>
+<p>A natural question: why does <span class="math inline">\(L(r)\)</span> contain only even powers of <span class="math inline">\(r\)</span>?</p>
+<p>Consider any line through the principal point. Let <span class="math inline">\(t\)</span> be a signed coordinate along this line, with <span class="math inline">\(t = 0\)</span> at the principal point. Let <span class="math inline">\(g(t)\)</span> be the distorted position. Radial symmetry requires opposite points to remain opposite:</p>
+<p><span class="math display">\[g(-t) = -g(t)\]</span></p>
+<p>So <span class="math inline">\(g\)</span> is an odd function. Its Taylor expansion contains only odd powers:</p>
+<p><span class="math display">\[g(t) = t + k_1t^3 + k_2t^5 + k_3t^7 + \cdots\]</span></p>
+<p>Factoring out <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[g(t) = t\left(1 + k_1t^2 + k_2t^4 + k_3t^6 + \cdots\right)\]</span></p>
+<p>The factor in parentheses is <span class="math inline">\(L(r)\)</span> — and it contains only even powers because one factor of <span class="math inline">\(t\)</span> has already been extracted. The full radial mapping has odd powers; the scale factor has even ones.</p>
 </section>
 <section id="barrel-and-pincushion-distortion" class="level3">
-<h3 class="anchored" data-anchor-id="barrel-and-pincushion-distortion">Barrel and pincushion distortion</h3>
-<p>Under the forward distortion model</p>
-<p><span class="math display">\[
-\mathbf x_d-\mathbf p
-=
-L(r)(\mathbf x-\mathbf p),
-\]</span></p>
-<p>if points away from the principal point are moved inward, straight lines near the image boundary bow outward. This is called <strong>barrel distortion</strong>.</p>
-<p>For the simple model</p>
-<p><span class="math display">\[
-L(r)=1+k_1r^2,
-\]</span></p>
-<p>this usually corresponds to</p>
-<p><span class="math display">\[
-k_1&lt;0.
-\]</span></p>
-<p>If points are moved outward from the principal point, straight lines near the image boundary bend inward. This is called <strong>pincushion distortion</strong>.</p>
-<p>Under the same convention, this usually corresponds to</p>
-<p><span class="math display">\[
-k_1&gt;0.
-\]</span></p>
-<p>Different points on an ideal straight line generally lie at different radial distances from the principal point. They therefore receive different scale factors:</p>
-<p><span class="math display">\[
-L(r_1),L(r_2),\ldots.
-\]</span></p>
-<p>Because the points are displaced by different amounts, they need not remain collinear. This is why straight lines can appear curved in a distorted image.</p>
-<p>Lens distortion is nonlinear and therefore cannot, in general, be absorbed into the camera matrix <span class="math inline">\(P\)</span>.</p>
+<h3 class="anchored" data-anchor-id="barrel-and-pincushion-distortion">Barrel and Pincushion Distortion</h3>
+<p>Different points on a straight world line sit at different distances <span class="math inline">\(r\)</span> from the principal point. They therefore receive different scale factors <span class="math inline">\(L(r_1), L(r_2), \ldots\)</span> and are displaced by different amounts. A set of collinear points need not remain collinear after distortion. This is why straight lines appear curved.</p>
+<p>Two common cases:</p>
+<p><strong>Barrel distortion</strong> (<span class="math inline">\(k_1 &lt; 0\)</span>): points are pushed inward toward the principal point. The image appears to bulge outward, like a barrel.</p>
+<p><strong>Pincushion distortion</strong> (<span class="math inline">\(k_1 &gt; 0\)</span>): points are pushed outward away from the principal point. The image appears to pinch inward at the center.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/lens_distortion.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Left: an ideal grid as the pinhole camera model predicts it — straight lines, uniform spacing, no distortion. Middle: barrel distortion (<span class="math inline">\(k_1 &lt;
+0\)</span>) — points are pushed inward toward the principal point, causing straight lines to bow outward like the sides of a barrel. Right: pincushion distortion (<span class="math inline">\(k_1 &gt; 0\)</span>) — points are pushed outward away from the principal point, causing straight lines to bend inward. In both cases the distortion is negligible near the principal point and grows toward the image boundaries, which is why <span class="math inline">\(L(r) \approx 1\)</span> for small <span class="math inline">\(r\)</span> and deviates for large <span class="math inline">\(r\)</span>.</figcaption>
+</figure>
+</div>
+<p>Lens distortion is nonlinear — it cannot be absorbed into the camera matrix <span class="math inline">\(P\)</span>. It must be modeled separately, which is why the distortion coefficients <span class="math inline">\(k_1, k_2, k_3\)</span> are estimated alongside <span class="math inline">\(K\)</span> in the nonlinear refinement step.</p>
 </section>
 </section>
-<section id="back-to-camera-calibration" class="level2">
-<h2 class="anchored" data-anchor-id="back-to-camera-calibration">Back to camera calibration</h2>
-<p>The homography-based method gives initial estimates of</p>
-<p><span class="math display">\[
-K,
-\qquad
-R_i,
-\qquad
-\mathbf t_i
-\]</span></p>
-<p>for every view <span class="math inline">\(i\)</span>.</p>
-<p>We may initialize the distortion coefficients as</p>
-<p><span class="math display">\[
-k_1=k_2=k_3=0.
-\]</span></p>
-<p>These parameters are then refined jointly by minimizing the reprojection error over all observed corners and all images:</p>
-<p><span class="math display">\[
-\min_{K,\{R_i,\mathbf t_i\}_{i=1}^{m},k_1,k_2,k_3}
-\sum_{i=1}^{m}
-\sum_{j=1}^{n_i}
-\left\|
-\mathbf x_{ij}
--
-\widehat{\mathbf x}_{ij}
-\right\|_2^2,
-\]</span></p>
-<p>where <span class="math inline">\(\mathbf x_{ij}\)</span> is the observed pixel location and <span class="math inline">\(\widehat{\mathbf x}_{ij}\)</span> is the location predicted by the current camera and distortion parameters.</p>
-<p><span class="math display">\[
-\widehat{\mathbf x}_{ij}
-=
-D
-\left(
-\phi
-\left(
-K
-\begin{bmatrix}
-R_i &amp; \mathbf t_i
-\end{bmatrix}
-\widetilde{\mathbf X}_{w,j}
-\right)
-\right),
-\]</span></p>
-<p>where</p>
-<p><span class="math display">\[
-D(\mathbf x)
-=
-\mathbf p
-+
-L(r)(\mathbf x-\mathbf p),
-\]</span></p>
-<p>with</p>
-<p><span class="math display">\[
-\mathbf p
-=
-\begin{pmatrix}
-p_x\\
-p_y
-\end{pmatrix},
-\qquad
-r
-=
-\|\mathbf x-\mathbf p\|_2,
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-L(r)
-=
-1+k_1r^2+k_2r^4+k_3r^6.
-\]</span></p>
-<p>Equivalently, define the ideal pinhole projection</p>
-<p><span class="math display">\[
-\pi_i(\widetilde{\mathbf X}_{w,j})
-=
-\phi
-\left(
-K
-\begin{bmatrix}
-R_i &amp; \mathbf t_i
-\end{bmatrix}
-\widetilde{\mathbf X}_{w,j}
-\right).
-\]</span></p>
-<p>Then the predicted distorted pixel is simply</p>
-<p><span class="math display">\[
-\boxed{
-\widehat{\mathbf x}_{ij}
-=
-D
-\left(
-\pi_i(\widetilde{\mathbf X}_{w,j})
-\right).
-}
-\]</span></p>
-<p>As discussed in Part 3, this nonlinear least-squares problem can be solved using Gauss–Newton or Levenberg–Marquardt.</p>
-<p>The complete calibration pipeline is therefore</p>
-<p><span class="math display">\[
-\boxed{
-\begin{aligned}
-\text{planar correspondences}
-&amp;\longrightarrow
-\widehat H_1,\ldots,\widehat H_m\\
-&amp;\longrightarrow
-\widehat\omega\\
-&amp;\longrightarrow
-K\\
-&amp;\longrightarrow
-R_i,\mathbf t_i\\
-&amp;\longrightarrow
-\text{joint reprojection-error refinement}.
-\end{aligned}
-}
-\]</span></p>
-<p>The linear stage provides a geometrically meaningful initialization. The nonlinear stage then refines the intrinsic parameters, the pose of every view and the lens-distortion coefficients together.</p>
+<section id="putting-it-all-together" class="level2">
+<h2 class="anchored" data-anchor-id="putting-it-all-together">Putting It All Together</h2>
+<p>Now that we have a distortion model, we can fold it into the full calibration pipeline.</p>
+<p>Start by initializing the distortion coefficients at zero:</p>
+<p><span class="math display">\[k_1 = k_2 = k_3 = 0\]</span></p>
+<p>This is sensible — the linear stage ignores distortion entirely, so zero is the right starting point.</p>
+<p>Define the ideal pinhole projection for view <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[\pi_i(\tilde{\mathbf{X}}_{w,j}) = \phi\left(K\begin{bmatrix}R_i &amp;
+\mathbf{t}_i\end{bmatrix}\tilde{\mathbf{X}}_{w,j}\right)\]</span></p>
+<p>and the distortion map:</p>
+<p><span class="math display">\[D(\mathbf{x}) = \mathbf{p} + L(r)(\mathbf{x} - \mathbf{p}), \qquad
+r = \|\mathbf{x} - \mathbf{p}\|\]</span></p>
+<p>The predicted distorted pixel is:</p>
+<p><span class="math display">\[\boxed{\hat{\mathbf{x}}_{ij} = D(\pi_i(\tilde{\mathbf{X}}_{w,j}))}\]</span></p>
+<p>Project first with the pinhole model, then apply the distortion. That ordering matters.</p>
+<p>Refine everything jointly by minimising the total reprojection error over all corners and all views:</p>
+<p><span class="math display">\[\min_{K,\{R_i,\mathbf{t}_i\},k_1,k_2,k_3} \sum_{i=1}^m
+\sum_{j=1}^{n_i} \left\|\mathbf{x}_{ij} - \hat{\mathbf{x}}_{ij}
+\right\|^2\]</span></p>
+<p>This is nonlinear — Gauss-Newton or Levenberg-Marquardt, initialised from the linear estimates. As in Part 3, the linear stage minimises the wrong thing (algebraic error); the nonlinear stage fixes it by minimising what we actually care about (reprojection error).</p>
+<p>The full Zhang’s method pipeline is:</p>
+<p><span class="math display">\[\boxed{\begin{aligned} \text{checkerboard images} &amp;\longrightarrow
+\text{corner correspondences} \longrightarrow \hat{H}_1, \ldots,
+\hat{H}_m \\ &amp;\longrightarrow \hat{\omega} \longrightarrow K \\
+&amp;\longrightarrow R_i, \mathbf{t}_i \\ &amp;\longrightarrow \text{joint
+refinement of } K, R_i, \mathbf{t}_i, k_1, k_2, k_3 \end{aligned}}\]</span></p>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>We began with the image of the absolute conic,</p>
-<p><span class="math display">\[
-\omega
-=
-K^{-\top}K^{-1},
-\]</span></p>
-<p>and asked how it could be estimated from actual images.</p>
-<p>A planar calibration target gave us the missing link. Each image of the plane produced a homography, and the first two columns of that homography inherited the orthogonality and equal-length constraints of the first two rotation columns.</p>
-<p>Expressed through <span class="math inline">\(\omega\)</span>, these became linear equations in the unknown entries of the intrinsic matrix.</p>
-<p>By combining constraints from several views, we formed the homogeneous system</p>
-<p><span class="math display">\[
-V\mathbf b
-=
-\mathbf 0,
-\]</span></p>
-<p>solved it using the SVD, reconstructed <span class="math inline">\(\omega\)</span>, and recovered <span class="math inline">\(K\)</span> through a Cholesky factorization.</p>
-<p>Once <span class="math inline">\(K\)</span> was known, each homography could be decomposed to estimate the pose of the calibration plane relative to the camera.</p>
-<p>Because image measurements are noisy, the recovered rotation matrices were only approximately valid rotations. We therefore replaced each one with the nearest matrix in <span class="math inline">\(SO(3)\)</span>.</p>
-<p>Finally, we introduced radial lens distortion and used the linear estimates as the initialization for a nonlinear reprojection-error minimization that jointly refines the camera intrinsics, the pose of every view, and the distortion coefficients.</p>
-<p>The complete calibration pipeline is therefore</p>
-<p><span class="math display">\[
-\text{checkerboard images}
-\longrightarrow
-\text{corner correspondences}
-\longrightarrow
-\text{homographies}
-\longrightarrow
-\omega
-\longrightarrow
-K
-\longrightarrow
-\{R_i,\mathbf t_i\}
-\longrightarrow
-\text{nonlinear refinement}.
-\]</span></p>
-<p>What began as the abstract matrix</p>
-<p><span class="math display">\[
-\omega
-=
-K^{-\top}K^{-1}
-\]</span></p>
-<p>has now become something measurable.</p>
-<p>A collection of photographs of a flat checkerboard is enough to recover the internal geometry of the camera.</p>
+<p>We began with the image of the absolute conic <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> from Part 5 and asked how to estimate it from actual images.</p>
+<p>A planar calibration target gave us the missing link. Each image of the plane produced a homography, and the first two columns of that homography inherited the orthogonality and equal-norm constraints of the first two rotation columns. Expressed through <span class="math inline">\(\omega\)</span>, these became linear equations. Stack enough views, solve <span class="math inline">\(V\mathbf{b} = \mathbf{0}\)</span> via SVD, reshape into <span class="math inline">\(\hat{\omega}\)</span>, and Cholesky gives <span class="math inline">\(K\)</span>.</p>
+<p>With <span class="math inline">\(K\)</span> known, each homography decomposes into a pose <span class="math inline">\((R_i,
+\mathbf{t}_i)\)</span>. Noisy data means the recovered rotations are only approximately valid, so we project each one onto <span class="math inline">\(SO(3)\)</span> via SVD.</p>
+<p>Finally, lens distortion was added to the model and all parameters were refined jointly by minimising the true reprojection error with Levenberg-Marquardt.</p>
+<p><span class="math display">\[\boxed{\begin{aligned} &amp;\text{checkerboard images} \\
+&amp;\quad\longrightarrow \text{corner correspondences} \\
+&amp;\quad\longrightarrow \hat{H}_1, \ldots, \hat{H}_m \\
+&amp;\quad\longrightarrow V\mathbf{b} = \mathbf{0} \longrightarrow
+\hat{\omega} \\ &amp;\quad\longrightarrow K \\ &amp;\quad\longrightarrow R_i,
+\mathbf{t}_i \\ &amp;\quad\longrightarrow \text{joint nonlinear refinement
+of } K, R_i, \mathbf{t}_i, k_1, k_2, k_3 \end{aligned}}\]</span></p>
+<p>What began as the abstract matrix <span class="math inline">\(\omega = K^{-\top}K^{-1}\)</span> has now become something measurable. A flat checkerboard, photographed from several angles, is enough to recover the internal geometry of the camera. I find that remarkable — and I spent eight years not knowing it.</p>
 </section>
 <section id="what-comes-next" class="level2">
-<h2 class="anchored" data-anchor-id="what-comes-next">What comes next?</h2>
-<p>Calibration tells us how a single camera maps points in the three-dimensional world to points in an image.</p>
-<p>The next question is what happens when the same scene is observed by two cameras, or by the same camera from two different positions.</p>
-<p>A point in the first image cannot correspond to an arbitrary point in the second image. The camera geometry restricts its possible match to a line.</p>
-<p>This is the beginning of <strong>epipolar geometry</strong>.</p>
-<p>In the next part, we will derive the epipolar constraint from the two camera matrices and arrive at the fundamental relation</p>
-<p><span class="math display">\[
-\widetilde{\mathbf x}_2^\top
-F
-\widetilde{\mathbf x}_1
-=
-0.
-\]</span></p>
-<p>We will then ask what the matrix <span class="math inline">\(F\)</span> contains, how it is related to the calibrated-camera matrix <span class="math inline">\(E\)</span>, and how two images begin to reveal the three-dimensional structure of a scene.</p>
+<h2 class="anchored" data-anchor-id="what-comes-next">What Comes Next?</h2>
+<p>Calibration tells us how a single camera sees the world. The next question is what happens when the same scene is observed from two different positions — either by two cameras, or by the same camera moved to a new location.</p>
+<p>It turns out that a point visible in both images cannot correspond to an arbitrary point in the second image. The geometry of the two cameras constrains its possible match to a single line. This constraint is the heart of <strong>epipolar geometry</strong>.</p>
+<p>In Part 7, we will derive this constraint from the two camera matrices and arrive at:</p>
+<p><span class="math display">\[\tilde{\mathbf{x}}_2^\top F\tilde{\mathbf{x}}_1 = 0\]</span></p>
+<p>The matrix <span class="math inline">\(F\)</span> is called the <strong>fundamental matrix</strong>. It encodes the relative geometry of the two cameras entirely in terms of image measurements — no 3D points needed, no calibration required. From <span class="math inline">\(F\)</span> we will extract the essential matrix <span class="math inline">\(E\)</span> for calibrated cameras, and from <span class="math inline">\(E\)</span> we will begin to recover the 3D structure of the scene.</p>
+<p>Stereo — depth from two calibrated cameras — follows naturally after that.</p>
 
 
 </section>
