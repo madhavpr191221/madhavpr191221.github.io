@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Madhav Prashanth Ramachandran">
-<meta name="dcterms.date" content="2026-07-15">
-<meta name="description" content="Deriving the camera matrix from similar triangles to P = K[R \mid \mathbf{t}], stage by stage from first principles.">
 
-<title>3D Computer Vision from First Principles — Part 3 – Madhav Prashanth</title>
+<title>index – Madhav Prashanth</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -194,7 +191,7 @@ window.Quarto = {
   <li><a href="#why-reference-frames" id="toc-why-reference-frames" class="nav-link" data-scroll-target="#why-reference-frames">Why Reference Frames?</a></li>
   <li><a href="#a-refresher-position-vectors-and-two-origins" id="toc-a-refresher-position-vectors-and-two-origins" class="nav-link" data-scroll-target="#a-refresher-position-vectors-and-two-origins">A Refresher: Position Vectors and Two Origins</a></li>
   <li><a href="#the-world-frame-and-the-camera-frame" id="toc-the-world-frame-and-the-camera-frame" class="nav-link" data-scroll-target="#the-world-frame-and-the-camera-frame">The World Frame and the Camera Frame</a></li>
-  <li><a href="#translation-is-not-linear-but-homogeneous-coordinates-fix-it" id="toc-translation-is-not-linear-but-homogeneous-coordinates-fix-it" class="nav-link" data-scroll-target="#translation-is-not-linear-but-homogeneous-coordinates-fix-it">Translation is Not Linear — But Homogeneous Coordinates Fix It</a></li>
+  <li><a href="#translation-is-not-linear-but-homogeneous-coordinates-fix-it" id="toc-translation-is-not-linear-but-homogeneous-coordinates-fix-it" class="nav-link" data-scroll-target="#translation-is-not-linear-but-homogeneous-coordinates-fix-it">Translation is Not Linear But Homogeneous Coordinates Fix It</a></li>
   <li><a href="#rotations" id="toc-rotations" class="nav-link" data-scroll-target="#rotations">Rotations</a></li>
   <li><a href="#the-stage-2-pipeline" id="toc-the-stage-2-pipeline" class="nav-link" data-scroll-target="#the-stage-2-pipeline">The Stage 2 Pipeline</a></li>
   </ul></li>
@@ -223,7 +220,7 @@ window.Quarto = {
   <li><a href="#one-final-check-dethatr-1" id="toc-one-final-check-dethatr-1" class="nav-link" data-scroll-target="#one-final-check-dethatr-1">One Final Check: <span class="math inline">\(\det\hat{R} = +1\)</span></a></li>
   <li><a href="#summary-everything-we-know-about-the-camera" id="toc-summary-everything-we-know-about-the-camera" class="nav-link" data-scroll-target="#summary-everything-we-know-about-the-camera">Summary: Everything We Know About the Camera</a></li>
   </ul></li>
-  <li><a href="#but-wait-are-we-really-done" id="toc-but-wait-are-we-really-done" class="nav-link" data-scroll-target="#but-wait-are-we-really-done">But Wait — Are We Really Done?</a>
+  <li><a href="#but-wait-are-we-really-done" id="toc-but-wait-are-we-really-done" class="nav-link" data-scroll-target="#but-wait-are-we-really-done">But Wait Are We Really Done?</a>
   <ul class="collapse">
   <li><a href="#what-did-dlt-actually-minimize" id="toc-what-did-dlt-actually-minimize" class="nav-link" data-scroll-target="#what-did-dlt-actually-minimize">What Did DLT Actually Minimize?</a></li>
   <li><a href="#what-is-w_i" id="toc-what-is-w_i" class="nav-link" data-scroll-target="#what-is-w_i">What Is <span class="math inline">\(w_i\)</span>?</a></li>
@@ -240,69 +237,59 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">3D Computer Vision from First Principles — Part 3</h1>
-<p class="subtitle lead">The Camera Matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span></p>
-  <div class="quarto-categories">
-    <div class="quarto-category">3d-vision</div>
-    <div class="quarto-category">linear-algebra</div>
-  </div>
-  </div>
-
-<div>
-  <div class="description">
-    Deriving the camera matrix from similar triangles to <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, stage by stage from first principles.
-  </div>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Madhav Prashanth Ramachandran </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">July 15, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
 
 
-</header>
-
-
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td>title: “3D Computer Vision from First Principles Part 3”</td>
+</tr>
+<tr class="even">
+<td>subtitle: “The Camera Matrix <span class="math inline">\(P = K[R \\mid \\mathbf{t}]\)</span>”</td>
+</tr>
+<tr class="odd">
+<td>author: “Madhav Prashanth Ramachandran”</td>
+</tr>
+<tr class="even">
+<td>date: “2026-07-15”</td>
+</tr>
+<tr class="odd">
+<td>categories: [3d-vision, linear-algebra]</td>
+</tr>
+<tr class="even">
+<td>description: “Deriving the camera matrix from similar triangles to <span class="math inline">\(P = K[R \\mid \\mathbf{t}]\)</span>, stage by stage from first principles.”</td>
+</tr>
+<tr class="odd">
+<td>toc: true</td>
+</tr>
+<tr class="even">
+<td>toc-depth: 3</td>
+</tr>
+</tbody>
+</table>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In <a href="">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction — homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
+<p>In <a href="">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
 <p>Enough abstraction. It is time to step into the real world.</p>
-<p>Cameras and real scenes live in three dimensions. A tree, a building, a face — these are 3D objects in <span class="math inline">\(\mathbb{R}^3\)</span>. A camera takes this 3D world and collapses it onto a 2D sensor. The mathematical object that does this collapsing is the <strong>camera matrix</strong> <span class="math inline">\(P\)</span> — a <span class="math inline">\(3 \times 4\)</span> matrix that maps <span class="math inline">\(\mathbb{R}^4\)</span> to <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
+<p>Cameras and real scenes live in three dimensions. A tree, a building, a face – these are 3D objects in <span class="math inline">\(\mathbb{R}^3\)</span>. A camera takes this 3D world and collapses it onto a 2D sensor. The mathematical object that does this collapsing is the <strong>camera matrix</strong> <span class="math inline">\(P\)</span> a <span class="math inline">\(3 \times 4\)</span> matrix that maps <span class="math inline">\(\mathbb{R}^4\)</span> to <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
 <p>We promised this object at the end of Part 1. Here it is.</p>
-<p>We will build it stage by stage — from similar triangles to the full <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span> — deriving every piece from physical first principles. No formulas handed down from above. At the end of the post, the camera matrix will be a simple composition of a few simple matrices, each with a clear geometric meaning. Moreover, it will cease to be a mysterious black box and instead become a tool that almost anyone can understand and use.</p>
+<p>We will build it stage by stage from similar triangles to the full <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span> deriving every piece from physical first principles. No formulas handed down from above. At the end of the post, the camera matrix will be a simple composition of a few simple matrices, each with a clear geometric meaning. Moreover, it will cease to be a mysterious black box and instead become a tool that almost anyone can understand and use.</p>
 </section>
 <section id="the-camera-matrix" class="level2">
 <h2 class="anchored" data-anchor-id="the-camera-matrix">The Camera Matrix</h2>
 <section id="the-ideal-pinhole-camera" class="level3">
 <h3 class="anchored" data-anchor-id="the-ideal-pinhole-camera">The Ideal Pinhole Camera</h3>
 <p>Before lenses, sensors, and pixels, there is a simpler question: how does light from a 3D scene form a 2D image?</p>
-<p>The oldest answer is the pinhole camera. Punch a small hole in one wall of a dark box. Light from each point in the scene passes through the hole and lands on the opposite wall. The result is an image — inverted, but sharp. No lens required.</p>
+<p>The oldest answer is the pinhole camera. Punch a small hole in one wall of a dark box. Light from each point in the scene passes through the hole and lands on the opposite wall. The result is an image inverted, but sharp. No lens required.</p>
 <p>The pinhole camera is not just a historical curiosity. It is the mathematical model that underlies every camera matrix derivation in computer vision. Real cameras have lenses, distortion, and finite apertures, but the pinhole model captures the essential geometry: every scene point maps to exactly one image point, via a straight ray through the camera center.</p>
 <p><strong>Setup.</strong> Place the camera center at the origin <span class="math inline">\(O = (0, 0, 0)^\top\)</span>. The camera points along the positive <span class="math inline">\(Z\)</span> axis. The image plane sits perpendicular to <span class="math inline">\(Z\)</span> at distance <span class="math inline">\(f\)</span> in front of the camera center. This distance <span class="math inline">\(f\)</span> is the <strong>focal length</strong>. If you remember your high school physics, <span class="math inline">\(f\)</span> is the distance at which parallel rays converge to a point. In our case, it is the distance from the camera center to the image plane.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/pinhole_real_vs_cv_camera.png" class="img-fluid figure-img" style="width:90.0%"></p>
-<figcaption>In a real pinhole camera, the image forms behind the pinhole at <span class="math inline">\(Z = -f\)</span> and is inverted. In the computer vision convention, we place a virtual image plane in front of the pinhole at <span class="math inline">\(Z = +f\)</span>, giving an upright image. The mathematics is identical — only the sign of <span class="math inline">\(f\)</span> changes.</figcaption>
+<figcaption>In a real pinhole camera, the image forms behind the pinhole at <span class="math inline">\(Z = -f\)</span> and is inverted. In the computer vision convention, we place a virtual image plane in front of the pinhole at <span class="math inline">\(Z = +f\)</span>, giving an upright image. The mathematics is identical only the sign of <span class="math inline">\(f\)</span> changes.</figcaption>
 </figure>
 </div>
 <p>A scene point <span class="math inline">\(\mathbf{X} = (X, Y, Z)^\top \in \mathbb{R}^3\)</span> with <span class="math inline">\(Z &gt; 0\)</span> maps to an image point <span class="math inline">\((x, y)^\top\)</span> via similar triangles:</p>
@@ -311,7 +298,7 @@ window.Quarto = {
 </section>
 <section id="from-ratios-to-matrices" class="level3">
 <h3 class="anchored" data-anchor-id="from-ratios-to-matrices">From Ratios to Matrices</h3>
-<p>We know from Part 1 that the map <span class="math inline">\((X, Y, Z)^\top \mapsto (fX/Z, fY/Z)^\top\)</span> is not linear — division by <span class="math inline">\(Z\)</span> rules that out. But we do not want to give up linearity. Matrices can be inverted, decomposed, estimated from data, and composed. Can we salvage something? Anything?</p>
+<p>We know from Part 1 that the map <span class="math inline">\((X, Y, Z)^\top \mapsto (fX/Z, fY/Z)^\top\)</span> is not linear division by <span class="math inline">\(Z\)</span> rules that out. But we do not want to give up linearity. Matrices can be inverted, decomposed, estimated from data, and composed. Can we salvage something? Anything?</p>
 <p>Yes. The trick is to separate the two steps. The map:</p>
 <p><span class="math display">\[T : \mathbb{R}^3 \to \mathbb{R}^3, \qquad T\begin{pmatrix} X \\ Y \\ Z
 \end{pmatrix} = \begin{pmatrix} fX \\ fY \\ Z \end{pmatrix}\]</span></p>
@@ -351,12 +338,12 @@ T(\mathbf{e}_3) = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}\]</span></p>
 \xrightarrow{M_0} \underbrace{\begin{pmatrix} fX \\ fY \\ Z
 \end{pmatrix}}_{\mathbb{R}^3} \xrightarrow{\phi} \underbrace{\begin{pmatrix}
 x \\ y \end{pmatrix}}_{\mathbb{R}^2}\]</span></p>
-<p>The first step is linear. The second step — <span class="math inline">\(\phi\)</span>, dividing by the third coordinate — is the nonlinearity, deferred to the very end.</p>
-<p>Note that only the last step — <span class="math inline">\(\phi\)</span> — is nonlinear. And notice something else. For any <span class="math inline">\(\lambda \neq 0\)</span>:</p>
+<p>The first step is linear. The second step <span class="math inline">\(\phi\)</span>, dividing by the third coordinate is the nonlinearity, deferred to the very end.</p>
+<p>Note that only the last step <span class="math inline">\(\phi\)</span> is nonlinear. And notice something else. For any <span class="math inline">\(\lambda \neq 0\)</span>:</p>
 <p><span class="math display">\[\phi(\lambda fX, \lambda fY, \lambda Z) = \left(\frac{\lambda fX}{\lambda Z},
 \frac{\lambda fY}{\lambda Z}\right) = \left(\frac{fX}{Z}, \frac{fY}{Z}\right)
 = \phi(fX, fY, Z)\]</span></p>
-<p>The <span class="math inline">\(\lambda\)</span> cancels. Remember this from somewhere? Yes — <span class="math inline">\(\mathbb{P}^2\)</span>. All that machinery — equivalence classes, the quotient set, the bijection <span class="math inline">\(\phi\)</span> — was built exactly for this cancellation.</p>
+<p>The <span class="math inline">\(\lambda\)</span> cancels. Remember this from somewhere? Yes <span class="math inline">\(\mathbb{P}^2\)</span>. All that machinery equivalence classes, the quotient set, the bijection <span class="math inline">\(\phi\)</span> was built exactly for this cancellation.</p>
 <p>Do not worry, we have not given it up. <span class="math inline">\(\mathbb{P}^2\)</span> will return with a vengeance later, when we discuss homographies and the image of the absolute conic. But today, all our action takes place in the real world <span class="math inline">\(\mathbb{R}^3\)</span>. No equivalence classes. No points at infinity. Just a few matrices, relative motions and reference frames, and a camera that maps 3D points to 2D points. Nothing more, nothing less.</p>
 </section>
 </section>
@@ -364,17 +351,17 @@ x \\ y \end{pmatrix}}_{\mathbb{R}^2}\]</span></p>
 <h2 class="anchored" data-anchor-id="stage-1-the-intrinsic-matrix-k">Stage 1: The Intrinsic Matrix <span class="math inline">\(K\)</span></h2>
 <section id="sensor-coordinates-and-pixel-coordinates" class="level3">
 <h3 class="anchored" data-anchor-id="sensor-coordinates-and-pixel-coordinates">Sensor Coordinates and Pixel Coordinates</h3>
-<p>Let us be more careful about units. Rename the image coordinates from the similar triangles derivation as <span class="math inline">\(x_s\)</span> and <span class="math inline">\(y_s\)</span> — the subscript <span class="math inline">\(s\)</span> stands for sensor:</p>
+<p>Let us be more careful about units. Rename the image coordinates from the similar triangles derivation as <span class="math inline">\(x_s\)</span> and <span class="math inline">\(y_s\)</span> the subscript <span class="math inline">\(s\)</span> stands for sensor:</p>
 <p><span class="math display">\[x_s = \frac{fX}{Z}, \qquad y_s = \frac{fY}{Z}\]</span></p>
-<p>The world coordinates <span class="math inline">\((X, Y, Z)\)</span> and the sensor coordinates <span class="math inline">\((x_s, y_s)\)</span> are all in the same physical units — metres, millimetres, whatever the scene is measured in. But in computer vision and image processing, the natural unit is the <strong>pixel</strong>. We need to convert.</p>
+<p>The world coordinates <span class="math inline">\((X, Y, Z)\)</span> and the sensor coordinates <span class="math inline">\((x_s, y_s)\)</span> are all in the same physical units metres, millimetres, whatever the scene is measured in. But in computer vision and image processing, the natural unit is the <strong>pixel</strong>. We need to convert.</p>
 <p>Let <span class="math inline">\(s_x\)</span> and <span class="math inline">\(s_y\)</span> be the physical width and height of each pixel (in metres or millimetres). Then:</p>
 <p><span class="math display">\[\frac{x_s}{s_x}, \qquad \frac{y_s}{s_y}\]</span></p>
 <p>are the sensor coordinates measured in pixel units. So far so good.</p>
 </section>
 <section id="the-principal-point" class="level3">
 <h3 class="anchored" data-anchor-id="the-principal-point">The Principal Point</h3>
-<p>There is one more thing. The formula <span class="math inline">\(x_s = fX/Z\)</span> measures the image coordinate from the <strong>principal point</strong> — the point where the camera’s optical axis pierces the image plane. In our ideal setup, the principal point was always the origin. But in a real camera, the principal point can be anywhere on the sensor.</p>
-<p>For example: - The pixel coordinate origin is usually the top-left corner of the image. The principal point — where the optical axis hits the sensor — is typically somewhere near the center. So even for a perfectly manufactured camera, <span class="math inline">\(p_x \approx \text{image width}/2\)</span> and <span class="math inline">\(p_y \approx \text{image
+<p>There is one more thing. The formula <span class="math inline">\(x_s = fX/Z\)</span> measures the image coordinate from the <strong>principal point</strong> the point where the camera’s optical axis pierces the image plane. In our ideal setup, the principal point was always the origin. But in a real camera, the principal point can be anywhere on the sensor.</p>
+<p>For example: - The pixel coordinate origin is usually the top-left corner of the image. The principal point where the optical axis hits the sensor is typically somewhere near the center. So even for a perfectly manufactured camera, <span class="math inline">\(p_x \approx \text{image width}/2\)</span> and <span class="math inline">\(p_y \approx \text{image
 height}/2\)</span>. - For a <span class="math inline">\(1920 \times 1080\)</span> image, the principal point might be at approximately <span class="math inline">\((960, 540)\)</span> in pixel coordinates.</p>
 <p>Let <span class="math inline">\((p_x, p_y)\)</span> denote the principal point in pixel coordinates. Then the full pixel coordinates of the image point are:</p>
 <p><span class="math display">\[x = \frac{x_s}{s_x} + p_x, \qquad y = \frac{y_s}{s_y} + p_y\]</span></p>
@@ -383,17 +370,17 @@ height}/2\)</span>. - For a <span class="math inline">\(1920 \times 1080\)</span
 + p_y\]</span></p>
 <p>Define:</p>
 <p><span class="math display">\[f_x := \frac{f}{s_x}, \qquad f_y := \frac{f}{s_y}\]</span></p>
-<p>These are the <strong>focal lengths in pixel units</strong> — <span class="math inline">\(f_x\)</span> in the <span class="math inline">\(x\)</span> direction, <span class="math inline">\(f_y\)</span> in the <span class="math inline">\(y\)</span> direction. So:</p>
+<p>These are the <strong>focal lengths in pixel units</strong> <span class="math inline">\(f_x\)</span> in the <span class="math inline">\(x\)</span> direction, <span class="math inline">\(f_y\)</span> in the <span class="math inline">\(y\)</span> direction. So:</p>
 <p><span class="math display">\[x = f_x\frac{X}{Z} + p_x, \qquad y = f_y\frac{Y}{Z} + p_y\]</span></p>
 </section>
 <section id="writing-it-as-a-linear-map" class="level3">
 <h3 class="anchored" data-anchor-id="writing-it-as-a-linear-map">Writing It as a Linear Map</h3>
 <p>Can we write this as a linear map? Yes. Multiply through by <span class="math inline">\(Z\)</span>:</p>
 <p><span class="math display">\[(X, Y, Z) \mapsto (f_xX + p_xZ,\ f_yY + p_yZ,\ Z)\]</span></p>
-<p>This is linear — you can check it using the same argument as before. The matrix that represents this map, using the standard basis of <span class="math inline">\(\mathbb{R}^3\)</span>, is:</p>
+<p>This is linear you can check it using the same argument as before. The matrix that represents this map, using the standard basis of <span class="math inline">\(\mathbb{R}^3\)</span>, is:</p>
 <p><span class="math display">\[K = \begin{pmatrix} f_x &amp; 0 &amp; p_x \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1
 \end{pmatrix}\]</span></p>
-<p>This is the <strong>intrinsic matrix</strong> of the camera. It is called intrinsic because it encodes parameters that are internal to the camera — focal lengths and principal point — independent of where the camera is placed or how it is oriented in the world.</p>
+<p>This is the <strong>intrinsic matrix</strong> of the camera. It is called intrinsic because it encodes parameters that are internal to the camera focal lengths and principal point independent of where the camera is placed or how it is oriented in the world.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -404,10 +391,10 @@ height}/2\)</span>. - For a <span class="math inline">\(1920 \times 1080\)</span
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A fully general intrinsic matrix has one more entry — the skew <span class="math inline">\(s\)</span>:</p>
+<p>A fully general intrinsic matrix has one more entry the skew <span class="math inline">\(s\)</span>:</p>
 <p><span class="math display">\[K = \begin{pmatrix} f_x &amp; s &amp; p_x \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1
 \end{pmatrix}\]</span></p>
-<p>The skew <span class="math inline">\(s\)</span> accounts for a slight non-orthogonality between the pixel axes — a manufacturing imperfection where the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes of the sensor are not exactly perpendicular. For virtually all modern cameras, <span class="math inline">\(s = 0\)</span>, and we will assume this throughout.</p>
+<p>The skew <span class="math inline">\(s\)</span> accounts for a slight non-orthogonality between the pixel axes – a manufacturing imperfection where the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes of the sensor are not exactly perpendicular. For virtually all modern cameras, <span class="math inline">\(s = 0\)</span>, and we will assume this throughout.</p>
 </div>
 </div>
 <p>Let us verify. Multiply <span class="math inline">\(K\)</span> by <span class="math inline">\((X, Y, Z)^\top\)</span>:</p>
@@ -415,7 +402,7 @@ height}/2\)</span>. - For a <span class="math inline">\(1920 \times 1080\)</span
 \\ 0 &amp; f_y &amp; p_y \\ 0 &amp; 0 &amp; 1 \end{pmatrix} \begin{pmatrix} X \\ Y \\ Z
 \end{pmatrix} = \begin{pmatrix} f_xX + p_xZ \\ f_yY + p_yZ \\ Z
 \end{pmatrix}\]</span></p>
-<p>To recover the pixel coordinates, apply <span class="math inline">\(\phi\)</span> — divide by the third coordinate <span class="math inline">\(Z\)</span>:</p>
+<p>To recover the pixel coordinates, apply <span class="math inline">\(\phi\)</span> divide by the third coordinate <span class="math inline">\(Z\)</span>:</p>
 <p><span class="math display">\[\phi\begin{pmatrix} f_xX + p_xZ \\ f_yY + p_yZ \\ Z \end{pmatrix} =
 \begin{pmatrix} f_xX/Z + p_x \\ f_yY/Z + p_y \end{pmatrix} = \begin{pmatrix}
 x \\ y \end{pmatrix} \checkmark\]</span></p>
@@ -435,7 +422,7 @@ x \\ y \end{pmatrix} \checkmark\]</span></p>
 <p><span class="math display">\[\frac{f_xX + p_xZ}{Z} \quad \text{units: } \frac{[\text{pixels} \cdot
 \text{metres}]}{[\text{metres}]} = [\text{pixels}]\]</span></p>
 <p>Division by <span class="math inline">\(Z\)</span> does two things at once: it performs the perspective projection, and it ensures unit consistency. The final image coordinates are in pixels, as they should be.</p>
-<p>This pixel pair <span class="math inline">\((x, y)\)</span> is exactly what you work with in OpenCV and other image processing libraries — the location of a point in the image. Do not confuse this with the pixel value at <span class="math inline">\((x, y)\)</span>, which is the intensity of light that fell on that particular sensor location. The coordinates tell you where. The value tells you how bright. Two different things.</p>
+<p>This pixel pair <span class="math inline">\((x, y)\)</span> is exactly what you work with in OpenCV and other image processing libraries the location of a point in the image. Do not confuse this with the pixel value at <span class="math inline">\((x, y)\)</span>, which is the intensity of light that fell on that particular sensor location. The coordinates tell you where. The value tells you how bright. Two different things.</p>
 </div>
 </div>
 </section>
@@ -445,29 +432,29 @@ x \\ y \end{pmatrix} \checkmark\]</span></p>
 <section id="why-reference-frames" class="level3">
 <h3 class="anchored" data-anchor-id="why-reference-frames">Why Reference Frames?</h3>
 <p>You may have seen this concept in a basic kinematics or mechanics course. An airplane pilot navigates using a coordinate system fixed to the cockpit, while air traffic control tracks the same airplane using a fixed ground-based system. The same physical point has different coordinates depending on which frame you use.</p>
-<p>This is exactly what we deal with in computer vision. A drone, a satellite, a surveillance camera — each has a fixed world coordinate frame describing the scene, and a camera coordinate frame attached to the camera body. The scene is described in one frame, the camera sees it in another.</p>
+<p>This is exactly what we deal with in computer vision. A drone, a satellite, a surveillance camera each has a fixed world coordinate frame describing the scene, and a camera coordinate frame attached to the camera body. The scene is described in one frame, the camera sees it in another.</p>
 <p>In all these cases, the scene is described in one coordinate system (the world frame) and the camera sees it in another (the camera frame). To build the camera matrix, we need to understand how to move between them.</p>
 </section>
 <section id="a-refresher-position-vectors-and-two-origins" class="level3">
 <h3 class="anchored" data-anchor-id="a-refresher-position-vectors-and-two-origins">A Refresher: Position Vectors and Two Origins</h3>
-<p>Consider a coordinate system with origin <span class="math inline">\(O\)</span>. A point <span class="math inline">\(P\)</span> — say, the tip of a building — has coordinates <span class="math inline">\((X, Y, Z)^\top\)</span> in this system. Its position vector from <span class="math inline">\(O\)</span> is:</p>
+<p>Consider a coordinate system with origin <span class="math inline">\(O\)</span>. A point <span class="math inline">\(P\)</span> say, the tip of a building has coordinates <span class="math inline">\((X, Y, Z)^\top\)</span> in this system. Its position vector from <span class="math inline">\(O\)</span> is:</p>
 <p><span class="math display">\[\mathbf{r} = \begin{pmatrix} X \\ Y \\ Z \end{pmatrix}\]</span></p>
-<p>Now suppose your friend is standing somewhere else, with their own origin <span class="math inline">\(O'\)</span> — think of a colleague at a different GPS anchor point, or a second camera mounted on a different wall. The position vector of <span class="math inline">\(P\)</span> from your friend’s origin <span class="math inline">\(O'\)</span> is <span class="math inline">\(\mathbf{r}'\)</span>, and the position vector from <span class="math inline">\(O\)</span> to <span class="math inline">\(O'\)</span> is <span class="math inline">\(\mathbf{c}\)</span>.</p>
+<p>Now suppose your friend is standing somewhere else, with their own origin <span class="math inline">\(O'\)</span> think of a colleague at a different GPS anchor point, or a second camera mounted on a different wall. The position vector of <span class="math inline">\(P\)</span> from your friend’s origin <span class="math inline">\(O'\)</span> is <span class="math inline">\(\mathbf{r}'\)</span>, and the position vector from <span class="math inline">\(O\)</span> to <span class="math inline">\(O'\)</span> is <span class="math inline">\(\mathbf{c}\)</span>.</p>
 <p>Simple vector addition gives:</p>
 <p><span class="math display">\[\mathbf{r} = \mathbf{r}' + \mathbf{c} \qquad \Longrightarrow \qquad
 \mathbf{r}' = \mathbf{r} - \mathbf{c}\]</span></p>
-<p>That is it. The coordinates of <span class="math inline">\(P\)</span> in your friend’s frame are obtained by subtracting the position of their origin from the position of <span class="math inline">\(P\)</span> in your frame. Simple, almost obvious — and yet this equation will follow us everywhere in what comes next.</p>
+<p>That is it. The coordinates of <span class="math inline">\(P\)</span> in your friend’s frame are obtained by subtracting the position of their origin from the position of <span class="math inline">\(P\)</span> in your frame. Simple, almost obvious and yet this equation will follow us everywhere in what comes next.</p>
 </section>
 <section id="the-world-frame-and-the-camera-frame" class="level3">
 <h3 class="anchored" data-anchor-id="the-world-frame-and-the-camera-frame">The World Frame and the Camera Frame</h3>
-<p>Here is why this matters for computer vision. We fix a <strong>world coordinate frame</strong> — an external reference shared by the entire scene. Every 3D point in the scene has coordinates <span class="math inline">\(\mathbf{X}_w = (X, Y, Z)^\top\)</span> in this frame. This is your origin <span class="math inline">\(O\)</span>.</p>
-<p>The camera has its own <strong>camera coordinate frame</strong> — origin at the camera center <span class="math inline">\(O'\)</span>, with the optical axis pointing along the camera’s <span class="math inline">\(Z\)</span> axis. The projection formula <span class="math inline">\(x = f_xX'/Z'\)</span>, <span class="math inline">\(y = f_yY'/Z'\)</span> requires coordinates expressed in the camera frame. This is your friend’s origin.</p>
+<p>Here is why this matters for computer vision. We fix a <strong>world coordinate frame</strong> an external reference shared by the entire scene. Every 3D point in the scene has coordinates <span class="math inline">\(\mathbf{X}_w = (X, Y, Z)^\top\)</span> in this frame. This is your origin <span class="math inline">\(O\)</span>.</p>
+<p>The camera has its own <strong>camera coordinate frame</strong> origin at the camera center <span class="math inline">\(O'\)</span>, with the optical axis pointing along the camera’s <span class="math inline">\(Z\)</span> axis. The projection formula <span class="math inline">\(x = f_xX'/Z'\)</span>, <span class="math inline">\(y = f_yY'/Z'\)</span> requires coordinates expressed in the camera frame. This is your friend’s origin.</p>
 <p>The camera center is at position <span class="math inline">\(\mathbf{c}\)</span> in world coordinates. So the coordinates of a scene point in the camera frame are:</p>
 <p><span class="math display">\[\mathbf{r}' = \mathbf{r} - \mathbf{c}\]</span></p>
-<p>exactly as above. This is the translation step. But there is a subtlety — the camera frame is not just translated from the world frame. It is also rotated. The camera may be pointing in any direction. We will handle that next.</p>
+<p>exactly as above. This is the translation step. But there is a subtlety the camera frame is not just translated from the world frame. It is also rotated. The camera may be pointing in any direction. We will handle that next.</p>
 </section>
 <section id="translation-is-not-linear-but-homogeneous-coordinates-fix-it" class="level3">
-<h3 class="anchored" data-anchor-id="translation-is-not-linear-but-homogeneous-coordinates-fix-it">Translation is Not Linear — But Homogeneous Coordinates Fix It</h3>
+<h3 class="anchored" data-anchor-id="translation-is-not-linear-but-homogeneous-coordinates-fix-it">Translation is Not Linear But Homogeneous Coordinates Fix It</h3>
 <p>Since we work with matrices, a natural question: can we represent the translation <span class="math inline">\(\mathbf{r}' = \mathbf{r} - \mathbf{c}\)</span> as a matrix operation? Is the map <span class="math inline">\(T(\mathbf{r}) = \mathbf{r} - \mathbf{c}\)</span> linear?</p>
 <p>Unfortunately not. Check:</p>
 <p><span class="math display">\[T(\mathbf{r}_1 + \mathbf{r}_2) = \mathbf{r}_1 + \mathbf{r}_2 - \mathbf{c}\]</span></p>
@@ -477,9 +464,9 @@ x \\ y \end{pmatrix} \checkmark\]</span></p>
 <p><span class="math display">\[T(\alpha\mathbf{r}) = \alpha\mathbf{r} - \mathbf{c} \neq \alpha(\mathbf{r}
 - \mathbf{c}) = \alpha T(\mathbf{r})\]</span></p>
 <p>So <span class="math inline">\(T\)</span> fails both conditions. No <span class="math inline">\(3 \times 3\)</span> matrix can represent it.</p>
-<p>Homogeneous coordinates to the rescue — again. Lift the world coordinates from <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^4\)</span>:</p>
+<p>Homogeneous coordinates to the rescue again. Lift the world coordinates from <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^4\)</span>:</p>
 <p><span class="math display">\[(X, Y, Z) \longmapsto (X, Y, Z, 1)^\top\]</span></p>
-<p>We want a matrix <span class="math inline">\(M\)</span> — necessarily <span class="math inline">\(3 \times 4\)</span> — such that:</p>
+<p>We want a matrix <span class="math inline">\(M\)</span> necessarily <span class="math inline">\(3 \times 4\)</span> such that:</p>
 <p><span class="math display">\[M\begin{pmatrix} X \\ Y \\ Z \\ 1 \end{pmatrix} = \begin{pmatrix} X - c_1
 \\ Y - c_2 \\ Z - c_3 \end{pmatrix}\]</span></p>
 <p>Let us find <span class="math inline">\(M\)</span> by brute force. Write:</p>
@@ -492,24 +479,24 @@ x \\ y \end{pmatrix} \checkmark\]</span></p>
 -c_3 \end{pmatrix}\]</span></p>
 <p>Notice the <span class="math inline">\(3 \times 3\)</span> identity matrix <span class="math inline">\(I_3\)</span> hiding inside. Using block matrix notation:</p>
 <p><span class="math display">\[\boxed{M = \begin{bmatrix} I_3 \mid -\mathbf{c} \end{bmatrix}}\]</span></p>
-<p>where <span class="math inline">\(\mathbf{c} = (c_1, c_2, c_3)^\top\)</span> is the camera center in world coordinates. The <span class="math inline">\(1\)</span> in the fourth slot of the lifted input carries the constant <span class="math inline">\(\mathbf{c}\)</span> into the multiplication — making what was an affine map linear.</p>
+<p>where <span class="math inline">\(\mathbf{c} = (c_1, c_2, c_3)^\top\)</span> is the camera center in world coordinates. The <span class="math inline">\(1\)</span> in the fourth slot of the lifted input carries the constant <span class="math inline">\(\mathbf{c}\)</span> into the multiplication making what was an affine map linear.</p>
 <p>In Part 1, we lifted <span class="math inline">\(\mathbb{R}^2\)</span> to <span class="math inline">\(\mathbb{R}^3\)</span> because the intersection formula <span class="math inline">\(\mathbf{u} = \boldsymbol{\ell}_1 \times
-\boldsymbol{\ell}_2\)</span> naturally produced a triple <span class="math inline">\((p, q, w)^\top\)</span> rather than a pair — and the division <span class="math inline">\(x = p/w\)</span>, <span class="math inline">\(y = q/w\)</span> was nonlinear. Lifting deferred the nonlinearity to the very end.</p>
-<p>Here, we lift <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^4\)</span> for a completely different reason: translation <span class="math inline">\(\mathbf{r}' = \mathbf{r} - \mathbf{c}\)</span> is an affine map, not a linear one. Appending a <span class="math inline">\(1\)</span> as the fourth coordinate turns the constant <span class="math inline">\(\mathbf{c}\)</span> into something a matrix can carry — making the affine map linear in <span class="math inline">\(\mathbb{R}^4\)</span>.</p>
+\boldsymbol{\ell}_2\)</span> naturally produced a triple <span class="math inline">\((p, q, w)^\top\)</span> rather than a pair and the division <span class="math inline">\(x = p/w\)</span>, <span class="math inline">\(y = q/w\)</span> was nonlinear. Lifting deferred the nonlinearity to the very end.</p>
+<p>Here, we lift <span class="math inline">\(\mathbb{R}^3\)</span> to <span class="math inline">\(\mathbb{R}^4\)</span> for a completely different reason: translation <span class="math inline">\(\mathbf{r}' = \mathbf{r} - \mathbf{c}\)</span> is an affine map, not a linear one. Appending a <span class="math inline">\(1\)</span> as the fourth coordinate turns the constant <span class="math inline">\(\mathbf{c}\)</span> into something a matrix can carry making the affine map linear in <span class="math inline">\(\mathbb{R}^4\)</span>.</p>
 <p>Same trick, different motivation. In Part 1, we lifted to handle ratios. Here, we lift to handle constants.</p>
 </section>
 <section id="rotations" class="level3">
 <h3 class="anchored" data-anchor-id="rotations">Rotations</h3>
-<p>If the word “rotation” conjures images of torque, angular velocity, angular momentum, and gyroscopes — fear not. We will have none of that. From our point of view, a rotation is simply an <a href="https://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a> <span class="math inline">\(R\)</span> with <span class="math inline">\(\det R =
+<p>If the word “rotation” conjures images of torque, angular velocity, angular momentum, and gyroscopes fear not. We will have none of that. From our point of view, a rotation is simply an <a href="https://en.wikipedia.org/wiki/Orthogonal_matrix">orthogonal matrix</a> <span class="math inline">\(R\)</span> with <span class="math inline">\(\det R =
 +1\)</span>. In pictures, it encodes how one coordinate system is oriented relative to another. That is it. No more, no less.</p>
-<p>Rotations matter in computer vision because a camera can be pointing in any direction. A phone held upright, sideways, or upside down has three different orientations — three different rotation matrices. A drone banking left or right changes its camera’s orientation continuously. The rotation matrix <span class="math inline">\(R\)</span> is what encodes this orientation mathematically.</p>
+<p>Rotations matter in computer vision because a camera can be pointing in any direction. A phone held upright, sideways, or upside down has three different orientations three different rotation matrices. A drone banking left or right changes its camera’s orientation continuously. The rotation matrix <span class="math inline">\(R\)</span> is what encodes this orientation mathematically.</p>
 <p><strong>Setup.</strong> Suppose the camera’s coordinate axes are rotated relative to the world axes. Call the camera axes <span class="math inline">\(\{\mathbf{e}_1', \mathbf{e}_2',
 \mathbf{e}_3'\}\)</span>. By definition, this is an orthonormal basis:</p>
 <p><span class="math display">\[\mathbf{e}_i' \cdot \mathbf{e}_j' = \delta_{ij} = \begin{cases} 1 &amp; i = j
 \\ 0 &amp; i \neq j \end{cases}\]</span></p>
-<p>After translation, we have <span class="math inline">\(\mathbf{r}' = \mathbf{r} - \mathbf{c}\)</span> — the position of the scene point <span class="math inline">\(P\)</span> with the camera center as origin, but still expressed along the world axes. To apply the projection formula <span class="math inline">\(x =
+<p>After translation, we have <span class="math inline">\(\mathbf{r}' = \mathbf{r} - \mathbf{c}\)</span> the position of the scene point <span class="math inline">\(P\)</span> with the camera center as origin, but still expressed along the world axes. To apply the projection formula <span class="math inline">\(x =
 f_xX'/Z'\)</span>, we need coordinates along the camera axes. We must rotate.</p>
-<p>Visually, we need to “align the world axes with the camera axes.” For those of us with zero spatial intuition — yours truly included :D — here is the formal linear algebraic way to do it.</p>
+<p>Visually, we need to “align the world axes with the camera axes.” For those of us with zero spatial intuition yours truly included :D here is the formal linear algebraic way to do it.</p>
 <p><strong>Decomposing <span class="math inline">\(\mathbf{r}'\)</span> along the camera axes.</strong> Write:</p>
 <p><span class="math display">\[\mathbf{r}' = \alpha_1\mathbf{e}_1' + \alpha_2\mathbf{e}_2' +
 \alpha_3\mathbf{e}_3'\]</span></p>
@@ -526,13 +513,13 @@ f_xX'/Z'\)</span>, we need coordinates along the camera axes. We must rotate.</p
 \\ \leftarrow \mathbf{e}_3'^\top \rightarrow \end{pmatrix}\]</span></p>
 <p>The rows of <span class="math inline">\(R\)</span> are the camera axes expressed in world coordinates. Since the camera axes are orthonormal:</p>
 <p><span class="math display">\[R^\top R = I, \qquad \det R = +1\]</span></p>
-<p><span class="math inline">\(R\)</span> is an orthogonal matrix with determinant <span class="math inline">\(+1\)</span> — a proper rotation. And the camera frame coordinates of <span class="math inline">\(\mathbf{r}'\)</span> are simply:</p>
+<p><span class="math inline">\(R\)</span> is an orthogonal matrix with determinant <span class="math inline">\(+1\)</span> a proper rotation. And the camera frame coordinates of <span class="math inline">\(\mathbf{r}'\)</span> are simply:</p>
 <p><span class="math display">\[\begin{pmatrix} X' \\ Y' \\ Z' \end{pmatrix} = R\mathbf{r}' =
 R(\mathbf{r} - \mathbf{c})\]</span></p>
 </section>
 <section id="the-stage-2-pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="the-stage-2-pipeline">The Stage 2 Pipeline</h3>
-<p>We now have two operations — translation and rotation — each representable as a matrix. Let us compose them.</p>
+<p>We now have two operations translation and rotation each representable as a matrix. Let us compose them.</p>
 <p>Starting from a lifted world coordinate <span class="math inline">\((X, Y, Z, 1)^\top\)</span>:</p>
 <p><span class="math display">\[\underbrace{\begin{pmatrix} X \\ Y \\ Z \\ 1 \end{pmatrix}}_{\text{world}}
 \xrightarrow{[I_3 \mid -\mathbf{c}]} \underbrace{\begin{pmatrix} X - c_1 \\
@@ -552,18 +539,18 @@ RI_3 \mid -R\mathbf{c} \end{bmatrix} = \begin{bmatrix} R \mid \mathbf{t}
 \mathbb{R}^{3 \times 4}}\]</span></p>
 <p>This is the <strong>extrinsic matrix</strong>. It encodes two things:</p>
 <ul>
-<li><strong>Where the camera is</strong> — through the camera center <span class="math inline">\(\mathbf{c} =
+<li><strong>Where the camera is</strong> through the camera center <span class="math inline">\(\mathbf{c} =
 -R^\top\mathbf{t}\)</span> in world coordinates</li>
-<li><strong>How the camera is oriented</strong> — through the rotation matrix <span class="math inline">\(R\)</span></li>
+<li><strong>How the camera is oriented</strong> through the rotation matrix <span class="math inline">\(R\)</span></li>
 </ul>
-<p>It is called extrinsic because it depends entirely on the camera’s position and orientation in the world — nothing to do with the sensor itself.</p>
+<p>It is called extrinsic because it depends entirely on the camera’s position and orientation in the world nothing to do with the sensor itself.</p>
 </section>
 </section>
 <section id="stage-3-the-full-camera-matrix" class="level2">
 <h2 class="anchored" data-anchor-id="stage-3-the-full-camera-matrix">Stage 3: The Full Camera Matrix</h2>
 <section id="the-complete-pipeline" class="level3">
 <h3 class="anchored" data-anchor-id="the-complete-pipeline">The Complete Pipeline</h3>
-<p>We derived Stage 1 (the intrinsic matrix <span class="math inline">\(K\)</span>) first because it is the simpler, more fundamental operation — it describes what the camera does to coordinates already expressed in its own frame. Stage 2 (the extrinsic matrix <span class="math inline">\([R \mid \mathbf{t}]\)</span>) comes first in the actual pipeline, because we must first transform the 3D scene into the camera frame before the camera can image it.</p>
+<p>We derived Stage 1 (the intrinsic matrix <span class="math inline">\(K\)</span>) first because it is the simpler, more fundamental operation it describes what the camera does to coordinates already expressed in its own frame. Stage 2 (the extrinsic matrix <span class="math inline">\([R \mid \mathbf{t}]\)</span>) comes first in the actual pipeline, because we must first transform the 3D scene into the camera frame before the camera can image it.</p>
 <p>Here is the full pipeline:</p>
 <p><span class="math display">\[\underbrace{\begin{pmatrix} X \\ Y \\ Z \\ 1 \end{pmatrix}}_{\mathbb{R}^4}
 \xrightarrow{[I_3 \mid -\mathbf{c}]} \underbrace{\begin{pmatrix} X - c_1 \\
@@ -572,7 +559,7 @@ Y - c_2 \\ Z - c_3 \end{pmatrix}}_{\mathbb{R}^3} \xrightarrow{R}
 \xrightarrow{K} \underbrace{\begin{pmatrix} f_xX'' + p_xZ'' \\
 f_yY'' + p_yZ'' \\ Z'' \end{pmatrix}}_{\mathbb{R}^3} \xrightarrow{\phi}
 \underbrace{\begin{pmatrix} x \\ y \end{pmatrix}}_{\mathbb{R}^2}\]</span></p>
-<p>Once we have the oriented coordinates <span class="math inline">\((X'', Y'', Z'')\)</span> — Stage 2 is done. The camera takes over. The intrinsic matrix <span class="math inline">\(K\)</span> maps these camera-frame coordinates to homogeneous pixel coordinates, and <span class="math inline">\(\phi\)</span> recovers the actual pixel location.</p>
+<p>Once we have the oriented coordinates <span class="math inline">\((X'', Y'', Z'')\)</span> Stage 2 is done. The camera takes over. The intrinsic matrix <span class="math inline">\(K\)</span> maps these camera-frame coordinates to homogeneous pixel coordinates, and <span class="math inline">\(\phi\)</span> recovers the actual pixel location.</p>
 </section>
 <section id="building-the-camera-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="building-the-camera-matrix">Building the Camera Matrix</h3>
@@ -585,11 +572,11 @@ f_yY''/Z'' + p_y \end{pmatrix}\]</span></p>
 = K[R \mid \mathbf{t}]\]</span></p>
 <p>where <span class="math inline">\(\mathbf{t} = -R\mathbf{c}\)</span>.</p>
 <p><span class="math display">\[\boxed{P = K[R \mid \mathbf{t}] \in \mathbb{R}^{3 \times 4}}\]</span></p>
-<p><span class="math inline">\(P\)</span> is the <strong>camera matrix</strong> — also called the camera projection matrix or camera transformation. It encodes:</p>
+<p><span class="math inline">\(P\)</span> is the <strong>camera matrix</strong> also called the camera projection matrix or camera transformation. It encodes:</p>
 <ul>
 <li>The <strong>intrinsic parameters</strong> of the camera (<span class="math inline">\(f_x\)</span>, <span class="math inline">\(f_y\)</span>, <span class="math inline">\(p_x\)</span>, <span class="math inline">\(p_y\)</span>, and optionally <span class="math inline">\(s\)</span>) through <span class="math inline">\(K\)</span></li>
-<li>The <strong>extrinsic parameters</strong> — where the camera is (<span class="math inline">\(\mathbf{c} =
--R^\top\mathbf{t}\)</span>) and how it is oriented (<span class="math inline">\(R\)</span>) in the world — through <span class="math inline">\([R \mid \mathbf{t}]\)</span></li>
+<li>The <strong>extrinsic parameters</strong> where the camera is (<span class="math inline">\(\mathbf{c} =
+-R^\top\mathbf{t}\)</span>) and how it is oriented (<span class="math inline">\(R\)</span>) in the world through <span class="math inline">\([R \mid \mathbf{t}]\)</span></li>
 </ul>
 <p>The full camera pipeline collapses to:</p>
 <p><span class="math display">\[\begin{pmatrix} x \\ y \end{pmatrix} = \phi\left(P\begin{pmatrix} X \\ Y
@@ -612,7 +599,7 @@ f_yY''/Z'' + p_y \end{pmatrix}\]</span></p>
 <li>Positive <span class="math inline">\(Y_c\)</span>: toward the bottom edge of the phone</li>
 <li>Positive <span class="math inline">\(Z_c\)</span>: straight out through the rear camera, into the scene</li>
 </ul>
-<p>A word on <span class="math inline">\(Z\)</span>: in the world frame, positive <span class="math inline">\(Z_w\)</span> points up — toward the sky. In the camera frame, positive <span class="math inline">\(Z_c\)</span> points outward — away from you, into the scene. These are very different directions. This is precisely why the rotation matrix <span class="math inline">\(R\)</span> is needed — to translate between them.</p>
+<p>A word on <span class="math inline">\(Z\)</span>: in the world frame, positive <span class="math inline">\(Z_w\)</span> points up toward the sky. In the camera frame, positive <span class="math inline">\(Z_c\)</span> points outward away from you, into the scene. These are very different directions. This is precisely why the rotation matrix <span class="math inline">\(R\)</span> is needed to translate between them.</p>
 <p>The camera coordinate axes do not physically exist inside the phone or camera. They are a mathematical abstraction that travels with the camera as it moves and rotates. If you see me or someone else drawing a diagram of a camera with axes inside it, that is just a visual convention. Ignore it.</p>
 <p>For a phone held upright facing forward (north), the relations between the two frames are:</p>
 <p><span class="math inline">\(X_c = X_w, \qquad Y_c = -Z_w, \qquad Z_c = Y_w\)</span>$</p>
@@ -639,13 +626,13 @@ X_w \\ Y_w \\ Z_w \end{pmatrix}\]</span></p>
 \mathbf{e}_{Z_c} = \begin{pmatrix} -1 \\ 0 \\ 0 \end{pmatrix}\]</span></p>
 <p>The rows of <span class="math inline">\(R\)</span> are the camera axes in world coordinates:</p>
 <p><span class="math display">\[R = \begin{pmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \\ -1 &amp; 0 &amp; 0 \end{pmatrix}\]</span></p>
-<p>Verification — <span class="math inline">\(R^\top R = I\)</span>:</p>
+<p>Verification <span class="math inline">\(R^\top R = I\)</span>:</p>
 <p><span class="math display">\[R^\top = \begin{pmatrix} 0 &amp; 0 &amp; -1 \\ 1 &amp; 0 &amp; 0 \\ 0 &amp; -1 &amp; 0
 \end{pmatrix}, \qquad R^\top R = \begin{pmatrix} 0 &amp; 0 &amp; -1 \\ 1 &amp; 0 &amp; 0 \\
 0 &amp; -1 &amp; 0 \end{pmatrix} \begin{pmatrix} 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; -1 \\ -1 &amp; 0
 &amp; 0 \end{pmatrix} = I \checkmark\]</span></p>
 <p>And <span class="math inline">\(\det R = +1\)</span>, so <span class="math inline">\(R\)</span> is a proper rotation matrix.</p>
-<p>One thing to note: the positive <span class="math inline">\(Z_c\)</span> axis of the camera always points outward — straight out through the rear camera, into the scene. This is true regardless of which direction you are facing or how you have rotated. <span class="math inline">\(Z_c\)</span> is always “away from you.” What changes with rotation is which world direction <span class="math inline">\(Z_c\)</span> aligns with — forward, left, right, or any other direction — but <span class="math inline">\(Z_c\)</span> itself always points into the scene.</p>
+<p>One thing to note: the positive <span class="math inline">\(Z_c\)</span> axis of the camera always points outward straight out through the rear camera, into the scene. This is true regardless of which direction you are facing or how you have rotated. <span class="math inline">\(Z_c\)</span> is always “away from you.” What changes with rotation is which world direction <span class="math inline">\(Z_c\)</span> aligns with forward, left, right, or any other direction – but <span class="math inline">\(Z_c\)</span> itself always points into the scene.</p>
 </section>
 <section id="a-worked-example" class="level3">
 <h3 class="anchored" data-anchor-id="a-worked-example">A Worked Example</h3>
@@ -655,7 +642,7 @@ X_w \\ Y_w \\ Z_w \end{pmatrix}\]</span></p>
 <p><span class="math display">\[\mathbf{c} = \begin{pmatrix} 2 \\ 1 \\ 1.5 \end{pmatrix}\]</span></p>
 <p>The camera intrinsics are <span class="math inline">\(f_x = f_y = 12500\)</span> pixels and principal point <span class="math inline">\((p_x, p_y) = (3000, 2000)\)</span>.</p>
 <p><strong>Find the pixel coordinates of the drone.</strong></p>
-<hr>
+<p>–</p>
 <p><strong>Step 1: Translation.</strong></p>
 <p><span class="math display">\[\mathbf{r} - \mathbf{c} = \begin{pmatrix} -3 \\ 1.4 \\ 1.7 \end{pmatrix} -
 \begin{pmatrix} 2 \\ 1 \\ 1.5 \end{pmatrix} = \begin{pmatrix} -5 \\ 0.4 \\
@@ -668,7 +655,7 @@ X_w \\ Y_w \\ Z_w \end{pmatrix}\]</span></p>
 \begin{pmatrix} -5 \\ 0.4 \\ 0.2 \end{pmatrix} = \begin{pmatrix} 0.4 \\ -0.2
 \\ 5 \end{pmatrix}\]</span></p>
 <p>So in the camera frame, the drone is at <span class="math inline">\((X_c, Y_c, Z_c) = (0.4, -0.2, 5)\)</span>.</p>
-<p>Note that <span class="math inline">\(Z_c = 5 &gt; 0\)</span> — the drone is in front of the camera, as expected. If <span class="math inline">\(Z_c &lt; 0\)</span>, the point would be behind the camera and not visible.</p>
+<p>Note that <span class="math inline">\(Z_c = 5 &gt; 0\)</span> the drone is in front of the camera, as expected. If <span class="math inline">\(Z_c &lt; 0\)</span>, the point would be behind the camera and not visible.</p>
 <p><strong>Step 3: Apply <span class="math inline">\(K\)</span>.</strong></p>
 <p><span class="math display">\[K\begin{pmatrix} X_c \\ Y_c \\ Z_c \end{pmatrix} = \begin{pmatrix} 12500
 &amp; 0 &amp; 3000 \\ 0 &amp; 12500 &amp; 2000 \\ 0 &amp; 0 &amp; 1 \end{pmatrix} \begin{pmatrix}
@@ -684,17 +671,17 @@ X_w \\ Y_w \\ Z_w \end{pmatrix}\]</span></p>
 <figure class="figure">
 <p><img src="images/drone_camera.png" class="img-fluid figure-img" style="width:90.0%"></p>
 <figcaption>A person standing in an open field holds a phone upright, rear camera pointing west (negative <span class="math inline">\(X_w\)</span>). The drone at world coordinates <span class="math inline">\((-3, 1.4,
-1.7)^\top\)</span> is mapped through the camera matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span> to pixel coordinates <span class="math inline">\((4000, 1500)\)</span> in the image. The world frame has <span class="math inline">\(X_w\)</span> east, <span class="math inline">\(Y_w\)</span> north, <span class="math inline">\(Z_w\)</span> up. The camera frame (OpenCV convention) has <span class="math inline">\(X_c\)</span> right, <span class="math inline">\(Y_c\)</span> down, <span class="math inline">\(Z_c\)</span> outward through the rear camera. The principal point is at <span class="math inline">\((3000, 2000)\)</span> — the drone projects to the right of and above it, consistent with the geometry.</figcaption>
+1.7)^\top\)</span> is mapped through the camera matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span> to pixel coordinates <span class="math inline">\((4000, 1500)\)</span> in the image. The world frame has <span class="math inline">\(X_w\)</span> east, <span class="math inline">\(Y_w\)</span> north, <span class="math inline">\(Z_w\)</span> up. The camera frame (OpenCV convention) has <span class="math inline">\(X_c\)</span> right, <span class="math inline">\(Y_c\)</span> down, <span class="math inline">\(Z_c\)</span> outward through the rear camera. The principal point is at <span class="math inline">\((3000, 2000)\)</span> the drone projects to the right of and above it, consistent with the geometry.</figcaption>
 </figure>
 </div>
-<p>Never mind if the AI generated image is not photorealistic or the coordinate systems are not drawn perfectly. The point is to understand the math and how a camera matrix <span class="math inline">\(P\)</span> maps a 3D point in the world to a pixel in the image. But going forward, I will do my best to make the AI generated diagrams technically accurate and visually clear. Dear image generation models — please do not hallucinate coordinate axes or mislabel them. Thank you. Let’s see if they can follow instructions properly from now on.</p>
-<hr>
+<p>Never mind if the AI generated image is not photorealistic or the coordinate systems are not drawn perfectly. The point is to understand the math and how a camera matrix <span class="math inline">\(P\)</span> maps a 3D point in the world to a pixel in the image. But going forward, I will do my best to make the AI generated diagrams technically accurate and visually clear. Dear image generation models please do not hallucinate coordinate axes or mislabel them. Thank you. Let’s see if they can follow instructions properly from now on.</p>
+<p>–</p>
 <p>Let us also verify using the formula directly:</p>
 <p><span class="math display">\[x = f_x\frac{X_c}{Z_c} + p_x = 12500 \times \frac{0.4}{5} + 3000 = 1000
 + 3000 = 4000 \checkmark\]</span></p>
 <p><span class="math display">\[y = f_y\frac{Y_c}{Z_c} + p_y = 12500 \times \frac{-0.2}{5} + 2000 = -500
 + 2000 = 1500 \checkmark\]</span></p>
-<p>The pixel <span class="math inline">\((4000, 1500)\)</span> is to the right of and above the principal point <span class="math inline">\((3000, 2000)\)</span> — which makes geometric sense given the drone’s position relative to the camera.</p>
+<p>The pixel <span class="math inline">\((4000, 1500)\)</span> is to the right of and above the principal point <span class="math inline">\((3000, 2000)\)</span> which makes geometric sense given the drone’s position relative to the camera.</p>
 </section>
 </section>
 <section id="the-direct-linear-transform-dlt" class="level2">
@@ -702,28 +689,28 @@ X_w \\ Y_w \\ Z_w \end{pmatrix}\]</span></p>
 <section id="the-inverse-problem" class="level3">
 <h3 class="anchored" data-anchor-id="the-inverse-problem">The Inverse Problem</h3>
 <p>So far we have gone forward: given a 3D point and a camera matrix <span class="math inline">\(P\)</span>, find the pixel coordinates. But in practice, you rarely know <span class="math inline">\(P\)</span> in advance.</p>
-<p>What you have is a photograph. You can identify specific points in the image — the corner of a building, a marker on a calibration board, the tip of a known object — and measure their pixel coordinates <span class="math inline">\((x_i, y_i)\)</span>. If you also know the corresponding 3D world coordinates <span class="math inline">\((X_i, Y_i, Z_i)\)</span> of those same points, can you recover the camera matrix <span class="math inline">\(P\)</span> that made this image possible?</p>
+<p>What you have is a photograph. You can identify specific points in the image – the corner of a building, a marker on a calibration board, the tip of a known object and measure their pixel coordinates <span class="math inline">\((x_i, y_i)\)</span>. If you also know the corresponding 3D world coordinates <span class="math inline">\((X_i, Y_i, Z_i)\)</span> of those same points, can you recover the camera matrix <span class="math inline">\(P\)</span> that made this image possible?</p>
 <p>Yes. This is what the Direct Linear Transform (DLT) does.</p>
 </section>
 <section id="why-does-this-matter" class="level3">
 <h3 class="anchored" data-anchor-id="why-does-this-matter">Why Does This Matter?</h3>
-<p><strong>Camera calibration</strong> is the process of determining the intrinsic parameters of a camera — the focal lengths <span class="math inline">\(f_x, f_y\)</span>, the principal point <span class="math inline">\((p_x,
-p_y)\)</span>, and the skew <span class="math inline">\(s\)</span> — from images. A calibrated camera is one whose intrinsic matrix <span class="math inline">\(K\)</span> is known. Full calibration methods (such as Zhang’s method using checkerboard patterns, which is what OpenCV’s implements) are more sophisticated and will come later in this series.</p>
-<p>For now, the DLT solves a simpler but related problem: given a set of known 3D-to-2D point correspondences, recover the full camera matrix <span class="math inline">\(P\)</span>. From <span class="math inline">\(P\)</span>, we can then decompose back into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> — recovering both intrinsic and extrinsic parameters simultaneously. This is the first step toward calibration, and the same null space pattern we have been using since Part 1.</p>
-<p>Knowing <span class="math inline">\(P\)</span> — and therefore <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span> — matters because:</p>
+<p><strong>Camera calibration</strong> is the process of determining the intrinsic parameters of a camera the focal lengths <span class="math inline">\(f_x, f_y\)</span>, the principal point <span class="math inline">\((p_x,
+p_y)\)</span>, and the skew <span class="math inline">\(s\)</span> from images. A calibrated camera is one whose intrinsic matrix <span class="math inline">\(K\)</span> is known. Full calibration methods (such as Zhang’s method using checkerboard patterns, which is what OpenCV’s implements) are more sophisticated and will come later in this series.</p>
+<p>For now, the DLT solves a simpler but related problem: given a set of known 3D-to-2D point correspondences, recover the full camera matrix <span class="math inline">\(P\)</span>. From <span class="math inline">\(P\)</span>, we can then decompose back into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> recovering both intrinsic and extrinsic parameters simultaneously. This is the first step toward calibration, and the same null space pattern we have been using since Part 1.</p>
+<p>Knowing <span class="math inline">\(P\)</span> and therefore <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, <span class="math inline">\(\mathbf{t}\)</span> matters because:</p>
 <ul>
 <li><strong>3D reconstruction:</strong> Recovering the 3D structure of a scene from multiple images requires knowing where each camera is and how it is oriented.</li>
 <li><strong>Augmented reality:</strong> Overlaying a virtual object convincingly on a real scene requires knowing the camera’s position and orientation in the world.</li>
 <li><strong>Robot navigation:</strong> A robot using a camera to navigate needs to know the relationship between what it sees and where things are in the world.</li>
-<li><strong>Photogrammetry:</strong> Surveyors and architects recover precise measurements of structures from photographs — but only if the camera parameters are known.</li>
+<li><strong>Photogrammetry:</strong> Surveyors and architects recover precise measurements of structures from photographs but only if the camera parameters are known.</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/camera_calibration_applications.png" class="img-fluid figure-img" style="width:90.0%"></p>
-<figcaption>Four applications where knowing the camera matrix <span class="math inline">\(P\)</span> — and therefore the intrinsic and extrinsic parameters — is essential. Clockwise from top-left: 3D reconstruction from multiple calibrated cameras; augmented reality overlaying virtual content on the real world; photogrammetry recovering precise 3D measurements from photographs; robot navigation using calibrated cameras for mapping and localization.</figcaption>
+<figcaption>Four applications where knowing the camera matrix <span class="math inline">\(P\)</span> and therefore the intrinsic and extrinsic parameters is essential. Clockwise from top-left: 3D reconstruction from multiple calibrated cameras; augmented reality overlaying virtual content on the real world; photogrammetry recovering precise 3D measurements from photographs; robot navigation using calibrated cameras for mapping and localization.</figcaption>
 </figure>
 </div>
-<p>In all of these, recovering <span class="math inline">\(P\)</span> is the first step. Everything else depends on it. And notice how practical and real these applications are — this is not just abstract math. This is the math that powers the cameras in your phone, or the image sensors on a satellite, or the vision system of a self-driving car. It is the math that allows computers to understand the 3D world from 2D images.</p>
+<p>In all of these, recovering <span class="math inline">\(P\)</span> is the first step. Everything else depends on it. And notice how practical and real these applications are this is not just abstract math. This is the math that powers the cameras in your phone, or the image sensors on a satellite, or the vision system of a self-driving car. It is the math that allows computers to understand the 3D world from 2D images.</p>
 </section>
 <section id="the-dlt-algorithm" class="level3">
 <h3 class="anchored" data-anchor-id="the-dlt-algorithm">The DLT Algorithm</h3>
@@ -745,7 +732,7 @@ Z_i, 1)^\top\)</span>. Then:</p>
 \tilde{\mathbf{X}}_i}, \qquad y_i = \frac{\mathbf{p}_2^\top\tilde{\mathbf{X}}_i}
 {\mathbf{p}_3^\top\tilde{\mathbf{X}}_i}\]</span></p>
 <p>For this division to make sense, <span class="math inline">\(\mathbf{p}_3^\top\tilde{\mathbf{X}}_i \neq
-0\)</span>. Recall from the pipeline that <span class="math inline">\(\mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth <span class="math inline">\(Z_c\)</span> of the point in the camera frame — the distance of the scene point along the optical axis. It is zero only if the point lies at the same depth as the camera center itself, which cannot happen for any real scene point in front of the camera. We assume <span class="math inline">\(Z_c &gt; 0\)</span> throughout — all scene points are in front of the camera.</p>
+0\)</span>. Recall from the pipeline that <span class="math inline">\(\mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth <span class="math inline">\(Z_c\)</span> of the point in the camera frame the distance of the scene point along the optical axis. It is zero only if the point lies at the same depth as the camera center itself, which cannot happen for any real scene point in front of the camera. We assume <span class="math inline">\(Z_c &gt; 0\)</span> throughout all scene points are in front of the camera.</p>
 <p><strong>Cross-multiplying.</strong> Rearranging the two equations:</p>
 <p><span class="math display">\[x_i(\mathbf{p}_3^\top\tilde{\mathbf{X}}_i) - \mathbf{p}_1^\top
 \tilde{\mathbf{X}}_i = 0\]</span></p>
@@ -768,22 +755,22 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 <p><strong>Stacking all correspondences.</strong> Stack all <span class="math inline">\(n\)</span> such matrices into a single <span class="math inline">\(2n \times 12\)</span> matrix:</p>
 <p><span class="math display">\[A = \begin{pmatrix} A_1 \\ A_2 \\ \vdots \\ A_n \end{pmatrix} \in
 \mathbb{R}^{2n \times 12}\]</span></p>
-<p>Each row of <span class="math inline">\(A\)</span> dotted with <span class="math inline">\(\mathbf{p}\)</span> gives zero — by construction. So:</p>
+<p>Each row of <span class="math inline">\(A\)</span> dotted with <span class="math inline">\(\mathbf{p}\)</span> gives zero by construction. So:</p>
 <p><span class="math display">\[A\mathbf{p} = \mathbf{0}\]</span></p>
 <p>The camera parameters <span class="math inline">\(\mathbf{p}\)</span> lie in the <strong>null space of <span class="math inline">\(A\)</span></strong>. Reshaping the solution <span class="math inline">\(\hat{\mathbf{p}} \in \mathbb{R}^{12}\)</span> into a <span class="math inline">\(3
 \times 4\)</span> matrix gives the camera matrix <span class="math inline">\(\hat{P}\)</span>.</p>
-<p>This is the same master pattern we have seen since Part 1: find a geometric object as the null space of a matrix built from constraints. The intersection of two lines, the line through two points, the conic through five points, the camera matrix from point correspondences — all the same idea.</p>
+<p>This is the same master pattern we have seen since Part 1: find a geometric object as the null space of a matrix built from constraints. The intersection of two lines, the line through two points, the conic through five points, the camera matrix from point correspondences all the same idea.</p>
 </section>
 <section id="solving-via-svd" class="level3">
 <h3 class="anchored" data-anchor-id="solving-via-svd">Solving via SVD</h3>
-<p>You can solve <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> using standard Gaussian elimination, but there is a faster and more numerically robust method — the Singular Value Decomposition (SVD).</p>
+<p>You can solve <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> using standard Gaussian elimination, but there is a faster and more numerically robust method the Singular Value Decomposition (SVD).</p>
 <p><strong>Recall: SVD.</strong> For any matrix <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> of rank <span class="math inline">\(r\)</span>:</p>
 <p><span class="math display">\[A = U\Sigma V^\top\]</span></p>
-<p>where: - <span class="math inline">\(U \in \mathbb{R}^{m \times m}\)</span> is orthogonal — its columns are the <strong>left singular vectors</strong> - <span class="math inline">\(\Sigma \in \mathbb{R}^{m \times n}\)</span> is diagonal with non-negative entries <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r &gt; \sigma_{r+1} = \cdots =
-0\)</span> — the <strong>singular values</strong> - <span class="math inline">\(V \in \mathbb{R}^{n \times n}\)</span> is orthogonal — its columns are the <strong>right singular vectors</strong></p>
-<p>We will not do full justice to the SVD here — that deserves its own post. But the fact we need is this: the right singular vectors <span class="math inline">\(\{\mathbf{v}_{r+1},
+<p>where: - <span class="math inline">\(U \in \mathbb{R}^{m \times m}\)</span> is orthogonal its columns are the <strong>left singular vectors</strong> - <span class="math inline">\(\Sigma \in \mathbb{R}^{m \times n}\)</span> is diagonal with non-negative entries <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r &gt; \sigma_{r+1} = \cdots =
+0\)</span> the <strong>singular values</strong> - <span class="math inline">\(V \in \mathbb{R}^{n \times n}\)</span> is orthogonal its columns are the <strong>right singular vectors</strong></p>
+<p>We will not do full justice to the SVD here that deserves its own post. But the fact we need is this: the right singular vectors <span class="math inline">\(\{\mathbf{v}_{r+1},
 \mathbf{v}_{r+2}, \ldots, \mathbf{v}_n\}\)</span> corresponding to zero singular values form an orthonormal basis for <span class="math inline">\(\text{null}(A)\)</span>.</p>
-<p><strong>Ensuring the null space is one-dimensional.</strong> We need <span class="math inline">\(\text{null}(A)\)</span> to be exactly one-dimensional — so that the camera matrix is unique up to scale. By rank-nullity:</p>
+<p><strong>Ensuring the null space is one-dimensional.</strong> We need <span class="math inline">\(\text{null}(A)\)</span> to be exactly one-dimensional so that the camera matrix is unique up to scale. By rank-nullity:</p>
 <p><span class="math display">\[\dim(\text{null}(A)) = 12 - \text{rank}(A)\]</span></p>
 <p>So we need <span class="math inline">\(\text{rank}(A) = 11\)</span>.</p>
 <p>How do we ensure this? By choosing <span class="math inline">\(n \geq 6\)</span> point correspondences <strong>in general position</strong>. General position here means:</p>
@@ -792,12 +779,12 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 <li>No three of the image points are collinear</li>
 <li>The points are spread across the scene, not clustered together</li>
 </ul>
-<p>When these conditions hold, each correspondence contributes genuinely new information — the rows of <span class="math inline">\(A\)</span> are linearly independent enough to give <span class="math inline">\(\text{rank}(A) = 11\)</span>. With fewer than 6 correspondences, or with degenerate configurations (all points on a plane, for instance), the rank drops below 11 and the null space becomes larger than one-dimensional — multiple camera matrices would fit the data, and <span class="math inline">\(P\)</span> cannot be recovered uniquely.</p>
+<p>When these conditions hold, each correspondence contributes genuinely new information the rows of <span class="math inline">\(A\)</span> are linearly independent enough to give <span class="math inline">\(\text{rank}(A) = 11\)</span>. With fewer than 6 correspondences, or with degenerate configurations (all points on a plane, for instance), the rank drops below 11 and the null space becomes larger than one-dimensional multiple camera matrices would fit the data, and <span class="math inline">\(P\)</span> cannot be recovered uniquely.</p>
 <p>We also need <span class="math inline">\(\text{rank}(A) \leq \min(2n, 12)\)</span>. With <span class="math inline">\(n \geq 6\)</span>, we have <span class="math inline">\(2n \geq 12\)</span>, so this is not a binding constraint.</p>
-<p><strong>The solution.</strong> With <span class="math inline">\(\text{rank}(A) = 11\)</span>, the null space is one-dimensional, spanned by the last right singular vector <span class="math inline">\(\mathbf{v}_{12}\)</span> — the column of <span class="math inline">\(V\)</span> corresponding to the smallest singular value <span class="math inline">\(\sigma_{12}\)</span>. The solution is:</p>
+<p><strong>The solution.</strong> With <span class="math inline">\(\text{rank}(A) = 11\)</span>, the null space is one-dimensional, spanned by the last right singular vector <span class="math inline">\(\mathbf{v}_{12}\)</span> – the column of <span class="math inline">\(V\)</span> corresponding to the smallest singular value <span class="math inline">\(\sigma_{12}\)</span>. The solution is:</p>
 <p><span class="math display">\[\hat{\mathbf{p}} = \mathbf{v}_{12}\]</span></p>
 <p>Reshape <span class="math inline">\(\hat{\mathbf{p}} \in \mathbb{R}^{12}\)</span> into a <span class="math inline">\(3 \times 4\)</span> matrix to obtain <span class="math inline">\(\hat{P}\)</span>.</p>
-<p><strong>In the noiseless case</strong>, <span class="math inline">\(\sigma_{12} = 0\)</span> exactly and <span class="math inline">\(\mathbf{v}_{12}\)</span> is the true null vector. <strong>In the noisy case</strong> — which is always the reality — all singular values are nonzero, and <span class="math inline">\(\mathbf{v}_{12}\)</span> minimises the algebraic error <span class="math inline">\(\|A\mathbf{p}\|^2\)</span> subject to <span class="math inline">\(\|\mathbf{p}\| = 1\)</span>. This is not the same as minimising the geometric reprojection error, but it is a good starting point. More on this shortly.</p>
+<p><strong>In the noiseless case</strong>, <span class="math inline">\(\sigma_{12} = 0\)</span> exactly and <span class="math inline">\(\mathbf{v}_{12}\)</span> is the true null vector. <strong>In the noisy case</strong> which is always the reality – all singular values are nonzero, and <span class="math inline">\(\mathbf{v}_{12}\)</span> minimises the algebraic error <span class="math inline">\(\|A\mathbf{p}\|^2\)</span> subject to <span class="math inline">\(\|\mathbf{p}\| = 1\)</span>. This is not the same as minimising the geometric reprojection error, but it is a good starting point. More on this shortly.</p>
 <p>There are some subtle technical points here that are worth discussing. You can skip them if you want to get straight to the DLT implementation, but they are important for a deeper understanding of the SVD solution. Good thing is- I am not going into the full technical details of these points, but just giving you the intuition behind them.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -812,7 +799,7 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 <p>If <span class="math inline">\(\operatorname{rank}(A) = 12\)</span>, then the null space is trivial:</p>
 <p><span class="math display">\[\operatorname{Null}(A) = \{\mathbf{0}\}\]</span></p>
 <p>The only exact solution of <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> is therefore <span class="math inline">\(\mathbf{p} = \mathbf{0}\)</span>, which is not a valid camera matrix.</p>
-<p>In practice, noisy measurements usually make the equations inconsistent, so there may be no nonzero exact solution. This is why we use SVD to find the best approximate solution <span class="math inline">\(\mathbf{v}_{12}\)</span>. - <strong><span class="math inline">\(\sigma_{12} = 0\)</span>:</strong> <span class="math inline">\(\mathbf{v}_{12}\)</span> is in the exact null space. A camera matrix perfectly explains all correspondences. Noiseless case. - <strong><span class="math inline">\(\sigma_{12}\)</span> small but nonzero:</strong> <span class="math inline">\(A\)</span> nearly kills <span class="math inline">\(\mathbf{v}_{12}\)</span>. If you turn this into an optimization problem, <span class="math inline">\(\mathbf{v}_{12}\)</span> is the best approximate solution. The camera matrix explains the correspondences well, but not perfectly. This is the usual case in practice. - <strong><span class="math inline">\(\sigma_{12}\)</span> large:</strong> Even the best <span class="math inline">\(\mathbf{v}_{12}\)</span> gives a large residual. The correspondences are inconsistent — perhaps due to large noise, wrong point matches, or the scene not fitting the pinhole model.</p>
+<p>In practice, noisy measurements usually make the equations inconsistent, so there may be no nonzero exact solution. This is why we use SVD to find the best approximate solution <span class="math inline">\(\mathbf{v}_{12}\)</span>. - <strong><span class="math inline">\(\sigma_{12} = 0\)</span>:</strong> <span class="math inline">\(\mathbf{v}_{12}\)</span> is in the exact null space. A camera matrix perfectly explains all correspondences. Noiseless case. - <strong><span class="math inline">\(\sigma_{12}\)</span> small but nonzero:</strong> <span class="math inline">\(A\)</span> nearly kills <span class="math inline">\(\mathbf{v}_{12}\)</span>. If you turn this into an optimization problem, <span class="math inline">\(\mathbf{v}_{12}\)</span> is the best approximate solution. The camera matrix explains the correspondences well, but not perfectly. This is the usual case in practice. - <strong><span class="math inline">\(\sigma_{12}\)</span> large:</strong> Even the best <span class="math inline">\(\mathbf{v}_{12}\)</span> gives a large residual. The correspondences are inconsistent perhaps due to large noise, wrong point matches, or the scene not fitting the pinhole model.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -825,7 +812,7 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Two reasons. First, in the noisy case — which is always reality — <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> has no exact solution and Gaussian elimination breaks down. SVD gives the best approximate solution automatically. Second, SVD enforces <span class="math inline">\(\|\mathbf{p}\| = 1\)</span>, avoiding the trivial solution <span class="math inline">\(\mathbf{p}
+<p>Two reasons. First, in the noisy case which is always reality <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span> has no exact solution and Gaussian elimination breaks down. SVD gives the best approximate solution automatically. Second, SVD enforces <span class="math inline">\(\|\mathbf{p}\| = 1\)</span>, avoiding the trivial solution <span class="math inline">\(\mathbf{p}
 = \mathbf{0}\)</span>. Gaussian elimination does not.</p>
 </div>
 </div>
@@ -842,19 +829,19 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 <p>The <strong>operator norm</strong> (or spectral norm) of a matrix <span class="math inline">\(A\)</span> is defined as:</p>
 <p><span class="math display">\[\|A\|_2 = \sup\left\{\frac{\|A\mathbf{x}\|}{\|\mathbf{x}\|} : \mathbf{x}
 \neq \mathbf{0}\right\} = \max\{\|A\mathbf{x}\| : \|\mathbf{x}\| = 1\}\]</span></p>
-<p>It measures the maximum stretching factor of <span class="math inline">\(A\)</span> — the largest factor by which <span class="math inline">\(A\)</span> can amplify a unit vector. It turns out that <span class="math inline">\(\|A\|_2 = \sigma_1\)</span>, the largest singular value of <span class="math inline">\(A\)</span>.</p>
+<p>It measures the maximum stretching factor of <span class="math inline">\(A\)</span> the largest factor by which <span class="math inline">\(A\)</span> can amplify a unit vector. It turns out that <span class="math inline">\(\|A\|_2 = \sigma_1\)</span>, the largest singular value of <span class="math inline">\(A\)</span>.</p>
 <p>More usefully for us, the SVD gives a complete picture of how <span class="math inline">\(A\)</span> acts on unit vectors. For any <span class="math inline">\(\mathbf{p}\)</span> with <span class="math inline">\(\|\mathbf{p}\| = 1\)</span>:</p>
 <p><span class="math display">\[\|A\mathbf{p}\|^2 = \mathbf{p}^\top V \Sigma^\top \Sigma V^\top \mathbf{p}\]</span></p>
 <p>Writing <span class="math inline">\(\mathbf{q} = V^\top \mathbf{p}\)</span> (which also has unit norm since <span class="math inline">\(V\)</span> is orthogonal):</p>
 <p><span class="math display">\[\|A\mathbf{p}\|^2 = \sum_{i=1}^{12} \sigma_i^2 q_i^2\]</span></p>
-<p>Since <span class="math inline">\(\|\mathbf{q}\| = 1\)</span>, this is a weighted sum of the squared singular values with weights <span class="math inline">\(q_i^2\)</span> that sum to 1. To minimise it, put all the weight on the smallest <span class="math inline">\(\sigma_i^2\)</span> — set <span class="math inline">\(q_{12} = 1\)</span> and all other <span class="math inline">\(q_i = 0\)</span>. This gives <span class="math inline">\(\mathbf{q} = \mathbf{e}_{12}\)</span>, and since <span class="math inline">\(\mathbf{q} = V^\top
+<p>Since <span class="math inline">\(\|\mathbf{q}\| = 1\)</span>, this is a weighted sum of the squared singular values with weights <span class="math inline">\(q_i^2\)</span> that sum to 1. To minimise it, put all the weight on the smallest <span class="math inline">\(\sigma_i^2\)</span> set <span class="math inline">\(q_{12} = 1\)</span> and all other <span class="math inline">\(q_i = 0\)</span>. This gives <span class="math inline">\(\mathbf{q} = \mathbf{e}_{12}\)</span>, and since <span class="math inline">\(\mathbf{q} = V^\top
 \mathbf{p}\)</span>, the minimiser is <span class="math inline">\(\mathbf{p} = \mathbf{v}_{12}\)</span>.</p>
-<p>There is a beautiful geometric picture behind this. The SVD maps the unit sphere to an ellipsoid — the singular values <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq
-\cdots \geq \sigma_{12}\)</span> are the semi-axes of that ellipsoid. The maximum of <span class="math inline">\(\|A\mathbf{p}\|\)</span> over the unit sphere is <span class="math inline">\(\sigma_1\)</span> — the longest axis, attained at <span class="math inline">\(\mathbf{v}_1\)</span>. The minimum is <span class="math inline">\(\sigma_{12}\)</span> — the shortest axis, attained at <span class="math inline">\(\mathbf{v}_{12}\)</span>. Our solution lives at the shortest axis of the ellipsoid.</p>
+<p>There is a beautiful geometric picture behind this. The SVD maps the unit sphere to an ellipsoid the singular values <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq
+\cdots \geq \sigma_{12}\)</span> are the semi-axes of that ellipsoid. The maximum of <span class="math inline">\(\|A\mathbf{p}\|\)</span> over the unit sphere is <span class="math inline">\(\sigma_1\)</span> the longest axis, attained at <span class="math inline">\(\mathbf{v}_1\)</span>. The minimum is <span class="math inline">\(\sigma_{12}\)</span> the shortest axis, attained at <span class="math inline">\(\mathbf{v}_{12}\)</span>. Our solution lives at the shortest axis of the ellipsoid.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/svd_ellipsoid.png" class="img-fluid figure-img" style="width:80.0%"></p>
-<figcaption>The SVD maps the unit sphere to an ellipsoid. The singular values are the semi-axes. The minimum of <span class="math inline">\(\|A\mathbf{p}\|\)</span> over all unit vectors <span class="math inline">\(\mathbf{p}\)</span> is <span class="math inline">\(\sigma_{12}\)</span> — attained at <span class="math inline">\(\mathbf{v}_{12}\)</span>, the direction of the shortest axis. This is why the last right singular vector solves our problem.</figcaption>
+<figcaption>The SVD maps the unit sphere to an ellipsoid. The singular values are the semi-axes. The minimum of <span class="math inline">\(\|A\mathbf{p}\|\)</span> over all unit vectors <span class="math inline">\(\mathbf{p}\)</span> is <span class="math inline">\(\sigma_{12}\)</span> attained at <span class="math inline">\(\mathbf{v}_{12}\)</span>, the direction of the shortest axis. This is why the last right singular vector solves our problem.</figcaption>
 </figure>
 </div>
 </div>
@@ -870,9 +857,9 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 \mathbf{p}_1^\top\tilde{\mathbf{X}} / \mathbf{p}_3^\top\tilde{\mathbf{X}} \\
 \mathbf{p}_2^\top\tilde{\mathbf{X}} / \mathbf{p}_3^\top\tilde{\mathbf{X}}
 \end{pmatrix} = \phi(P\tilde{\mathbf{X}})\]</span></p>
-<p>The <span class="math inline">\(\lambda\)</span> cancels. So <span class="math inline">\(P\)</span> and <span class="math inline">\(\lambda P\)</span> define exactly the same camera for any <span class="math inline">\(\lambda \neq 0\)</span>. The camera matrix lives in an equivalence class <span class="math inline">\(\{\lambda\hat{P} : \lambda \neq 0\}\)</span> — just like points in <span class="math inline">\(\mathbb{P}^2\)</span> from Part 1.</p>
-<p><strong>What does <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> ensure?</strong> The SVD constraint <span class="math inline">\(\|\hat{\mathbf{p}}\| = 1\)</span> picks one representative from this equivalence class — it pins the solution to the unit sphere in <span class="math inline">\(\mathbb{R}^{12}\)</span>, avoiding <span class="math inline">\(\mathbf{p} = \mathbf{0}\)</span>. But it does not fully resolve the ambiguity: Both <span class="math inline">\(\hat{\mathbf{p}}\)</span> and <span class="math inline">\(-\hat{\mathbf{p}}\)</span> have unit norm and both satisfy <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span>. The sign is not fixed.</p>
-<p>So <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> is a convenient normalization for the SVD, not a physically meaningful one. The physically meaningful normalization — the one that will allow us to decompose <span class="math inline">\(\hat{P}\)</span> into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> — comes next.</p>
+<p>The <span class="math inline">\(\lambda\)</span> cancels. So <span class="math inline">\(P\)</span> and <span class="math inline">\(\lambda P\)</span> define exactly the same camera for any <span class="math inline">\(\lambda \neq 0\)</span>. The camera matrix lives in an equivalence class <span class="math inline">\(\{\lambda\hat{P} : \lambda \neq 0\}\)</span> just like points in <span class="math inline">\(\mathbb{P}^2\)</span> from Part 1.</p>
+<p><strong>What does <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> ensure?</strong> The SVD constraint <span class="math inline">\(\|\hat{\mathbf{p}}\| = 1\)</span> picks one representative from this equivalence class it pins the solution to the unit sphere in <span class="math inline">\(\mathbb{R}^{12}\)</span>, avoiding <span class="math inline">\(\mathbf{p} = \mathbf{0}\)</span>. But it does not fully resolve the ambiguity: Both <span class="math inline">\(\hat{\mathbf{p}}\)</span> and <span class="math inline">\(-\hat{\mathbf{p}}\)</span> have unit norm and both satisfy <span class="math inline">\(A\mathbf{p} = \mathbf{0}\)</span>. The sign is not fixed.</p>
+<p>So <span class="math inline">\(\|\mathbf{p}\| = 1\)</span> is a convenient normalization for the SVD, not a physically meaningful one. The physically meaningful normalization the one that will allow us to decompose <span class="math inline">\(\hat{P}\)</span> into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span> – comes next.</p>
 </section>
 </section>
 <section id="recovering-k-r-and-mathbft-from-hatp" class="level2">
@@ -893,7 +880,7 @@ p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top \in \mathbb{R}^{12}\]</span></p>
 \mathbf{r}_3^\top \end{pmatrix} = \begin{pmatrix} f_x\mathbf{r}_1^\top +
 s\mathbf{r}_2^\top + p_x\mathbf{r}_3^\top \\ f_y\mathbf{r}_2^\top +
 p_y\mathbf{r}_3^\top \\ \mathbf{r}_3^\top \end{pmatrix}\]</span></p>
-<p>The third row of <span class="math inline">\(KR\)</span> is just <span class="math inline">\(\mathbf{r}_3^\top\)</span> — the third row of <span class="math inline">\(R\)</span>. The intrinsic matrix <span class="math inline">\(K\)</span> does not affect the third row at all.</p>
+<p>The third row of <span class="math inline">\(KR\)</span> is just <span class="math inline">\(\mathbf{r}_3^\top\)</span> the third row of <span class="math inline">\(R\)</span>. The intrinsic matrix <span class="math inline">\(K\)</span> does not affect the third row at all.</p>
 </section>
 <section id="step-1-recover-mathbfr_3-and-fix-the-scale" class="level3">
 <h3 class="anchored" data-anchor-id="step-1-recover-mathbfr_3-and-fix-the-scale">Step 1: Recover <span class="math inline">\(\mathbf{r}_3\)</span> and Fix the Scale</h3>
@@ -902,7 +889,7 @@ p_y\mathbf{r}_3^\top \\ \mathbf{r}_3^\top \end{pmatrix}\]</span></p>
 \mathbf{m}_3 = \mathbf{r}_3\]</span></p>
 <p>Since <span class="math inline">\(R\)</span> is orthogonal, <span class="math inline">\(\|\mathbf{r}_3\| = 1\)</span>. So check:</p>
 <p><span class="math display">\[\lambda := \|\hat{\mathbf{m}}_3\|\]</span></p>
-<p>If <span class="math inline">\(\lambda \neq 1\)</span> — which happens because DLT gives <span class="math inline">\(\hat{P}\)</span> up to scale — rescale the entire matrix:</p>
+<p>If <span class="math inline">\(\lambda \neq 1\)</span> which happens because DLT gives <span class="math inline">\(\hat{P}\)</span> up to scale rescale the entire matrix:</p>
 <p><span class="math display">\[\hat{P} \leftarrow \frac{\hat{P}}{\lambda}, \qquad M \leftarrow
 \frac{M}{\lambda}\]</span></p>
 <p>Why divide the entire matrix and not just the third row? Because <span class="math inline">\(P\)</span> represents a single linear map, defined only up to scale. Changing one row independently would give a different camera altogether. After rescaling:</p>
@@ -945,7 +932,7 @@ p_y\mathbf{r}_3^\top \\ \mathbf{r}_3^\top \end{pmatrix}\]</span></p>
 <p>From the block structure of <span class="math inline">\(\hat{P}\)</span>:</p>
 <p><span class="math display">\[\hat{P} = \begin{bmatrix} M \mid \mathbf{p}_4 \end{bmatrix} = \begin{bmatrix}
 KR \mid K\mathbf{t} \end{bmatrix}\]</span></p>
-<p>So the last column satisfies <span class="math inline">\(\mathbf{p}_4 = K\mathbf{t}\)</span>. Since <span class="math inline">\(K\)</span> is invertible — <span class="math inline">\(\det K = f_x f_y \neq 0\)</span> as long as the focal lengths are nonzero — we can solve directly:</p>
+<p>So the last column satisfies <span class="math inline">\(\mathbf{p}_4 = K\mathbf{t}\)</span>. Since <span class="math inline">\(K\)</span> is invertible <span class="math inline">\(\det K = f_x f_y \neq 0\)</span> as long as the focal lengths are nonzero we can solve directly:</p>
 <p><span class="math display">\[\boxed{\hat{\mathbf{t}} = \hat{K}^{-1}\mathbf{p}_4}\]</span></p>
 <p>And the camera center in world coordinates:</p>
 <p><span class="math display">\[\mathbf{t} = -R\mathbf{c} \qquad \Longrightarrow \qquad \boxed{\hat{\mathbf{c}}
@@ -955,9 +942,9 @@ KR \mid K\mathbf{t} \end{bmatrix}\]</span></p>
 <section id="one-final-check-dethatr-1" class="level3">
 <h3 class="anchored" data-anchor-id="one-final-check-dethatr-1">One Final Check: <span class="math inline">\(\det\hat{R} = +1\)</span></h3>
 <p>By construction, <span class="math inline">\(\hat{R}\)</span> should be a proper rotation matrix with <span class="math inline">\(\det\hat{R}
-= +1\)</span>. But numerical errors from the SVD and the row-by-row recovery can occasionally give <span class="math inline">\(\det\hat{R} = -1\)</span> — an improper rotation (a reflection). This happens when the scale factor <span class="math inline">\(\lambda\)</span> from Step 1 is negative.</p>
+= +1\)</span>. But numerical errors from the SVD and the row-by-row recovery can occasionally give <span class="math inline">\(\det\hat{R} = -1\)</span> an improper rotation (a reflection). This happens when the scale factor <span class="math inline">\(\lambda\)</span> from Step 1 is negative.</p>
 <p>The fix is simple: if <span class="math inline">\(\det\hat{R} = -1\)</span>, replace <span class="math inline">\(\hat{P}\)</span> with <span class="math inline">\(-\hat{P}\)</span> and repeat the decomposition from scratch. Since <span class="math inline">\(\hat{P}\)</span> and <span class="math inline">\(-\hat{P}\)</span> define the same camera, this is always valid.</p>
-<p>In practice, libraries like OpenCV handle this automatically inside their decomposition routines — you do not need to check manually. But it is good to know why it can happen.</p>
+<p>In practice, libraries like OpenCV handle this automatically inside their decomposition routines you do not need to check manually. But it is good to know why it can happen.</p>
 </section>
 <section id="summary-everything-we-know-about-the-camera" class="level3">
 <h3 class="anchored" data-anchor-id="summary-everything-we-know-about-the-camera">Summary: Everything We Know About the Camera</h3>
@@ -1008,7 +995,7 @@ KR \mid K\mathbf{t} \end{bmatrix}\]</span></p>
 </tr>
 </tbody>
 </table>
-<p>We now know everything about the camera — where it is, how it is oriented, and what its sensor looks like. All from a set of point correspondences and linear algebra.</p>
+<p>We now know everything about the camera where it is, how it is oriented, and what its sensor looks like. All from a set of point correspondences and linear algebra.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1049,18 +1036,18 @@ Z_w=0,
 </section>
 </section>
 <section id="but-wait-are-we-really-done" class="level2">
-<h2 class="anchored" data-anchor-id="but-wait-are-we-really-done">But Wait — Are We Really Done?</h2>
+<h2 class="anchored" data-anchor-id="but-wait-are-we-really-done">But Wait Are We Really Done?</h2>
 <p>All the math is correct. Principled and logical. Airtight. But have we really solved the problem?</p>
-<p>Recall that each world point <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> is associated with its observed pixel coordinate <span class="math inline">\(\mathbf{x}_i = (x_i, y_i)^\top\)</span>. If we run the estimated <span class="math inline">\(\hat{P}\)</span> forward — projecting <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> through <span class="math inline">\(\hat{P}\)</span> — we get a predicted pixel coordinate:</p>
+<p>Recall that each world point <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> is associated with its observed pixel coordinate <span class="math inline">\(\mathbf{x}_i = (x_i, y_i)^\top\)</span>. If we run the estimated <span class="math inline">\(\hat{P}\)</span> forward projecting <span class="math inline">\(\tilde{\mathbf{X}}_i\)</span> through <span class="math inline">\(\hat{P}\)</span> we get a predicted pixel coordinate:</p>
 <p><span class="math display">\[\hat{\mathbf{x}}_i = \phi(\hat{P}\tilde{\mathbf{X}}_i) = \begin{pmatrix}
 \hat{\mathbf{p}}_1^\top\tilde{\mathbf{X}}_i / \hat{\mathbf{p}}_3^\top
 \tilde{\mathbf{X}}_i \\ \hat{\mathbf{p}}_2^\top\tilde{\mathbf{X}}_i /
 \hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i \end{pmatrix}\]</span></p>
-<p>The difference <span class="math inline">\(\mathbf{x}_i - \hat{\mathbf{x}}_i\)</span> is the <strong>reprojection error</strong> for point <span class="math inline">\(i\)</span> — the distance in pixels between the observed location and the predicted location. If your camera matrix is good, this should be small for all <span class="math inline">\(i\)</span>.</p>
+<p>The difference <span class="math inline">\(\mathbf{x}_i - \hat{\mathbf{x}}_i\)</span> is the <strong>reprojection error</strong> for point <span class="math inline">\(i\)</span> the distance in pixels between the observed location and the predicted location. If your camera matrix is good, this should be small for all <span class="math inline">\(i\)</span>.</p>
 <p>The natural objective is to find <span class="math inline">\(P\)</span> that minimizes the total reprojection error:</p>
 <p><span class="math display">\[\mathcal{L}(P) = \sum_{i=1}^n \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2
 = \sum_{i=1}^n \left[(x_i - \hat{x}_i)^2 + (y_i - \hat{y}_i)^2\right]\]</span></p>
-<p>This is exactly analogous to the sum of squared residuals in linear regression — the error between observed and predicted values, summed over all data points.</p>
+<p>This is exactly analogous to the sum of squared residuals in linear regression the error between observed and predicted values, summed over all data points.</p>
 <section id="what-did-dlt-actually-minimize" class="level3">
 <h3 class="anchored" data-anchor-id="what-did-dlt-actually-minimize">What Did DLT Actually Minimize?</h3>
 <p>Let us look more carefully at what DLT does. We solved:</p>
@@ -1073,18 +1060,18 @@ Z_w=0,
 \frac{\hat{\mathbf{p}}_1^\top\tilde{\mathbf{X}}_i}{w_i}\right)^2 +
 \left(y_i - \frac{\hat{\mathbf{p}}_2^\top\tilde{\mathbf{X}}_i}{w_i}\right)^2
 \right] = \sum_{i=1}^n w_i^2 \|\mathbf{x}_i - \hat{\mathbf{x}}_i\|^2\]</span></p>
-<p>This is a <strong>weighted</strong> reprojection error — each point’s squared error is multiplied by <span class="math inline">\(w_i^2\)</span>.</p>
+<p>This is a <strong>weighted</strong> reprojection error each point’s squared error is multiplied by <span class="math inline">\(w_i^2\)</span>.</p>
 </section>
 <section id="what-is-w_i" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-w_i">What Is <span class="math inline">\(w_i\)</span>?</h3>
-<p><span class="math inline">\(w_i = \hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth of point <span class="math inline">\(i\)</span> in the camera frame — the <span class="math inline">\(Z_c\)</span> coordinate of the point as seen by the camera. Points far from the camera have large <span class="math inline">\(w_i\)</span>, so their reprojection errors are weighted much more heavily than nearby points.</p>
-<p>This is completely arbitrary from a geometric perspective. A good point correspondence should not care how far the point is from the camera. Whether a point is 1 metre away or 100 metres away, we want its pixel coordinates to match, equally. DLT silently upweights distant points and downweights nearby ones — with no geometric justification whatsoever.</p>
+<p><span class="math inline">\(w_i = \hat{\mathbf{p}}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth of point <span class="math inline">\(i\)</span> in the camera frame the <span class="math inline">\(Z_c\)</span> coordinate of the point as seen by the camera. Points far from the camera have large <span class="math inline">\(w_i\)</span>, so their reprojection errors are weighted much more heavily than nearby points.</p>
+<p>This is completely arbitrary from a geometric perspective. A good point correspondence should not care how far the point is from the camera. Whether a point is 1 metre away or 100 metres away, we want its pixel coordinates to match, equally. DLT silently upweights distant points and downweights nearby ones with no geometric justification whatsoever.</p>
 <p>This is the fundamental limitation of DLT. The algebraic error <span class="math inline">\(\|A\mathbf{p}\|^2\)</span> is not the same as the geometric reprojection error <span class="math inline">\(\mathcal{L}(P)\)</span>. DLT minimizes the wrong thing.</p>
 </section>
 <section id="so-why-use-dlt-at-all" class="level3">
 <h3 class="anchored" data-anchor-id="so-why-use-dlt-at-all">So Why Use DLT At All?</h3>
-<p>Simple: it is fast, and it gives a good starting point. DLT has a closed-form solution via SVD — no iterations, no initialisation, no convergence issues. In practice, DLT gets you close enough to the true <span class="math inline">\(P\)</span> that a subsequent refinement step converges quickly. It is the standard first step in virtually every camera estimation pipeline.</p>
-<p>The refinement — minimizing the true reprojection error <span class="math inline">\(\mathcal{L}(P)\)</span> — is what we tackle next.</p>
+<p>Simple: it is fast, and it gives a good starting point. DLT has a closed-form solution via SVD no iterations, no initialisation, no convergence issues. In practice, DLT gets you close enough to the true <span class="math inline">\(P\)</span> that a subsequent refinement step converges quickly. It is the standard first step in virtually every camera estimation pipeline.</p>
+<p>The refinement minimizing the true reprojection error <span class="math inline">\(\mathcal{L}(P)\)</span> – is what we tackle next.</p>
 </section>
 <section id="minimizing-the-reprojection-error" class="level3">
 <h3 class="anchored" data-anchor-id="minimizing-the-reprojection-error">Minimizing the Reprojection Error</h3>
@@ -1098,7 +1085,7 @@ Z_w=0,
 <p>where <span class="math inline">\(w_i = \mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span> is the depth of point <span class="math inline">\(i\)</span> in the camera frame, and <span class="math inline">\(\mathbf{p} \in \mathbb{R}^{12}\)</span> is the vectorized camera matrix:</p>
 <p><span class="math display">\[\mathbf{p} = (p_{11}, p_{12}, p_{13}, p_{14}, p_{21}, p_{22}, p_{23},
 p_{24}, p_{31}, p_{32}, p_{33}, p_{34})^\top\]</span></p>
-<p>This is nonlinear in <span class="math inline">\(\mathbf{p}\)</span> — because of division by <span class="math inline">\(w_i\)</span>, which itself depends on <span class="math inline">\(\mathbf{p}\)</span>. So the map is:</p>
+<p>This is nonlinear in <span class="math inline">\(\mathbf{p}\)</span> because of division by <span class="math inline">\(w_i\)</span>, which itself depends on <span class="math inline">\(\mathbf{p}\)</span>. So the map is:</p>
 <p><span class="math display">\[\mathbf{p} \in \mathbb{R}^{12} \longrightarrow \mathbf{r}(\mathbf{p}) \in
 \mathbb{R}^{2n}\]</span></p>
 <p><strong>The Jacobian.</strong> Let <span class="math inline">\(J = D_\mathbf{p}\mathbf{r}(\mathbf{p}) \in
@@ -1147,9 +1134,9 @@ p_{32}Y_1 + p_{33}Z_1 + p_{34}}\]</span></p>
 (\mathbf{p})\]</span></p>
 <p>Setting this to zero gives the necessary condition for a minimum:</p>
 <p><span class="math display">\[J^\top\mathbf{r}(\mathbf{p}) = \mathbf{0}\]</span></p>
-<p>This is a system of 12 equations in 12 unknowns — <span class="math inline">\(J^\top\)</span> is <span class="math inline">\(12 \times
+<p>This is a system of 12 equations in 12 unknowns <span class="math inline">\(J^\top\)</span> is <span class="math inline">\(12 \times
 2n\)</span> and <span class="math inline">\(\mathbf{r}\)</span> is <span class="math inline">\(2n \times 1\)</span>, giving a <span class="math inline">\(12 \times 1\)</span> system. The 12 unknowns are the 12 entries of <span class="math inline">\(P\)</span>.</p>
-<p>If this were a linear system like <span class="math inline">\(A\mathbf{x} = \mathbf{b}\)</span>, standard methods like Gaussian elimination would work. But unfortunately it is not — <span class="math inline">\(J\)</span> itself depends on <span class="math inline">\(\mathbf{p}\)</span> through <span class="math inline">\(w_i =
+<p>If this were a linear system like <span class="math inline">\(A\mathbf{x} = \mathbf{b}\)</span>, standard methods like Gaussian elimination would work. But unfortunately it is not – <span class="math inline">\(J\)</span> itself depends on <span class="math inline">\(\mathbf{p}\)</span> through <span class="math inline">\(w_i =
 \mathbf{p}_3^\top\tilde{\mathbf{X}}_i\)</span>, making the whole system nonlinear. This is where Gauss-Newton comes in.</p>
 <p><strong>Gauss-Newton.</strong> We do not have a closed-form solution and the system is nonlinear. The standard fix: linearize.</p>
 <p>Let <span class="math inline">\(\mathbf{p}_0\)</span> be the DLT estimate. Taylor expansion of <span class="math inline">\(\mathbf{r}\)</span> around <span class="math inline">\(\mathbf{p}_0\)</span> gives:</p>
@@ -1160,7 +1147,7 @@ p_{32}Y_1 + p_{33}Z_1 + p_{34}}\]</span></p>
 <p><span class="math display">\[J_0^\top(\mathbf{r}(\mathbf{p}_0) + J_0\,\delta\mathbf{p}_0) = \mathbf{0}\]</span></p>
 <p><span class="math display">\[\underbrace{(J_0^\top J_0)}_{12 \times 12}\,\delta\mathbf{p}_0 =
 -J_0^\top\mathbf{r}(\mathbf{p}_0)\]</span></p>
-<p>These are the <strong>normal equations</strong>. If you have seen linear regression, this is exactly the same structure — the least-squares solution. Solving:</p>
+<p>These are the <strong>normal equations</strong>. If you have seen linear regression, this is exactly the same structure the least-squares solution. Solving:</p>
 <p><span class="math display">\[\delta\mathbf{p}_0 = -(J_0^\top J_0)^{-1}J_0^\top\mathbf{r}(\mathbf{p}_0)\]</span></p>
 <p>We assume <span class="math inline">\(J_0^\top J_0\)</span> is invertible. Non-invertibility means the data does not contain enough information to determine all 12 entries of <span class="math inline">\(P\)</span>. This can happen if the points are coplanar, or if there are too few points.</p>
 <p>Update:</p>
@@ -1197,9 +1184,9 @@ size becomes negligible)}\]</span></p>
 </div>
 <div class="callout-body-container callout-body">
 <p>The original problem is to minimize <span class="math inline">\(\|\mathbf{r}(\mathbf{p})\|^2\)</span> over <span class="math inline">\(\mathbf{p}\)</span>. The gradient condition <span class="math inline">\(J^\top\mathbf{r}(\mathbf{p}) =
-\mathbf{0}\)</span> is the necessary condition for any minimum — linearized or not. It always holds at the true solution.</p>
-<p>What Gauss-Newton does is convert this nonlinear problem into a sequence of locally linear problems. At each step, we replace <span class="math inline">\(\mathbf{r}(\mathbf{p})\)</span> by its linear approximation <span class="math inline">\(\mathbf{r}(\mathbf{p}_k) + J_k\delta\mathbf{p}\)</span>. The resulting problem — minimize <span class="math inline">\(\|\mathbf{r}(\mathbf{p}_k) +
-J_k\delta\mathbf{p}\|^2\)</span> over <span class="math inline">\(\delta\mathbf{p}\)</span> — is linear in <span class="math inline">\(\delta\mathbf{p}\)</span>, because <span class="math inline">\(\mathbf{r}(\mathbf{p}_k)\)</span> and <span class="math inline">\(J_k\)</span> are both fixed constants at the current iteration. A minimization problem that is quadratic in the unknowns with a linear model is exactly least squares — and has a closed-form solution via the normal equations. We solve it, update, and repeat.</p>
+\mathbf{0}\)</span> is the necessary condition for any minimum linearized or not. It always holds at the true solution.</p>
+<p>What Gauss-Newton does is convert this nonlinear problem into a sequence of locally linear problems. At each step, we replace <span class="math inline">\(\mathbf{r}(\mathbf{p})\)</span> by its linear approximation <span class="math inline">\(\mathbf{r}(\mathbf{p}_k) + J_k\delta\mathbf{p}\)</span>. The resulting problem minimize <span class="math inline">\(\|\mathbf{r}(\mathbf{p}_k) +
+J_k\delta\mathbf{p}\|^2\)</span> over <span class="math inline">\(\delta\mathbf{p}\)</span> is linear in <span class="math inline">\(\delta\mathbf{p}\)</span>, because <span class="math inline">\(\mathbf{r}(\mathbf{p}_k)\)</span> and <span class="math inline">\(J_k\)</span> are both fixed constants at the current iteration. A minimization problem that is quadratic in the unknowns with a linear model is exactly least squares and has a closed-form solution via the normal equations. We solve it, update, and repeat.</p>
 </div>
 </div>
 </section>
@@ -1240,13 +1227,13 @@ Q\Lambda^{-1}Q^\top\]</span></p>
 = -\sum_{i=1}^{12}\frac{g_i}{\lambda_i}\mathbf{q}_i\]</span></p>
 <p>The same solution, two forms.</p>
 <p><strong>What can go wrong?</strong> The danger sits directly in <span class="math inline">\(d_i = -g_i/\lambda_i\)</span>.</p>
-<p><strong>1. Zero eigenvalue (<span class="math inline">\(\lambda_i = 0\)</span>).</strong> Then <span class="math inline">\(d_i = -g_i/0\)</span> is undefined — the step cannot be computed. <span class="math inline">\(H_k\)</span> is not invertible and the normal equations have no unique solution.</p>
+<p><strong>1. Zero eigenvalue (<span class="math inline">\(\lambda_i = 0\)</span>).</strong> Then <span class="math inline">\(d_i = -g_i/0\)</span> is undefined – the step cannot be computed. <span class="math inline">\(H_k\)</span> is not invertible and the normal equations have no unique solution.</p>
 <p>This always happens for the camera matrix. Scale invariance of <span class="math inline">\(\phi\)</span> means <span class="math inline">\(P\)</span> and <span class="math inline">\(\lambda P\)</span> define the same camera. The loss <span class="math inline">\(\|\mathbf{r}(\mathbf{p})
-\|^2\)</span> is flat along the direction <span class="math inline">\(\mathbf{p}\)</span> itself — the loss does not change if you scale <span class="math inline">\(\mathbf{p}\)</span>. This flatness shows up as a zero eigenvalue of <span class="math inline">\(H_k\)</span> at every iteration.</p>
+\|^2\)</span> is flat along the direction <span class="math inline">\(\mathbf{p}\)</span> itself the loss does not change if you scale <span class="math inline">\(\mathbf{p}\)</span>. This flatness shows up as a zero eigenvalue of <span class="math inline">\(H_k\)</span> at every iteration.</p>
 <p><strong>2. Small but nonzero eigenvalue (<span class="math inline">\(\lambda_i \approx 0\)</span>).</strong> Then <span class="math inline">\(d_i =
--g_i/\lambda_i\)</span> is huge — a large step along <span class="math inline">\(\mathbf{q}_i\)</span>. But the linearization <span class="math inline">\(\mathbf{r}(\mathbf{p}_k + \delta\mathbf{p}) \approx
+-g_i/\lambda_i\)</span> is huge a large step along <span class="math inline">\(\mathbf{q}_i\)</span>. But the linearization <span class="math inline">\(\mathbf{r}(\mathbf{p}_k + \delta\mathbf{p}) \approx
 \mathbf{r}_k + J_k\delta\mathbf{p}\)</span> is only valid close to <span class="math inline">\(\mathbf{p}_k\)</span>. A huge step takes us far from <span class="math inline">\(\mathbf{p}_k\)</span> where the linearization breaks down. Gauss-Newton overshoots and may diverge.</p>
-<p><strong>Large eigenvalue (<span class="math inline">\(\lambda_i\)</span> large).</strong> Then <span class="math inline">\(d_i = -g_i/\lambda_i\)</span> is small — a cautious step. The loss is steep in this direction, and a small step is correct. Gauss-Newton works well here.</p>
+<p><strong>Large eigenvalue (<span class="math inline">\(\lambda_i\)</span> large).</strong> Then <span class="math inline">\(d_i = -g_i/\lambda_i\)</span> is small a cautious step. The loss is steep in this direction, and a small step is correct. Gauss-Newton works well here.</p>
 <section id="where-levenberg-marquardt-comes-in" class="level3">
 <h3 class="anchored" data-anchor-id="where-levenberg-marquardt-comes-in">Where Levenberg-Marquardt Comes In</h3>
 <p>The fix for small and zero eigenvalues is to regularise the step. Instead of minimising the bare linearised objective:</p>
@@ -1254,28 +1241,29 @@ Q\Lambda^{-1}Q^\top\]</span></p>
 <p>add an <span class="math inline">\(\ell_2\)</span> penalty on the step size:</p>
 <p><span class="math display">\[\min_{\delta\mathbf{p}} \|\mathbf{r}_k + J_k\delta\mathbf{p}\|^2 +
 \mu\|\delta\mathbf{p}\|^2\]</span></p>
-<p>The penalty <span class="math inline">\(\mu\|\delta\mathbf{p}\|^2\)</span> discourages large steps — exactly what we need when <span class="math inline">\(\lambda_i\)</span> is small. This discouraging large steps is the same idea as ridge regression or L2-regularization in linear regression.</p>
+<p>The penalty <span class="math inline">\(\mu\|\delta\mathbf{p}\|^2\)</span> discourages large steps exactly what we need when <span class="math inline">\(\lambda_i\)</span> is small. This discouraging large steps is the same idea as ridge regression or L2-regularization in linear regression.</p>
 <p>Setting the gradient to zero gives:</p>
 <p><span class="math display">\[(J_k^\top J_k + \mu I)\delta\mathbf{p} = -J_k^\top\mathbf{r}_k\]</span></p>
-<p>In the eigenbasis, each step becomes <span class="math inline">\(d_i = -g_i/(\lambda_i + \mu)\)</span>. For large <span class="math inline">\(\mu\)</span>, all steps are small and cautious — gradient descent behaviour. For small <span class="math inline">\(\mu\)</span>, the steps approach Gauss-Newton. The algorithm adapts <span class="math inline">\(\mu\)</span> automatically at each iteration.</p>
-<p>This is <strong>Levenberg-Marquardt</strong> — the standard workhorse for nonlinear least squares in computer vision. OpenCV uses LM internally to minimize reprojection error in functions like <code>solvePnP</code> and <code>calibrateCamera</code>. Note that <code>calibrateCamera</code> implements Zhang’s method — a more sophisticated calibration algorithm that uses a planar checkerboard pattern, not arbitrary 3D-2D correspondences like DLT. That is a story for a later post. For our purposes, the key point is: DLT gives you <span class="math inline">\(\mathbf{p}_0\)</span>, Gauss-Newton (or LM) refines it to minimise the true reprojection error. That is the complete pipeline.</p>
+<p>In the eigenbasis, each step becomes <span class="math inline">\(d_i = -g_i/(\lambda_i + \mu)\)</span>. For large <span class="math inline">\(\mu\)</span>, all steps are small and cautious gradient descent behaviour. For small <span class="math inline">\(\mu\)</span>, the steps approach Gauss-Newton. The algorithm adapts <span class="math inline">\(\mu\)</span> automatically at each iteration.</p>
+<p>This is <strong>Levenberg-Marquardt</strong> the standard workhorse for nonlinear least squares in computer vision. OpenCV uses LM internally to minimize reprojection error in functions like <code>solvePnP</code> and <code>calibrateCamera</code>. Note that <code>calibrateCamera</code> implements Zhang’s method a more sophisticated calibration algorithm that uses a planar checkerboard pattern, not arbitrary 3D-2D correspondences like DLT. That is a story for a later post. For our purposes, the key point is: DLT gives you <span class="math inline">\(\mathbf{p}_0\)</span>, Gauss-Newton (or LM) refines it to minimise the true reprojection error. That is the complete pipeline.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>We started with a grade school observation — light travels in straight lines through a pinhole — and ended with a <span class="math inline">\(3 \times 4\)</span> matrix that encodes everything a camera knows about the world. Along the way we derived the intrinsic matrix <span class="math inline">\(K\)</span> from pixel geometry, the extrinsic matrix <span class="math inline">\([R \mid
+<p>We started with a grade school observation light travels in straight lines through a pinhole and ended with a <span class="math inline">\(3 \times 4\)</span> matrix that encodes everything a camera knows about the world. Along the way we derived the intrinsic matrix <span class="math inline">\(K\)</span> from pixel geometry, the extrinsic matrix <span class="math inline">\([R \mid
 \mathbf{t}]\)</span> from reference frame changes, and the full camera matrix <span class="math inline">\(P =
-K[R \mid \mathbf{t}]\)</span> as their composition. We then asked the inverse question — given point correspondences, can we recover <span class="math inline">\(P\)</span>? — and answered it with the DLT algorithm, SVD, and a row-by-row decomposition back into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span>. Finally, we saw why DLT minimises the wrong thing, derived the true reprojection error, and sketched Gauss-Newton as the refinement step.</p>
-<p>For me, this post is a significant milestone in my journey through computer vision. It is the first time I have stepped away from the image plane and into the 3D world. The camera doesn’t look like a black box anymore — although, there are still many mysteries about it to uncover. The geometry is still not easy for someone with my spatial intuition, but the algebra is clear. And that is enough to keep me going.</p>
-<hr>
+K[R \mid \mathbf{t}]\)</span> as their composition. We then asked the inverse question given point correspondences, can we recover <span class="math inline">\(P\)</span>? and answered it with the DLT algorithm, SVD, and a row-by-row decomposition back into <span class="math inline">\(K\)</span>, <span class="math inline">\(R\)</span>, and <span class="math inline">\(\mathbf{t}\)</span>. Finally, we saw why DLT minimises the wrong thing, derived the true reprojection error, and sketched Gauss-Newton as the refinement step.</p>
+<p>For me, this post is a significant milestone in my journey through computer vision. It is the first time I have stepped away from the image plane and into the 3D world. The camera doesn’t look like a black box anymore although, there are still many mysteries about it to uncover. The geometry is still not easy for someone with my spatial intuition, but the algebra is clear. And that is enough to keep me going.</p>
 </section>
 <section id="whats-next-homographies" class="level2">
 <h2 class="anchored" data-anchor-id="whats-next-homographies">What’s Next: Homographies</h2>
-<p>In Part 4, we restrict the scene to a special case: all world points lie on a single plane. It turns out that the action of the full camera matrix <span class="math inline">\(P \in \mathbb{R}^{3 \times 4}\)</span> can be represented by a <span class="math inline">\(3 \times 3\)</span> matrix called a <strong>homography</strong>:</p>
+<p>In Part 4, we restrict the scene to a special case: all world points lie on a single plane. It turns out that the action of the full camera matrix <span class="math inline">\(P \in \mathbb{R}^{3 \times 4}\)</span> can be represented by a <span class="math inline">\(3 \times 3\)</span> matrix called a <strong>homography</strong>.</p>
 <p><span class="math display">\[\tilde{\mathbf{x}} \sim H\tilde{\mathbf{X}}_{\text{plane}}\]</span></p>
-<p>This is exactly the configuration in which the full 3D DLT problem becomes degenerate. But the planar mapping itself is extraordinarily useful: image stitching, augmented reality markers, document scanning, planar rectification, and several constructions in two-view geometry all run through homographies.</p>
-<p>The derivation will follow the same pattern as DLT — a homogeneous linear system, a null space, SVD — but in a simpler and cleaner setting. And we will finally have a concrete use for the <span class="math inline">\(\mathbb{P}^2\)</span> machinery from Parts 1 and 2. Camera calibration — recovering <span class="math inline">\(K\)</span> from images of a planar pattern, which is what OpenCV’s implements — will follow in Part 5, once we have homographies in hand.</p>
-<p>And yes — we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. Homographies are invertible linear maps on <span class="math inline">\(\mathbb{P}^2\)</span>, and all the machinery from Parts 1 and 2 — equivalence classes, the incidence condition, projective duality — will finally get their due.</p>
+<p>This is exactly the configuration in which the full 3D DLT problem becomes degenerate. But the planar mapping itself is extraordinarily useful – image stitching, augmented reality markers, document scanning, planar rectification, and several constructions in two-view geometry all run through homographies.</p>
+<p>The derivation will follow the same pattern as DLT a homogeneous linear system, a null space, SVD but in a simpler and cleaner setting. And we will finally have a concrete use for the <span class="math inline">\(\mathbb{P}^2\)</span> machinery from Parts 1 and 2. Camera calibration recovering <span class="math inline">\(K\)</span> from images of a planar pattern, which is what OpenCV’s implements will follow in Part 5, once we have homographies in hand.</p>
+<p>And yes we are stepping back into <span class="math inline">\(\mathbb{P}^2\)</span>. Homographies are invertible linear maps on <span class="math inline">\(\mathbb{P}^2\)</span>, and all the machinery from Parts 1 and 2 equivalence classes, the incidence condition, projective duality will finally get their due.</p>
+<hr>
+<p><a href="../../3d-vision/conics/index.html">← Previous: Conics and Projective Duality</a> | <a href="../../3d-vision/homography/index.html">Next: Homography →</a></p>
 
 
 </section>
