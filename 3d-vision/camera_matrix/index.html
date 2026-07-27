@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Madhav Prashanth Ramachandran">
+<meta name="dcterms.date" content="2026-07-15">
+<meta name="description" content="Deriving the camera matrix from similar triangles to P = K[R \mid \mathbf{t}], stage by stage from first principles.">
 
-<title>index – Madhav Prashanth</title>
+<title>3D Computer Vision from First Principles Part 3 – Madhav Prashanth</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -237,39 +240,49 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">3D Computer Vision from First Principles Part 3</h1>
+<p class="subtitle lead">The Camera Matrix <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span></p>
+  <div class="quarto-categories">
+    <div class="quarto-category">3d-vision</div>
+    <div class="quarto-category">linear-algebra</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Deriving the camera matrix from similar triangles to <span class="math inline">\(P = K[R \mid \mathbf{t}]\)</span>, stage by stage from first principles.
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Madhav Prashanth Ramachandran </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 15, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td>title: “3D Computer Vision from First Principles Part 3”</td>
-</tr>
-<tr class="even">
-<td>subtitle: “The Camera Matrix <span class="math inline">\(P = K[R \\mid \\mathbf{t}]\)</span>”</td>
-</tr>
-<tr class="odd">
-<td>author: “Madhav Prashanth Ramachandran”</td>
-</tr>
-<tr class="even">
-<td>date: “2026-07-15”</td>
-</tr>
-<tr class="odd">
-<td>categories: [3d-vision, linear-algebra]</td>
-</tr>
-<tr class="even">
-<td>description: “Deriving the camera matrix from similar triangles to <span class="math inline">\(P = K[R \\mid \\mathbf{t}]\)</span>, stage by stage from first principles.”</td>
-</tr>
-<tr class="odd">
-<td>toc: true</td>
-</tr>
-<tr class="even">
-<td>toc-depth: 3</td>
-</tr>
-</tbody>
-</table>
+</header>
+
+
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>In <a href="">Part 1</a>, we built <span class="math inline">\(\mathbb{P}^2\)</span> from row reduction homogeneous coordinates, equivalence classes, points at infinity. In <a href="https://madhavpr191221.github.io/3d-vision/conics/">Part 2</a>, we went further: projective duality, conics, tangent lines, the dual conic. All of it abstract, all of it in <span class="math inline">\(\mathbb{R}^2\)</span> and <span class="math inline">\(\mathbb{P}^2\)</span>.</p>
