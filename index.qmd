@@ -1,0 +1,33 @@
+---
+title: ""
+page-layout: full
+toc: false
+---
+
+## Madhav Prashanth Ramachandran
+
+I stare at numbers and figure out what they mean.
+
+Twelve years in AI/ML. The deeper I go, the more I realize I know nothing.
+So I work through it publicly — one topic, one derivation at a time.
+
+The power of seeing resonates with me more than the power of words.
+Language describes the world. For me, images are the world.
+
+---
+
+## Writing
+
+- [**Transformers & Perception**](transformers/index.qmd) — Self-attention from covariance geometry to ViT, DINO, DETR, and beyond.
+- [**Diffusion Models**](diffusion-models/index.qmd) — A first-principles mathematical journey from a scalar random variable toward image generation.
+- [**3D Computer Vision**](3d-vision/index.qmd) — Classical and neural 3D computer vision.
+- [**World Models**](world-models/index.qmd) — Representation learning, VICReg, JEPA.
+- [**Survival Analysis**](survival-analysis/index.qmd) — Hazard functions, Kaplan-Meier, Cox-PH.
+
+---
+
+## Code
+
+- [`world-models-from-scratch`](https://github.com/madhavpr191221/world-models-from-scratch)
+- [`transformers_for_perception`](https://github.com/madhavpr191221/transformers_for_perception)
+- [`blog`](https://github.com/madhavpr191221/blog)
