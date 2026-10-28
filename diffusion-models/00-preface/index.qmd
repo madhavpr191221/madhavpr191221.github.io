@@ -44,15 +44,15 @@ Finally, if you find mathematical derivations tedious and would rather skip to t
 
 ## A Note on the book: The Principles of Diffusion Models
 
-There is a fantastic book available on diffusion models called [*The Principles of Diffusion Models*](https://the-principles-of-diffusion-models.github.io/) by Chieh-Hsin Lai, Yang Song, Dongjun Kim, Yuki Mitsufuji, and Stefano Ermon. Much of what I've learned about diffusion models so far has come from this masterpiece and for those who want to study this subject seriously, this book is a must-read. 
+There is a fantastic book available on diffusion models called [*The Principles of Diffusion Models*](https://the-principles-of-diffusion-models.github.io/) by Chieh-Hsin Lai, Yang Song, Dongjun Kim, Yuki Mitsufuji, and Stefano Ermon. Much of what I've learned (and what I'm learning) about diffusion models so far has come from this masterpiece and for those who want to study this subject seriously, this book is a must-read. 
 
-My notes, on the other hand, are not a substitute for this book. Think of this series as a set of notes entitled **Diffusion Models for Dummies Who Know Some Math**, written by one of those dummies. I am not an AI researcher and my understanding is quite limited. I am simply trying to work through the mathematics, one equation at a time. 
+My notes, on the other hand, are not a substitute for this book. Think of this series as a set of notes entitled **Diffusion Models for Dummies Who Know Some Math**, written by one of those dummies. I am not an AI researcher and my understanding on diffusion models is quite limited. I am simply trying to work through the mathematics, one equation at a time. 
 
 ## A Note on AI Usage 
 
-I have used ChatGPT extensively as a learning aid while studying diffusion models, particularly when I struggled with concepts and ideas behind diffusion models. I often used it as a tutor, a study companion, asking questions, challenging assumptions, requesting more explanations or simpler examples until I could make sense of them. I worked through the mathematics myself (by hand), often filling in 10+ pages for equations that would fit in half a page of a notebook, and to check important results against the literature. 
+I have used ChatGPT extensively as a learning aid while studying diffusion models, particularly when I struggled with concepts and ideas. I often used it as a tutor, a study companion, asking questions, challenging assumptions, requesting more explanations or simpler examples until I could make sense of them. I worked through the mathematics myself (by hand), often filling in 10+ pages for equations that would fit in half a page of a notebook, and to check important results against the literature. 
 
-As an AI engineer myself, I am not opposed to the use of AI. But I believe there's a difference between using AI as a learning aid to sharpen your understanding versus letting it do all the thinking and brainstorming for you. I want you to experience the struggle of working through the mathematics yourself, get stuck, make mistakes and on bad days, question your life choices until you reap the rewards of finally understanding something that seems impossible. 
+As an AI engineer myself, I am not opposed to the use of AI tools. But I believe there's a difference between using AI as a learning aid to sharpen your understanding versus letting it do all the thinking and brainstorming for you. I want you to experience the struggle of working through the mathematics yourself, get stuck, make mistakes and on bad days, question your life choices until you reap the rewards of finally understanding something that seems impossible. 
 
 
 ## Enough Talk. Let's Study Diffusion Models. 
