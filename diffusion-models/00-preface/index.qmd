@@ -1,9 +1,9 @@
 ---
-title: "0 — Preface"
-subtitle: "A note before we begin"
+title: "Diffusion Models — Part 0: Preface"
+subtitle: "For the mathematically curious"
 date: "2026-10-28"
 categories: [diffusion models, probability, generative models]
-description: "Preface to a series of articles on diffusion models for the mathematically curious."
+description: "Why I'm studying diffusion models, who this series is for, and how I intend to explore the mathematics behind them."
 ---
 
 ## A Note Before We Begin
