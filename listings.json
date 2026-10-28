@@ -15,6 +15,10 @@
     ]
   },
   {
+    "listing": "/diffusion-models/index.html",
+    "items": []
+  },
+  {
     "listing": "/survival-analysis/index.html",
     "items": [
       "/survival-analysis/part-1-why-survival-analysis-exists/index.html",
