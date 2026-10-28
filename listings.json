@@ -16,7 +16,9 @@
   },
   {
     "listing": "/diffusion-models/index.html",
-    "items": []
+    "items": [
+      "/diffusion-models/00-preface/index.html"
+    ]
   },
   {
     "listing": "/survival-analysis/index.html",
