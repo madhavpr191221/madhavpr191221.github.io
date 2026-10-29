@@ -57,7 +57,7 @@ As an AI engineer myself, I am not opposed to the use of AI tools. But I believe
 
 ## Enough Talk. Let's Study Diffusion Models. 
 
-At this point, I've accumulated a lot of handwritten notes on diffusion models that start with the simplest model- DDPM and extend to topics involving the multidimensional Fokker-Planck equation). And these notes will keep growing as and when I add more topics into my diffusion models toolbox.
+At this point, I've accumulated a lot of handwritten notes on diffusion models that start with the simplest model- DDPM and extend to topics involving the multidimensional Fokker-Planck equation. And these notes will keep growing as and when I add more topics into my diffusion models toolbox.
 
 Turning these notes into something readable is another challenge altogether. Through this series, I hope to help readers understand how diffusion models work, grasp the mathematical ideas behind them, and appreciate how concepts from a wide spectrum of topics in mathematics and machine learning come together to make these remarkable generative models possible. 
 
